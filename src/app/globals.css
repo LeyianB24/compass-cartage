@@ -1,94 +1,175 @@
 /* src/app/globals.css */
 @import "tailwindcss";
 
-/* Tailwind v4 theme tokens - replaces tailwind.config.ts.
-   These become usable as classes: bg-navy, text-gold, font-display, etc.
-   Font families are wired to CSS variables set by next/font in layout.tsx */
+/* --------------------------------------------------------------------------
+   Tailwind v4 Theme Configuration
+   Registers custom color tokens, font stacks, radii, and container widths directly 
+   into the CSS engine. Automatically exposes standard utility classes:
+   (e.g., bg-navy-deep, text-gold, font-display, rounded-card, max-w-content)
+   -------------------------------------------------------------------------- */
 @theme {
   --color-navy: #0b1f3a;
   --color-navy-deep: #071426;
   --color-gold: #c9a227;
   --color-gold-soft: #e4c65c;
   --color-paper: #f7f6f2;
+  --color-paper-muted: #ededeb;
   --color-slate: #4a5568;
   --color-slate-light: #8792a2;
   --color-hairline: #e3e1da;
 
-  --font-display: var(--font-fraunces), serif;
-  --font-body: var(--font-inter), sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
 
+  --radius-xs: 2px;
   --radius-sm: 4px;
-  --radius-DEFAULT: 6px;
+  --radius-default: 6px;
+  --radius-card: 12px;
 
   --max-width-content: 1280px;
+
+  /* Easing curves for deliberate UI transitions */
+  --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-* {
-  box-sizing: border-box;
+/* --------------------------------------------------------------------------
+   Base Styles & Design Tokens Reset
+   -------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-navy-deep);
+    font-family: var(--font-body);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Custom Selection Highlight */
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-navy-deep);
+  }
+
+  /* Universal Custom Focus-Visible Indicator (Accessibility Focus Ring) */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    transition: outline-offset 150ms var(--ease-out-smooth);
+  }
+
+  /* Heading Defaults */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-navy-deep);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+/* --------------------------------------------------------------------------
+   Reusable Layout & Component Utility Layer
+   -------------------------------------------------------------------------- */
+@layer utilities {
+  /* Section Layout Spacing */
+  .section-padding {
+    padding-left: clamp(1.25rem, 5vw, 6rem);
+    padding-right: clamp(1.25rem, 5vw, 6rem);
+  }
+
+  /* Typography Eyebrow Tag */
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  /* Interactive Glassmorphism Surface Utility */
+  .surface-glass {
+    background-color: rgb(247 246 242 / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Subtle Card Hover Elevation Effect */
+  .hover-lift {
+    transition: transform 250ms var(--ease-out-smooth), box-shadow 250ms var(--ease-out-smooth);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -10px rgba(7, 20, 38, 0.08);
+  }
 }
 
-body {
-  background: var(--color-paper);
-  color: var(--color-navy-deep);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Respect reduced-motion preference */
+/* --------------------------------------------------------------------------
+   Accessibility & Reduced Motion Overrides
+   -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  * {
+
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* Visible keyboard focus - accessibility floor */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 2px;
+/* Screen Reader Only Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-/* Utility classes used across components */
-.font-display {
-  font-family: var(--font-display);
-}
-
-.eyebrow {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-}
-
-.section-padding {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .section-padding {
-    padding-left: 3rem;
-    padding-right: 3rem;
+/* --------------------------------------------------------------------------
+   Print Optimizations
+   -------------------------------------------------------------------------- */
+@media print {
+  body {
+    background-color: #ffffff;
+    color: #000000;
   }
-}
 
-@media (min-width: 1200px) {
-  .section-padding {
-    padding-left: 6rem;
-    padding-right: 6rem;
+  nav, footer, button, .no-print {
+    display: none !important;
   }
 }

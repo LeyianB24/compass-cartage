@@ -1,4 +1,5 @@
 // src/app/page.tsx
+import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Hero from "@/components/Hero";
@@ -8,47 +9,107 @@ import Testimonials from "@/components/Testimonials";
 import CallToAction from "@/components/CallToAction";
 import { SERVICES } from "@/lib/constants";
 
+export const metadata: Metadata = {
+  title: "Trusted Moving Services | One Crew for Every Move",
+  description:
+    "Professional, reliable residential and commercial moving services. Get a stress-free move with our experienced team.",
+  openGraph: {
+    title: "Trusted Moving Services | One Crew for Every Move",
+    description:
+      "Professional, reliable residential and commercial moving services.",
+    type: "website",
+  },
+};
+
 export default function HomePage() {
+  // Generate JSON-LD for MovingCompany / LocalBusiness SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MovingCompany",
+    name: "Your Moving Company Name",
+    description: "Professional residential and commercial moving services.",
+    offers: SERVICES.slice(0, 3).map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title,
+        description: service.description,
+      },
+    })),
+  };
+
   return (
     <>
-      <Hero />
+      {/* Inject Structured Data for Local Search Rankings */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      {/* Services preview */}
-      <section className="bg-paper">
-        <div className="section-padding mx-auto max-w-content py-20">
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <p className="eyebrow mb-3">What We Do</p>
-              <h2 className="font-display text-3xl font-semibold text-navy-deep">
-                Every kind of move, one trusted crew
-              </h2>
+      <main className="relative w-full overflow-hidden">
+        {/* Hero Section */}
+        <Hero />
+
+        {/* Services Preview Section */}
+        <section
+          aria-labelledby="services-heading"
+          className="bg-paper relative border-y border-navy-deep/5 py-16 md:py-24"
+        >
+          <div className="section-padding mx-auto max-w-content">
+            {/* Header Flex Container */}
+            <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+              <div className="max-w-2xl">
+                <p className="eyebrow mb-3 tracking-wider text-xs font-bold uppercase text-gold">
+                  What We Do
+                </p>
+                <h2
+                  id="services-heading"
+                  className="font-display text-3xl font-semibold tracking-tight text-navy-deep sm:text-4xl"
+                >
+                  Every kind of move, one trusted crew
+                </h2>
+              </div>
+
+              <Link
+                href="/services"
+                className="group inline-flex items-center gap-2 text-sm font-semibold text-navy-deep transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded-sm"
+              >
+                <span>View all services</span>
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
             </div>
-            <Link
-              href="/services"
-              className="flex items-center gap-1.5 text-sm font-semibold text-navy-deep hover:text-gold"
-            >
-              View all services
-              <ArrowRight size={15} />
-            </Link>
+
+            {/* Services Grid */}
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {SERVICES.slice(0, 3).map((service, i) => (
+                <ServiceCard
+                  key={service.slug || service.title}
+                  title={service.title}
+                  description={service.description}
+                  index={i}
+                />
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.slice(0, 3).map((service, i) => (
-              <ServiceCard
-                key={service.title}
-                title={service.title}
-                description={service.description}
-                index={i}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+        {/* Stats Counter Section */}
+        <section aria-label="Company Statistics">
+          <StatsCounter />
+        </section>
 
-      <StatsCounter />
+        {/* Testimonials Section */}
+        <section aria-label="Customer Reviews">
+          <Testimonials />
+        </section>
 
-      <Testimonials />
-      <CallToAction />
+        {/* Call To Action Section */}
+        <CallToAction />
+      </main>
     </>
   );
 }
