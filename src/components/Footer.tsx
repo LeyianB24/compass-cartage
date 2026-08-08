@@ -3,14 +3,29 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, ArrowUpRight } from "lucide-react";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Service Area", href: "/service-area" },
+  { label: "Get a Quote", href: "/quote" },
+];
+
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="relative overflow-hidden bg-navy-deep text-paper">
-      {/* Signature route-line motif — draws itself in once scrolled into
-          view, as if arriving at the final destination of the page. */}
+    <footer
+      aria-labelledby="footer-heading"
+      className="relative overflow-hidden bg-navy-deep text-paper"
+    >
+      <h2 id="footer-heading" className="sr-only">
+        Site Footer
+      </h2>
+
+      {/* Signature route-line motif — draws itself in once scrolled into view */}
       <svg
         className="pointer-events-none absolute -top-6 left-0 h-16 w-full opacity-40"
         viewBox="0 0 1200 80"
@@ -42,12 +57,29 @@ export default function Footer() {
       </svg>
 
       <div className="section-padding mx-auto max-w-content pt-16">
-        <div className="grid gap-12 pb-12 md:grid-cols-4">
-          {/* Brand column */}
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-3">
-              <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none">
-                <rect x="4" y="4" width="40" height="40" rx="9" stroke="#e4c65c" strokeWidth="1.6" />
+        <div className="grid gap-12 pb-12 sm:grid-cols-2 md:grid-cols-5">
+          {/* Brand Column */}
+          <div className="sm:col-span-2 md:col-span-2">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-sm"
+              aria-label={`${BUSINESS?.name || "Compass Cartage"} - Home`}
+            >
+              <svg
+                viewBox="0 0 48 48"
+                className="h-8 w-8 shrink-0 transition-transform duration-200 hover:scale-105"
+                fill="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="4"
+                  y="4"
+                  width="40"
+                  height="40"
+                  rx="9"
+                  stroke="#e4c65c"
+                  strokeWidth="1.6"
+                />
                 <path
                   d="M15 30 L24 14 L33 30"
                   stroke="#e4c65c"
@@ -56,55 +88,111 @@ export default function Footer() {
                   strokeLinejoin="round"
                   fill="none"
                 />
-                <path d="M19.5 24 L28.5 24" stroke="#f7f6f2" strokeWidth="2" strokeLinecap="round" />
+                <path
+                  d="M19.5 24 L28.5 24"
+                  stroke="#f7f6f2"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
-              <span className="font-display text-lg font-semibold">{BUSINESS.name}</span>
-            </div>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-paper/60">
-              {BUSINESS.tagline}. Serving households and businesses across the
-              region with moves that show up on time and handled with care.
+              <span className="font-display text-xl font-semibold tracking-tight text-paper">
+                {BUSINESS?.name || "Compass Cartage"}
+              </span>
+            </Link>
+
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-paper/70">
+              {BUSINESS?.tagline || "Moving services built around you"}. Serving households and businesses across the region with moves that show up on time and are handled with care.
             </p>
           </div>
 
-          {/* Contact column */}
+          {/* Navigation Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft">Contact</p>
-            <ul className="space-y-3 text-sm text-paper/75">
-              <li className="flex items-center gap-2">
-                <Phone size={15} className="shrink-0 text-gold" />
-                <a href={BUSINESS.phoneHref}>{BUSINESS.phone}</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <Mail size={15} className="shrink-0 text-gold" />
-                <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <MapPin size={15} className="shrink-0 text-gold" />
-                {BUSINESS.serviceAreaShort}
-              </li>
-            </ul>
-          </div>
-
-          {/* Areas column */}
-          <div>
-            <p className="eyebrow mb-4 text-gold-soft">Service Area</p>
-            <ul className="space-y-2 text-sm text-paper/75">
-              {SERVICE_AREAS.slice(0, 5).map((area) => (
-                <li key={area}>{area}</li>
+            <p className="eyebrow mb-4 text-gold-soft">Quick Links</p>
+            <ul className="space-y-2.5 text-sm text-paper/75">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-block transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
+
+          {/* Contact Column */}
+          <div>
+            <p className="eyebrow mb-4 text-gold-soft">Contact Us</p>
+            <ul className="space-y-3 text-sm text-paper/75">
+              {BUSINESS?.phone && (
+                <li className="flex items-center gap-2.5">
+                  <Phone size={15} className="shrink-0 text-gold" aria-hidden="true" />
+                  <a
+                    href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
+                    className="transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                  >
+                    {BUSINESS.phone}
+                  </a>
+                </li>
+              )}
+              {BUSINESS?.email && (
+                <li className="flex items-center gap-2.5">
+                  <Mail size={15} className="shrink-0 text-gold" aria-hidden="true" />
+                  <a
+                    href={`mailto:${BUSINESS.email}`}
+                    className="transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                  >
+                    {BUSINESS.email}
+                  </a>
+                </li>
+              )}
+              {BUSINESS?.serviceAreaShort && (
+                <li className="flex items-start gap-2.5">
+                  <MapPin size={15} className="mt-0.5 shrink-0 text-gold" aria-hidden="true" />
+                  <span>{BUSINESS.serviceAreaShort}</span>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* Areas Column */}
+          <div>
+            <div className="flex items-center justify-between">
+              <p className="eyebrow mb-4 text-gold-soft">Service Area</p>
+            </div>
+            <ul className="space-y-2 text-sm text-paper/75">
+              {SERVICE_AREAS?.slice(0, 5).map((area) => (
+                <li key={area} className="transition-colors duration-200 hover:text-paper">
+                  {area}
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/service-area"
+              className="group mt-3 inline-flex items-center gap-1 text-xs font-semibold text-gold transition-colors duration-200 hover:text-gold-soft"
+            >
+              <span>View all regions</span>
+              <ArrowUpRight
+                size={13}
+                className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-paper/10 py-6 text-xs text-paper/50 md:flex-row">
+        {/* Sub-Footer / Copyright */}
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-paper/10 py-6 text-xs text-paper/60 md:flex-row">
           <p>
-            © {new Date().getFullYear()} {BUSINESS.name}. All rights reserved.
+            © {currentYear} {BUSINESS?.name || "Compass Cartage"}. All rights reserved.
           </p>
-          <p>
-            Site by{" "}
+          <p className="flex items-center gap-1">
+            <span>Site built by</span>
             <a
               href="mailto:technologiesbezalel@gmail.com"
-              className="text-gold-soft hover:text-gold"
+              className="font-medium text-gold-soft transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold rounded-xs"
             >
               Bezalel Technologies
             </a>

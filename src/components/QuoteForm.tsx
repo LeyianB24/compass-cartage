@@ -1,8 +1,9 @@
 // src/components/QuoteForm.tsx
 "use client";
 
-import { useState, FormEvent } from "react";
-import { Loader2, CheckCircle2 } from "lucide-react";
+import { useState, FormEvent, useId } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -29,44 +30,98 @@ export default function QuoteForm() {
 
       setStatus("success");
       form.reset();
-    } catch (err) {
+    } catch {
       setStatus("error");
-      setErrorMsg("Something went wrong sending your request. Please try again or call us directly.");
+      setErrorMsg(
+        "Something went wrong sending your request. Please try again or call us directly."
+      );
     }
+  }
+
+  function handleReset() {
+    setStatus("idle");
+    setErrorMsg("");
   }
 
   if (status === "success") {
     return (
-      <div className="flex flex-col items-center border border-hairline bg-white px-8 py-16 text-center">
-        <CheckCircle2 size={40} className="text-gold" />
-        <h3 className="mt-4 font-display text-2xl font-semibold text-navy-deep">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="flex flex-col items-center border border-hairline bg-white px-8 py-16 text-center shadow-xs"
+      >
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
+          <CheckCircle2 size={36} className="text-gold" />
+        </div>
+        <h3 className="mt-5 font-display text-2xl font-semibold text-navy-deep">
           Quote request sent
         </h3>
         <p className="mt-2 max-w-sm text-sm text-slate">
-          Thanks for reaching out — we&apos;ll get back to you shortly with a
-          free quote.
+          Thanks for reaching out — we&apos;ll review your move details and get
+          back to you shortly with a free quote.
         </p>
-      </div>
+
+        <button
+          type="button"
+          onClick={handleReset}
+          className="mt-8 flex items-center gap-2 rounded-sm border border-hairline bg-paper px-5 py-2.5 text-xs font-semibold text-navy-deep transition-colors hover:bg-paper-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep"
+        >
+          <RefreshCw size={14} className="text-slate" />
+          Submit Another Request
+        </button>
+      </motion.div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border border-hairline bg-white p-6 md:p-8">
+    <form
+      onSubmit={handleSubmit}
+      className="border border-hairline bg-white p-6 md:p-8 shadow-xs"
+      noValidate
+    >
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Full Name" name="name" required />
-        <Field label="Phone Number" name="phone" type="tel" required />
-        <Field label="Email" name="email" type="email" required className="sm:col-span-2" />
-        <Field label="Moving From" name="pickupAddress" required />
-        <Field label="Moving To" name="dropoffAddress" required />
+        <Field label="Full Name" name="name" required placeholder="John Doe" />
+        <Field
+          label="Phone Number"
+          name="phone"
+          type="tel"
+          required
+          placeholder="(555) 000-0000"
+        />
+        <Field
+          label="Email"
+          name="email"
+          type="email"
+          required
+          className="sm:col-span-2"
+          placeholder="john@example.com"
+        />
+        <Field
+          label="Moving From"
+          name="pickupAddress"
+          required
+          placeholder="City, ZIP, or address"
+        />
+        <Field
+          label="Moving To"
+          name="dropoffAddress"
+          required
+          placeholder="City, ZIP, or address"
+        />
         <Field label="Preferred Move Date" name="moveDate" type="date" />
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-navy-deep">
+          <label
+            htmlFor="moveSize"
+            className="mb-1.5 block text-sm font-medium text-navy-deep"
+          >
             Home / Move Size
           </label>
           <select
+            id="moveSize"
             name="moveSize"
-            className="w-full border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold"
+            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             <option value="">Select size</option>
             <option value="studio">Studio</option>
@@ -78,32 +133,58 @@ export default function QuoteForm() {
         </div>
 
         <div className="sm:col-span-2">
-          <label className="mb-1.5 block text-sm font-medium text-navy-deep">
+          <label
+            htmlFor="notes"
+            className="mb-1.5 block text-sm font-medium text-navy-deep"
+          >
             Additional Notes
           </label>
           <textarea
+            id="notes"
             name="notes"
             rows={4}
-            placeholder="Anything we should know — stairs, elevator access, fragile items, etc."
-            className="w-full border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold"
+            placeholder="Anything we should know — stairs, elevator access, fragile items, preferred times, etc."
+            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           />
         </div>
       </div>
 
-      {status === "error" && (
-        <p className="mt-4 text-sm text-red-600">{errorMsg}</p>
-      )}
+      <AnimatePresence>
+        {status === "error" && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            role="alert"
+            className="mt-4 flex items-center gap-2 rounded-xs bg-red-50 p-3 text-sm text-red-700 border border-red-200"
+          >
+            <AlertCircle size={16} className="shrink-0 text-red-500" />
+            <span>{errorMsg}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-sm bg-navy-deep px-7 py-3.5 text-sm font-semibold text-paper transition-colors hover:bg-navy disabled:opacity-60 sm:w-auto"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-sm bg-navy-deep px-7 py-3.5 text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        {status === "submitting" && <Loader2 size={16} className="animate-spin" />}
+        {status === "submitting" && (
+          <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+        )}
         {status === "submitting" ? "Sending..." : "Request My Free Quote"}
       </button>
     </form>
   );
+}
+
+interface FieldProps {
+  label: string;
+  name: string;
+  type?: string;
+  required?: boolean;
+  className?: string;
+  placeholder?: string;
 }
 
 function Field({
@@ -112,24 +193,31 @@ function Field({
   type = "text",
   required = false,
   className = "",
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-  className?: string;
-}) {
+  placeholder = "",
+}: FieldProps) {
+  const id = useId();
+
   return (
     <div className={className}>
-      <label className="mb-1.5 block text-sm font-medium text-navy-deep">
+      <label
+        htmlFor={id}
+        className="mb-1.5 block text-sm font-medium text-navy-deep"
+      >
         {label}
-        {required && <span className="text-gold"> *</span>}
+        {required && (
+          <span className="text-gold" aria-hidden="true">
+            {" "}
+            *
+          </span>
+        )}
       </label>
       <input
+        id={id}
         type={type}
         name={name}
         required={required}
-        className="w-full border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold"
+        placeholder={placeholder}
+        className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
       />
     </div>
   );

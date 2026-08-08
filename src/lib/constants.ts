@@ -23,31 +23,47 @@ export const SERVICE_AREAS = [
 ];
 
 // Update once Howard confirms exact service offerings.
-export const SERVICES = [
+// NOTE: `imageKey` links each service to a key in SERVICE_IMAGES
+// (see ./images.ts) so the right photograph stays attached to a
+// given service everywhere it appears.
+import type { ServiceImageKey } from "./images";
+
+export type Service = {
+  title: string;
+  description: string;
+  imageKey: ServiceImageKey;
+};
+
+export const SERVICES: Service[] = [
   {
     title: "Local Moves",
     description:
       "Full-service moving within the metro area — apartments, houses, and everything in between.",
+    imageKey: "indoorsWithTools",
   },
   {
     title: "Long-Distance Moves",
     description:
       "Moving across the province or country? We handle logistics start to finish.",
+    imageKey: "truckSunnyDay",
   },
   {
     title: "Packing & Unpacking",
     description:
       "Professional packing services to keep your belongings safe in transit.",
+    imageKey: "packingScene",
   },
   {
     title: "Storage Solutions",
     description:
       "Short and long-term storage options for moves that need extra flexibility.",
+    imageKey: "storageWarehouse",
   },
   {
     title: "Commercial & Office Moves",
     description:
       "Minimize downtime with efficient office and commercial relocation services.",
+    imageKey: "officeMove",
   },
 ];
 

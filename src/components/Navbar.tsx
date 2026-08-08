@@ -3,7 +3,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -23,7 +25,7 @@ export default function Navbar() {
   });
 
   return (
-    <header className="sticky top-0 z-50 border-b border-hairline bg-paper/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-hairline bg-paper/95 backdrop-blur-md">
       <motion.div
         animate={{
           height: scrolled ? 68 : 80,
@@ -34,10 +36,28 @@ export default function Navbar() {
         transition={{ duration: 0.25, ease: "easeOut" }}
         className="section-padding mx-auto flex max-w-content items-center justify-between"
       >
-        {/* Logo mark */}
-        <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <svg viewBox="0 0 48 48" className="h-9 w-9" fill="none">
-            <rect x="4" y="4" width="40" height="40" rx="9" stroke="#0b1f3a" strokeWidth="2" />
+        {/* Logo Mark */}
+        <Link
+          href="/"
+          className="flex items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2"
+          onClick={() => setOpen(false)}
+          aria-label={`${BUSINESS?.name || "Compass Cartage"} Home`}
+        >
+          <svg
+            viewBox="0 0 48 48"
+            className="h-9 w-9 shrink-0 transition-transform duration-200 hover:scale-105"
+            fill="none"
+            aria-hidden="true"
+          >
+            <rect
+              x="4"
+              y="4"
+              width="40"
+              height="40"
+              rx="9"
+              stroke="#0b1f3a"
+              strokeWidth="2"
+            />
             <path
               d="M15 30 L24 14 L33 30"
               stroke="#c9a227"
@@ -46,89 +66,129 @@ export default function Navbar() {
               strokeLinejoin="round"
               fill="none"
             />
-            <path d="M19.5 24 L28.5 24" stroke="#0b1f3a" strokeWidth="2.4" strokeLinecap="round" />
+            <path
+              d="M19.5 24 L28.5 24"
+              stroke="#0b1f3a"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+            />
           </svg>
           <span className="font-display text-lg font-semibold leading-none text-navy-deep">
-            {BUSINESS.name}
+            {BUSINESS?.name || "Compass Cartage"}
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="relative text-sm font-medium text-slate transition-colors hover:text-navy-deep"
-            >
-              {link.label}
-            </Link>
-          ))}
+        {/* Desktop Navigation Links */}
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Main Navigation">
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative text-sm transition-colors duration-200 rounded-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep ${
+                  isActive
+                    ? "font-semibold text-navy-deep"
+                    : "font-medium text-slate hover:text-navy-deep"
+                }`}
+              >
+                {link.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="activeNavIndicator"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gold rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
-          <a
-            href={BUSINESS.phoneHref}
-            className="flex items-center gap-2 text-sm font-medium text-navy-deep"
-          >
-            <Phone size={16} strokeWidth={2} className="text-gold" />
-            {BUSINESS.phone}
-          </a>
+        {/* Desktop Call To Actions */}
+        <div className="hidden items-center gap-5 md:flex">
+          {BUSINESS?.phone && (
+            <a
+              href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
+              className="flex items-center gap-2 text-sm font-medium text-navy-deep transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep rounded-xs"
+            >
+              <Phone size={16} strokeWidth={2} className="text-gold" aria-hidden="true" />
+              {BUSINESS.phone}
+            </a>
+          )}
           <Link
             href="/quote"
-            className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-navy"
+            className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2"
           >
             Get a Free Quote
           </Link>
         </div>
 
-        {/* Mobile menu toggle */}
+        {/* Mobile Menu Toggle Button */}
         <button
-          className="md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
+          type="button"
+          className="rounded-md p-2 text-navy-deep transition-colors hover:bg-paper-dark md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep"
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X size={24} /> : <Menu size={24} />}
+          {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
         </button>
       </motion.div>
 
-      {/* Mobile menu panel */}
-      {open && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.25 }}
-          className="overflow-hidden border-t border-hairline bg-paper md:hidden"
-        >
-          <nav className="section-padding flex flex-col gap-1 py-4">
-            {NAV_LINKS.map((link) => (
+      {/* Animated Mobile Menu Panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-hairline bg-paper md:hidden"
+          >
+            <nav className="section-padding flex flex-col gap-1 py-4" aria-label="Mobile Navigation">
+              {NAV_LINKS.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`py-3 text-base transition-colors ${
+                      isActive
+                        ? "font-semibold text-gold"
+                        : "font-medium text-navy-deep hover:text-gold"
+                    }`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              {BUSINESS?.phone && (
+                <a
+                  href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
+                  className="flex items-center gap-2 py-3 text-base font-medium text-navy-deep hover:text-gold"
+                  onClick={() => setOpen(false)}
+                >
+                  <Phone size={16} className="text-gold" aria-hidden="true" />
+                  {BUSINESS.phone}
+                </a>
+              )}
+
               <Link
-                key={link.href}
-                href={link.href}
-                className="py-3 text-base font-medium text-navy-deep"
+                href="/quote"
+                className="mt-3 rounded-sm bg-navy-deep px-5 py-3 text-center text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy"
                 onClick={() => setOpen(false)}
               >
-                {link.label}
+                Get a Free Quote
               </Link>
-            ))}
-            <a
-              href={BUSINESS.phoneHref}
-              className="flex items-center gap-2 py-3 text-base font-medium text-navy-deep"
-            >
-              <Phone size={16} className="text-gold" />
-              {BUSINESS.phone}
-            </a>
-            <Link
-              href="/quote"
-              className="mt-2 rounded-sm bg-navy-deep px-5 py-3 text-center text-sm font-semibold text-paper"
-              onClick={() => setOpen(false)}
-            >
-              Get a Free Quote
-            </Link>
-          </nav>
-        </motion.div>
-      )}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
