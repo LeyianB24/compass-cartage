@@ -1,13 +1,16 @@
 // src/components/Footer.tsx
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-navy-deep text-paper">
-      {/* Signature route-line motif — a dashed path with a waypoint,
-          echoing the logo's compass mark. One deliberate flourish. */}
+      {/* Signature route-line motif — draws itself in once scrolled into
+          view, as if arriving at the final destination of the page. */}
       <svg
         className="pointer-events-none absolute -top-6 left-0 h-16 w-full opacity-40"
         viewBox="0 0 1200 80"
@@ -15,14 +18,27 @@ export default function Footer() {
         fill="none"
         aria-hidden="true"
       >
-        <path
+        <motion.path
           d="M0 60 C 200 10, 380 90, 600 40 S 1000 10, 1200 55"
           stroke="#c9a227"
           strokeWidth="1.5"
           strokeDasharray="2 10"
           strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          whileInView={{ pathLength: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.4, ease: "easeInOut" }}
         />
-        <circle cx="600" cy="40" r="4" fill="#c9a227" />
+        <motion.circle
+          cx="600"
+          cy="40"
+          r="4"
+          fill="#c9a227"
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1.3, duration: 0.3 }}
+        />
       </svg>
 
       <div className="section-padding mx-auto max-w-content pt-16">

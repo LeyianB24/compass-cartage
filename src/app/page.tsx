@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Hero from "@/components/Hero";
 import ServiceCard from "@/components/ServiceCard";
+import StatsCounter from "@/components/StatsCounter";
 import Testimonials from "@/components/Testimonials";
 import CallToAction from "@/components/CallToAction";
 import { SERVICES } from "@/lib/constants";
@@ -44,23 +45,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why choose us strip */}
-      <section className="border-y border-hairline bg-white">
-        <div className="section-padding mx-auto grid max-w-content gap-10 py-16 sm:grid-cols-3">
-          {[
-            { stat: "On-Time", label: "Arrival, every job" },
-            { stat: "Insured", label: "Fully covered moves" },
-            { stat: "Flat-Rate", label: "No surprise fees" },
-          ].map((item) => (
-            <div key={item.stat}>
-              <p className="font-display text-2xl font-semibold text-navy-deep">
-                {item.stat}
-              </p>
-              <p className="mt-1 text-sm text-slate">{item.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <StatsCounter />
 
       <Testimonials />
       <CallToAction />

@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 
@@ -14,10 +15,25 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 16);
+  });
 
   return (
     <header className="sticky top-0 z-50 border-b border-hairline bg-paper/95 backdrop-blur">
-      <div className="section-padding mx-auto flex h-20 max-w-content items-center justify-between">
+      <motion.div
+        animate={{
+          height: scrolled ? 68 : 80,
+          boxShadow: scrolled
+            ? "0 4px 20px -8px rgba(7,20,38,0.12)"
+            : "0 0 0 rgba(0,0,0,0)",
+        }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="section-padding mx-auto flex max-w-content items-center justify-between"
+      >
         {/* Logo mark */}
         <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <svg viewBox="0 0 48 48" className="h-9 w-9" fill="none">
@@ -43,7 +59,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-slate transition-colors hover:text-navy-deep"
+              className="relative text-sm font-medium text-slate transition-colors hover:text-navy-deep"
             >
               {link.label}
             </Link>
@@ -74,11 +90,17 @@ export default function Navbar() {
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </div>
+      </motion.div>
 
       {/* Mobile menu panel */}
       {open && (
-        <div className="border-t border-hairline bg-paper md:hidden">
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.25 }}
+          className="overflow-hidden border-t border-hairline bg-paper md:hidden"
+        >
           <nav className="section-padding flex flex-col gap-1 py-4">
             {NAV_LINKS.map((link) => (
               <Link
@@ -105,7 +127,7 @@ export default function Navbar() {
               Get a Free Quote
             </Link>
           </nav>
-        </div>
+        </motion.div>
       )}
     </header>
   );
