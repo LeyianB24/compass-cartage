@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import ServiceCard from "@/components/ServiceCard";
 import StatsCounter from "@/components/StatsCounter";
 import Testimonials from "@/components/Testimonials";
+import GalleryStrip from "@/components/GalleryStrip";
 import CallToAction from "@/components/CallToAction";
 import { SERVICES } from "@/lib/constants";
 
@@ -107,6 +108,9 @@ export default function HomePage() {
         <section aria-label="Customer Reviews">
           <Testimonials />
         </section>
+
+        {/* Gallery — a curated strip of moving-day photographs */}
+        <GalleryStrip />
 
         {/* Call To Action Section */}
         <CallToAction />
