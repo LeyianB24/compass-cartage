@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compass Cartage — Next-Gen Logo Suite</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+
+  :root {
+    --navy: #0b1f3a;
+    --navy-deep: #061222;
+    --gold: #c9a227;
+    --gold-light: #f3d46a;
+    --paper: #f8f7f4;
+    --card-bg: #ffffff;
+    --slate: #4a5568;
+    --hairline: #e2e0d8;
+  }
+
+  body.dark-mode {
+    --paper: #061222;
+    --card-bg: #0b1f3a;
+    --slate: #a0aec0;
+    --hairline: #1e3a8a33;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--navy-deep);
+    font-family: 'Inter', sans-serif;
+    padding: 40px 20px 80px;
+    transition: background-color 0.3s ease;
+  }
+
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-b: 1px solid var(--hairline);
+    padding-bottom: 24px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 36px;
+    margin: 0;
+    color: var(--navy-deep);
+  }
+  body.dark-mode h1 { color: #ffffff; }
+
+  .header-desc {
+    color: var(--slate);
+    font-size: 14px;
+    max-width: 600px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .theme-toggle {
+    background: var(--navy);
+    color: #fff;
+    border: 1px solid var(--gold);
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+  }
+  .theme-toggle:hover {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+
+  .grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 32px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-header {
+    margin-bottom: 20px;
+  }
+  .concept-num {
+    font-size: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .concept-title {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 4px 0 8px;
+    color: var(--navy-deep);
+  }
+  body.dark-mode .concept-title { color: #ffffff; }
+
+  .concept-desc {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  /* Display Stages */
+  .preview-box {
+    background: #ffffff;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    min-height: 160px;
+  }
+  body.dark-mode .preview-box {
+    background: #071426;
+  }
+
+  .preview-box.dark-bg {
+    background: #071426;
+  }
+
+  .preview-box.light-bg {
+    background: #f8f7f4;
+  }
+
+  /* SVG Sizing */
+  .icon-preview svg {
+    width: 80px;
+    height: 80px;
+  }
+  .lockup-preview svg {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+  }
+
+  .scale-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0,0,0,0.02);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+  body.dark-mode .scale-strip {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .scale-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .scale-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate);
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .download-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .download-btn:hover {
+    background: var(--gold);
+    color: #061222;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-container">
+  <div>
+    <div class="eyebrow">Brand Identity Expansion</div>
+    <h1>Compass Cartage</h1>
+    <div class="header-desc">
+      6 strategic logo concepts designed to seamlessly transition from residential & commercial moving into international freight, shipping, and intermodal logistics.
+    </div>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark View</button>
+</div>
+
+<div class="grid">
+
+  <!-- CONCEPT 1 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="concept-num">Concept 01</div>
+      <div class="concept-title">The Global Intermodal</div>
+      <div class="concept-desc">Combines an isometric freight shipping container with a dynamic compass star. Communicates structured cartage, logistics precision, and global freight capacity.</div>
+    </div>
+    
+    <div class="preview-box icon-preview">
+      <svg id="svg-mark-1" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#0b1f3a" stroke-width="3" fill="none" stroke-linejoin="round"/>
+        <path d="M50 10 L50 90" stroke="#0b1f3a" stroke-width="2" stroke-dasharray="3 3"/>
+        <path d="M15 30 L50 50 L85 30" stroke="#0b1f3a" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- Compass Needle -->
+        <polygon points="50,18 57,50 50,45 43,50" fill="#c9a227"/>
+        <polygon points="50,82 57,50 50,55 43,50" fill="#0b1f3a"/>
+      </svg>
+    </div>
+
+    <div class="preview-box lockup-preview dark-bg">
+      <svg id="svg-lockup-1" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(10, 10)">
+          <path d="M30 5 L51 17 L51 41 L30 53 L9 41 L9 17 Z" stroke="#e4c65c" stroke-width="2" fill="none" stroke-linejoin="round"/>
+          <path d="M30 5 L30 53" stroke="#e4c65c" stroke-width="1.5" stroke-dasharray="2 2"/>
+          <path d="M9 17 L30 29 L51 17" stroke="#e4c65c" stroke-width="1.5"/>
+          <polygon points="30,10 34,29 30,26 26,29" fill="#f3d46a"/>
+          <polygon points="30,48 34,29 30,32 26,29" fill="#ffffff"/>
+        </g>
+        <text x="80" y="38" font-family="'Cinzel', serif" font-weight="700" font-size="20" fill="#ffffff" letter-spacing="1">COMPASS</text>
+        <text x="80" y="56" font-family="'Inter', sans-serif" font-weight="600" font-size="11" fill="#c9a227" letter-spacing="4">CARTAGE & FREIGHT</text>
+      </svg>
+    </div>
+
+    <div class="scale-strip">
+      <div class="scale-item">
+        <span class="scale-label">Favicon (32px)</span>
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#0b1f3a" stroke-width="6" fill="none"/>
+          <polygon points="50,15 60,50 50,42 40,50" fill="#c9a227"/>
+        </svg>
+      </div>
+      <div class="scale-item">
+        <span class="scale-label">App Icon</span>
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="20" fill="#0b1f3a"/>
+          <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" stroke="#e4c65c" stroke-width="4" fill="none"/>
+          <polygon points="50,25 58,50 50,44 42,50" fill="#e4c65c"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="download-btn" onclick="downloadSVG('svg-mark-1', 'Compass-Cartage-Intermodal-Mark.svg')">Mark SVG</button>
+      <button class="download-btn" onclick="downloadSVG('svg-lockup-1', 'Compass-Cartage-Intermodal-Lockup.svg')">Lockup SVG</button>
+    </div>
+  </div>
+
+  <!-- CONCEPT 2 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="concept-num">Concept 02</div>
+      <div class="concept-title">The Velocity Arrow</div>
+      <div class="concept-desc">Dynamic forward-leaning motion lines representing rapid transport, moving trucks, and cargo ships heading North-East toward destination.</div>
+    </div>
+    
+    <div class="preview-box icon-preview">
+      <svg id="svg-mark-2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 85 L80 15" stroke="#e2e0d8" stroke-width="4" stroke-linecap="round"/>
+        <path d="M30 70 L75 25 L50 25" stroke="#0b1f3a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M25 45 L75 25 L75 55" stroke="#c9a227" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="75" cy="25" r="5" fill="#0b1f3a"/>
+      </svg>
+    </div>
+
+    <div class="preview-box lockup-preview light-bg">
+      <svg id="svg-lockup-2" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(10, 15)">
+          <path d="M15 50 L45 10 L30 10" stroke="#0b1f3a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 30 L45 10 L45 30" stroke="#c9a227" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <text x="75" y="38" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="21" fill="#0b1f3a" letter-spacing="1">COMPASS</text>
+        <text x="75" y="55" font-family="'Inter', sans-serif" font-weight="600" font-size="10" fill="#c9a227" letter-spacing="3.5">CARTAGE & LOGISTICS</text>
+      </svg>
+    </div>
+
+    <div class="scale-strip">
+      <div class="scale-item">
+        <span class="scale-label">Favicon (32px)</span>
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <path d="M20 80 L80 20 L45 20" stroke="#0b1f3a" stroke-width="12" stroke-linecap="round"/>
+          <path d="M80 20 L80 55" stroke="#c9a227" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="scale-item">
+        <span class="scale-label">App Icon</span>
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="20" fill="#0b1f3a"/>
+          <path d="M25 75 L75 25 L50 25" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+          <path d="M75 25 L75 50" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="download-btn" onclick="downloadSVG('svg-mark-2', 'Compass-Cartage-Velocity-Mark.svg')">Mark SVG</button>
+      <button class="download-btn" onclick="downloadSVG('svg-lockup-2', 'Compass-Cartage-Velocity-Lockup.svg')">Lockup SVG</button>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="concept-num">Concept 03</div>
+      <div class="concept-title">Maritime & Highway Shield</div>
+      <div class="concept-desc">An authoritative crest featuring a North Star compass integrated with a highway lane / shipping channel perspective. Built for heavy trust and security.</div>
+    </div>
+    
+    <div class="preview-box icon-preview">
+      <svg id="svg-mark-3" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 10 L82 22 V50 C82 70 50 90 50 90 C50 90 18 70 18 50 V22 L50 10 Z" stroke="#0b1f3a" stroke-width="3" fill="none"/>
+        <!-- Highway/Channel Lines -->
+        <path d="M38 78 L47 48" stroke="#0b1f3a" stroke-width="2"/>
+        <path d="M62 78 L53 48" stroke="#0b1f3a" stroke-width="2"/>
+        <!-- Compass Star -->
+        <polygon points="50,22 54,36 68,36 56,44 60,58 50,48 40,58 44,44 32,36 46,36" fill="#c9a227"/>
+      </svg>
+    </div>
+
+    <div class="preview-box lockup-preview dark-bg">
+      <svg id="svg-lockup-3" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(12, 10)">
+          <path d="M25 5 L43 12 V28 C43 39 25 50 25 50 C25 50 7 39 7 28 V12 L25 5 Z" stroke="#e4c65c" stroke-width="2" fill="none"/>
+          <polygon points="25,12 27,20 35,20 28,25 31,33 25,28 19,33 22,25 15,20 23,20" fill="#f3d46a"/>
+        </g>
+        <text x="70" y="36" font-family="'Cinzel', serif" font-weight="700" font-size="18" fill="#ffffff" letter-spacing="1.5">COMPASS</text>
+        <text x="70" y="54" font-family="'Inter', sans-serif" font-weight="500" font-size="10" fill="#e4c65c" letter-spacing="3">CARTAGE & SHIPPING</text>
+      </svg>
+    </div>
+
+    <div class="scale-strip">
+      <div class="scale-item">
+        <span class="scale-label">Favicon (32px)</span>
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <path d="M50 10 L85 22 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V22 L50 10 Z" fill="#0b1f3a"/>
+          <polygon points="50,25 55,42 70,42 58,52 63,70 50,58 37,70 42,52 30,42 45,42" fill="#c9a227"/>
+        </svg>
+      </div>
+      <div class="scale-item">
+        <span class="scale-label">App Icon</span>
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="20" fill="#0b1f3a"/>
+          <path d="M50 18 L78 28 V52 C78 68 50 82 50 82 C50 82 22 68 22 52 V28 L50 18 Z" stroke="#e4c65c" stroke-width="4" fill="none"/>
+          <circle cx="50" cy="48" r="10" fill="#e4c65c"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="download-btn" onclick="downloadSVG('svg-mark-3', 'Compass-Cartage-Shield-Mark.svg')">Mark SVG</button>
+      <button class="download-btn" onclick="downloadSVG('svg-lockup-3', 'Compass-Cartage-Shield-Lockup.svg')">Lockup SVG</button>
+    </div>
+  </div>
+
+  <!-- CONCEPT 4 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="concept-num">Concept 04</div>
+      <div class="concept-title">Global Meridian Ring</div>
+      <div class="concept-desc">An abstract globe formed by orbital freight paths with a sharp geometric compass point at its center. Modern, premium, and corporate.</div>
+    </div>
+    
+    <div class="preview-box icon-preview">
+      <svg id="svg-mark-4" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="38" stroke="#0b1f3a" stroke-width="2.5" stroke-dasharray="8 4"/>
+        <ellipse cx="50" cy="50" rx="38" ry="14" stroke="#c9a227" stroke-width="2" transform="rotate(-25 50 50)"/>
+        <!-- Compass Core -->
+        <polygon points="50,20 58,50 50,44 42,50" fill="#0b1f3a"/>
+        <polygon points="50,80 58,50 50,56 42,50" fill="#c9a227"/>
+      </svg>
+    </div>
+
+    <div class="preview-box lockup-preview light-bg">
+      <svg id="svg-lockup-4" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(10, 10)">
+          <circle cx="30" cy="30" r="24" stroke="#0b1f3a" stroke-width="2" stroke-dasharray="5 3"/>
+          <ellipse cx="30" cy="30" rx="24" ry="9" stroke="#c9a227" stroke-width="1.5" transform="rotate(-25 30 30)"/>
+          <polygon points="30,12 35,30 30,27 25,30" fill="#0b1f3a"/>
+          <polygon points="30,48 35,30 30,33 25,30" fill="#c9a227"/>
+        </g>
+        <text x="75" y="36" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="20" fill="#0b1f3a">COMPASS</text>
+        <text x="75" y="54" font-family="'Inter', sans-serif" font-weight="600" font-size="10" fill="#c9a227" letter-spacing="3.5">WORLDWIDE CARTAGE</text>
+      </svg>
+    </div>
+
+    <div class="scale-strip">
+      <div class="scale-item">
+        <span class="scale-label">Favicon (32px)</span>
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="40" stroke="#0b1f3a" stroke-width="8"/>
+          <polygon points="50,15 62,50 50,40 38,50" fill="#c9a227"/>
+        </svg>
+      </div>
+      <div class="scale-item">
+        <span class="scale-label">App Icon</span>
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="20" fill="#0b1f3a"/>
+          <circle cx="50" cy="50" r="30" stroke="#f3d46a" stroke-width="3"/>
+          <polygon points="50,25 58,50 50,44 42,50" fill="#ffffff"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="download-btn" onclick="downloadSVG('svg-mark-4', 'Compass-Cartage-Meridian-Mark.svg')">Mark SVG</button>
+      <button class="download-btn" onclick="downloadSVG('svg-lockup-4', 'Compass-Cartage-Meridian-Lockup.svg')">Lockup SVG</button>
+    </div>
+  </div>
+
+  <!-- CONCEPT 5 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="concept-num">Concept 05</div>
+      <div class="concept-title">Folded Parcel Compass</div>
+      <div class="concept-desc">An origami-style cardboard shipping box constructed out of opposing compass needles. Merges tactile moving services with elegant geometry.</div>
+    </div>
+    
+    <div class="preview-box icon-preview">
+      <svg id="svg-mark-5" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Top Facets -->
+        <polygon points="50,15 80,35 50,50 20,35" fill="#0b1f3a"/>
+        <!-- Left Facet -->
+        <polygon points="20,35 50,50 50,85 20,65" fill="#c9a227"/>
+        <!-- Right Facet -->
+        <polygon points="80,35 50,50 50,85 80,65" fill="#061222"/>
+        <!-- Accent Needle Cutout on top -->
+        <polygon points="50,15 58,35 50,30 42,35" fill="#f3d46a"/>
+      </svg>
+    </div>
+
+    <div class="preview-box lockup-preview dark-bg">
+      <svg id="svg-lockup-5" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(10, 12)">
+          <polygon points="30,8 50,20 30,30 10,20" fill="#f3d46a"/>
+          <polygon points="10,20 30,30 30,52 10,40" fill="#c9a227"/>
+          <polygon points="50,20 30,30 30,52 50,40" fill="#ffffff"/>
+        </g>
+        <text x="75" y="38" font-family="'Cinzel', serif" font-weight="700" font-size="20" fill="#ffffff">COMPASS</text>
+        <text x="75" y="55" font-family="'Inter', sans-serif" font-weight="600" font-size="10" fill="#e4c65c" letter-spacing="4">CARTAGE SERVICES</text>
+      </svg>
+    </div>
+
+    <div class="scale-strip">
+      <div class="scale-item">
+        <span class="scale-label">Favicon (32px)</span>
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <polygon points="50,15 85,38 50,55 15,38" fill="#0b1f3a"/>
+          <polygon points="15,38 50,55 50,88 15,68" fill="#c9a227"/>
+          <polygon points="85,38 50,55 50,88 85,68" fill="#061222"/>
+        </svg>
+      </div>
+      <div class="scale-item">
+        <span class="scale-label">App Icon</span>
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="20" fill="#0b1f3a"/>
+          <polygon points="50,20 75,35 50,48 25,35" fill="#f3d46a"/>
+          <polygon points="25,35 50,48 50,75 25,60" fill="#c9a227"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="download-btn" onclick="downloadSVG('svg-mark-5', 'Compass-Cartage-Parcel-Mark.svg')">Mark SVG</button>
+      <button class="download-btn" onclick="downloadSVG('svg-lockup-5', 'Compass-Cartage-Parcel-Lockup.svg')">Lockup SVG</button>
+    </div>
+  </div>
+
+  <!-- CONCEPT 6 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="concept-num">Concept 06</div>
+      <div class="concept-title">The Continuous Horizon</div>
+      <div class="concept-desc">Sleek, ultra-minimal monogram incorporating the letter "C" with a compass rose sweeping across a subtle horizon line. Highly refined for apparel, vehicles, and air freight.</div>
+    </div>
+    
+    <div class="preview-box icon-preview">
+      <svg id="svg-mark-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer C Arc -->
+        <path d="M70 25 C 40 10, 15 35, 15 50 C 15 65, 40 90, 70 75" stroke="#0b1f3a" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <!-- Horizon line -->
+        <line x1="25" y1="50" x2="85" y2="50" stroke="#c9a227" stroke-width="3" stroke-dasharray="2 4"/>
+        <!-- Compass Triangle -->
+        <polygon points="60,25 75,50 55,50" fill="#c9a227"/>
+        <polygon points="60,75 75,50 55,50" fill="#0b1f3a"/>
+      </svg>
+    </div>
+
+    <div class="preview-box lockup-preview light-bg">
+      <svg id="svg-lockup-6" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(10, 12)">
+          <path d="M42 15 C 24 6, 9 21, 9 30 C 9 39, 24 54, 42 45" stroke="#0b1f3a" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <line x1="15" y1="30" x2="51" y2="30" stroke="#c9a227" stroke-width="2"/>
+          <polygon points="36,15 45,30 33,30" fill="#c9a227"/>
+        </g>
+        <text x="70" y="36" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="20" fill="#0b1f3a" letter-spacing="1">COMPASS</text>
+        <text x="70" y="53" font-family="'Inter', sans-serif" font-weight="600" font-size="10" fill="#c9a227" letter-spacing="3.5">CARTAGE FREIGHT</text>
+      </svg>
+    </div>
+
+    <div class="scale-strip">
+      <div class="scale-item">
+        <span class="scale-label">Favicon (32px)</span>
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <path d="M75 20 C 35 5, 10 35, 10 50 C 10 65, 35 95, 75 80" stroke="#0b1f3a" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <polygon points="65,20 82,50 55,50" fill="#c9a227"/>
+        </svg>
+      </div>
+      <div class="scale-item">
+        <span class="scale-label">App Icon</span>
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+          <rect width="100" height="100" rx="20" fill="#0b1f3a"/>
+          <path d="M70 25 C 40 10, 20 35, 20 50 C 20 65, 40 90, 70 75" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <polygon points="60,25 75,50 55,50" fill="#f3d46a"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="download-btn" onclick="downloadSVG('svg-mark-6', 'Compass-Cartage-Horizon-Mark.svg')">Mark SVG</button>
+      <button class="download-btn" onclick="downloadSVG('svg-lockup-6', 'Compass-Cartage-Horizon-Lockup.svg')">Lockup SVG</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  function downloadSVG(svgId, filename) {
+    const svgElement = document.getElementById(svgId);
+    if (!svgElement) return;
+
+    // Clone element to prevent altering DOM
+    const clonedSvg = svgElement.cloneNode(true);
+    
+    // Ensure XML standard attributes exist
+    clonedSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+
+    const serializer = new XMLSerializer();
+    let svgString = serializer.serializeToString(clonedSvg);
+
+    // Add XML header
+    svgString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + svgString;
+
+    const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    
+    const downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = filename;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>

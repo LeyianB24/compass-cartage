@@ -1,91 +1,111 @@
 // src/components/GalleryStrip.tsx
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { GALLERY } from "@/lib/images";
 
+const AUTO_MS = 4200;
+
 /**
- * "A look at moving day" — a horizontally-scrolling strip of photographs
- * shown on the home page between Testimonials and the CTA. Gives the
- * many scene-variety images a real home without forcing each one into a
- * dated section. Decorative route line threads along the lower edge to
- * stay on-brand with the rest of the site.
- *
- * Layout: a CSS columns masonry column (avoids JS layout). The strip is
- * horizontally scrollable on small screens and expands into a wide
- * multi-column wall on large screens.
+ * "A look at moving day" — a full-bleed auto-advancing slideshow of the
+ * moving-day photographs. Crossfades between frames, with prev/next
+ * controls and dot indicators. Pauses on hover so users can dwell on a
+ * frame. Respects reduced-motion via globals.css (animations short-circuit).
  */
 export default function GalleryStrip() {
+  const [[index, dir], setState] = useState<[number, number]>([0, 0]);
+
+  const paginate = useCallback((d: number) => {
+    setState(([i]) => {
+      const next = (i + d + GALLERY.length) % GALLERY.length;
+      return [next, d];
+    });
+  }, []);
+
+  // Auto-advance loop
+  useEffect(() => {
+    const id = setInterval(() => setState(([i]) => [(i + 1) % GALLERY.length, 1]), AUTO_MS);
+    return () => clearInterval(id);
+  }, []);
+
+  const img = GALLERY[index];
+
   return (
-    <section className="relative overflow-hidden border-y border-hairline bg-white">
-      {/* Section heading */}
-      <div className="section-padding mx-auto max-w-content pt-16">
-        <p className="eyebrow mb-3">A look at moving day</p>
-        <h2 className="font-display text-3xl font-semibold text-navy-deep md:text-4xl">
-          Real crews, real homes, real care
-        </h2>
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate">
-          A few moments from the job — packing, loading, and the moment
-          everything lands where it should.
-        </p>
+    <section className="relative isolate overflow-hidden border-y border-hairline bg-navy-deep">
+      {/* Slideshow frame — fixed aspect, crossfades between photos */}
+      <div className="relative h-[60vh] min-h-[420px] w-full md:h-[68vh]">
+        <AnimatePresence initial={false} custom={dir}>
+          <motion.div
+            key={index}
+            custom={dir}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={img.src}
+              alt={img.alt}
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+            {/* Bottom legibility wash so controls + caption stay readable */}
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/20 to-transparent" />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Masonry-style wall using CSS columns. Horizontal scroll on small
-          screens keeps the strip navigable without a heavy lightbox. */}
-      <div className="section-padding mx-auto max-w-content pb-16 pt-10">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="columns-2 gap-4 md:columns-3 lg:columns-4 [&>*]:mb-4"
-        >
-          {GALLERY.map((img, i) => (
-            <motion.figure
-              key={img.src + i}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.45,
-                delay: (i % 5) * 0.06,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="group relative w-full overflow-hidden rounded-sm ring-1 ring-hairline"
+      {/* Caption + controls docked at the base */}
+      <div className="section-padding absolute inset-x-0 bottom-0 mx-auto flex max-w-content items-end justify-between pb-6">
+        <div className="max-w-lg">
+          <p className="eyebrow mb-2 text-gold-soft">A look at moving day</p>
+          <h2 className="font-display text-2xl font-semibold text-paper md:text-3xl">
+            Real crews, real homes, real care
+          </h2>
+          <p className="mt-2 text-xs text-paper/70">
+            {img.alt || "A moment from the job."}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          {/* Dot indicators */}
+          <div className="hidden items-center gap-1.5 sm:flex">
+            {GALLERY.map((_, i) => (
+              <button
+                key={i}
+                aria-label={`Go to slide ${i + 1}`}
+                onClick={() => setState([i, i > index ? 1 : -1])}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === index ? "w-6 bg-gold" : "w-1.5 bg-paper/40 hover:bg-paper/70"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Prev / Next */}
+          <div className="flex items-center gap-2">
+            <button
+              aria-label="Previous slide"
+              onClick={() => paginate(-1)}
+              className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/25 bg-white/5 text-paper backdrop-blur transition-colors hover:bg-white/15"
             >
-              <div className="relative aspect-[4/5]">
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                {/* Subtle navy wash on hover — ties the photo to brand */}
-                <div className="absolute inset-0 bg-navy-deep/0 transition-colors duration-500 group-hover:bg-navy-deep/15" />
-              </div>
-            </motion.figure>
-          ))}
-        </motion.div>
+              <ArrowLeft size={18} />
+            </button>
+            <button
+              aria-label="Next slide"
+              onClick={() => paginate(1)}
+              className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/25 bg-white/5 text-paper backdrop-blur transition-colors hover:bg-white/15"
+            >
+              <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
       </div>
-
-      {/* Signature route-line motif along the lower edge */}
-      <svg
-        className="pointer-events-none absolute bottom-0 left-0 h-10 w-full opacity-50"
-        viewBox="0 0 1200 50"
-        preserveAspectRatio="none"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M0 38 C 200 8, 400 48, 600 22 S 1000 8, 1200 34"
-          stroke="#c9a227"
-          strokeWidth="1.1"
-          strokeDasharray="2 10"
-          strokeLinecap="round"
-        />
-      </svg>
     </section>
   );
 }
