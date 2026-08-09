@@ -20,7 +20,6 @@ export default function AboutPage() {
         title="Moving, done right"
         lead="A locally owned crew built on showing up, handling every item with care, and quoting a price that holds."
       />
-
       <section className="bg-paper">
         <div className="section-padding mx-auto max-w-content py-16">
           <div className="grid gap-12 md:grid-cols-2 md:items-start">

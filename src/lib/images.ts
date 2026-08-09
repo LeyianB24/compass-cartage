@@ -75,7 +75,95 @@ export const IMAGES = {
     src: "/images/OIP.webp",
     alt: "",
   },
+
+  // ---- New arrivals ----
+
+  // A couple prepping for a packing process — warm, human, domestic.
+  couplePacking: {
+    src: "/images/a-couple-preparing-for-the-packing-process.jpeg",
+    alt: "A couple preparing for the packing process before a move",
+  },
+
+  // Fridge / appliance move — specialty heavy-item handling.
+  fridgeAppliance: {
+    src: "/images/fridge3.jpeg",
+    alt: "Movers carefully transporting a refrigerator appliance",
+  },
+
+  // "Movers needed today" — short-notice / same-day move energy.
+  moversNeededToday: {
+    src: "/images/63185a05af058b28b09c5044_movers-needed-today.jpg",
+    alt: "Movers unloading a truck for a short-notice move",
+  },
+
+  // "Hire Moving Services" webp — relocation / destination-themed.
+  hireMovingServices: {
+    src: "/images/Hire-Moving-Services-in-Hawaii.webp",
+    alt: "Family arriving at a new home after a long-distance relocation",
+  },
+
+  // Packers and movers service — general crew-at-work shot.
+  packersAndMovers: {
+    src: "/images/1681205388packers-and-movers-service.webp",
+    alt: "Packers and movers service crew loading packed boxes",
+  },
+
+  // Alternate two-movers indoor shot — variety for the gallery.
+  moversWorkingAlt: {
+    src: "/images/pexels-rdne-7464643.jpg",
+    alt: "Two professional movers coordinating a move indoors",
+  },
+
+  // Generic "50.jpg" — used as a soft texture/accent. Decorative only.
+  accentTexture50: {
+    src: "/images/50.jpg",
+    alt: "",
+  },
+
+  // Scene-variety gallery images (iStock). Content varies; alt text is
+  // kept honest as "Movers and moving-day scenes" since the specific
+  // subject of each numbered stock photo cannot be confirmed here.
+  scene01: { src: "/images/360_F_295379180_nGEQOJRF2JlkhpXRAAlZL2JQ3zLIxdXb.jpg", alt: "Movers and moving-day scenes" },
+  scene02: { src: "/images/istockphoto-1095327944-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene03: { src: "/images/istockphoto-1096481674-612x612.jpg", alt: "Movers and moving-day scenes" },
+  scene04: { src: "/images/istockphoto-1124516333-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene05: { src: "/images/istockphoto-1148585957-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene06: { src: "/images/istockphoto-1158769361-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene07: { src: "/images/istockphoto-1159202850-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene08: { src: "/images/istockphoto-1172135995-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene09: { src: "/images/istockphoto-1182829710-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene10: { src: "/images/istockphoto-1182829715-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene11: { src: "/images/istockphoto-1241951376-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene12: { src: "/images/istockphoto-1269457936-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene13: { src: "/images/istockphoto-1291903683-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene14: { src: "/images/istockphoto-1834676984-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene15: { src: "/images/istockphoto-2115960340-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene16: { src: "/images/istockphoto-888150004-170667a.jpg", alt: "Movers and moving-day scenes" },
+  scene17: { src: "/images/istockphoto-923387832-170667a.jpg", alt: "Movers and moving-day scenes" },
 } as const satisfies Record<string, ImageAsset>;
+
+/**
+ * Curated gallery strip — an ordered set of photographs shown in the
+ * "A look at moving day" section on the home page. Mixes signature shots
+ * with scene-variety images so the gallery feels intentional, not random.
+ * Reorder or swap entries here only.
+ */
+export const GALLERY: ReadonlyArray<ImageAsset> = [
+  IMAGES.heroMovers,
+  IMAGES.couplePacking,
+  IMAGES.truckSunnyDay,
+  IMAGES.fridgeAppliance,
+  IMAGES.moversNeededToday,
+  IMAGES.packersAndMovers,
+  IMAGES.moversWorking,
+  IMAGES.moversWorkingAlt,
+  IMAGES.storageWarehouse,
+  IMAGES.smilingMover,
+  IMAGES.scene02,
+  IMAGES.scene11,
+  IMAGES.scene14,
+  IMAGES.scene16,
+] as const;
 
 /**
  * Per-service image associations. The SERVICES array in constants.ts
@@ -84,10 +172,12 @@ export const IMAGES = {
  */
 export const SERVICE_IMAGES = {
   "Local Moves": "indoorsWithTools",
-  "Long-Distance Moves": "truckSunnyDay",
-  "Packing & Unpacking": "packingScene",
+  "Long-Distance Moves": "hireMovingServices",
+  "Packing & Unpacking": "couplePacking",
   "Storage Solutions": "storageWarehouse",
   "Commercial & Office Moves": "officeMove",
+  "Appliance & Heavy Items": "fridgeAppliance",
+  "Short-Notice Moves": "moversNeededToday",
 } as const;
 
 export type ServiceImageKey = keyof typeof SERVICE_IMAGES;

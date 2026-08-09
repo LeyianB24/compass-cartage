@@ -66,10 +66,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.jpg", // Add your OG image path in /public
+        url: IMAGES.heroMovers.src, // 1200x630+ recommended; using the hero movers photo
         width: 1200,
         height: 630,
-        alt: "Compass Cartage - Moving Services You Can Trust",
+        alt: IMAGES.heroMovers.alt,
       },
     ],
   },
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     title: "Compass Cartage | Moving Services You Can Trust",
     description:
       "Fast, reliable, and affordable moving services. Get your free quote today.",
-    images: ["/og-image.jpg"],
+    images: [IMAGES.heroMovers.src],
   },
   robots: {
     index: true,
