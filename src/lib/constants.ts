@@ -65,6 +65,18 @@ export const SERVICES: Service[] = [
       "Minimize downtime with efficient office and commercial relocation services.",
     imageKey: "officeMove",
   },
+  {
+    title: "Appliance & Heavy Items",
+    description:
+      "Fridges, pianos, safes, and gym equipment — moved with the right tools and crew.",
+    imageKey: "fridgeAppliance",
+  },
+  {
+    title: "Short-Notice Moves",
+    description:
+      "Need to move this week? We keep flexible slots open for last-minute and same-day jobs.",
+    imageKey: "moversNeededToday",
+  },
 ];
 
 // Brand colors — mirrors the navy/gold theme from the business card & rate card.
