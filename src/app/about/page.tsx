@@ -1,7 +1,10 @@
 // src/app/about/page.tsx
 import type { Metadata } from "next";
+import Image from "next/image";
 import CallToAction from "@/components/CallToAction";
+import PageHero from "@/components/PageHero";
 import { BUSINESS } from "@/lib/constants";
+import { IMAGES } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: "About | Compass Cartage",
@@ -11,14 +14,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section className="border-b border-hairline bg-white">
-        <div className="section-padding mx-auto max-w-content py-16 md:py-20">
-          <p className="eyebrow mb-3">About Us</p>
-          <h1 className="font-display text-4xl font-semibold text-navy-deep md:text-5xl">
-            Moving, done right
-          </h1>
-        </div>
-      </section>
+      <PageHero
+        image={IMAGES.smilingMover}
+        eyebrow="About Us"
+        title="Moving, done right"
+        lead="A locally owned crew built on showing up, handling every item with care, and quoting a price that holds."
+      />
 
       <section className="bg-paper">
         <div className="section-padding mx-auto max-w-content py-16">
@@ -38,30 +39,43 @@ export default function AboutPage() {
               <p className="mt-4 leading-relaxed text-slate">
                 Every job — big or small, local or long-distance — gets the
                 same standard: clear communication, careful handling, and a
-                price that doesn&apos;t change on move-in day.
+                price that doesn't change on move-in day.
               </p>
             </div>
 
-            <div className="border border-hairline bg-white p-8">
-              <p className="eyebrow mb-4">Why Customers Choose Us</p>
-              <ul className="space-y-4 text-sm text-slate">
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-                  Transparent, flat-rate pricing with no hidden fees
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-                  Fully insured moves for total peace of mind
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-                  Experienced crew trained in careful handling
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-                  Flexible scheduling, including short-notice moves
-                </li>
-              </ul>
+            {/* Framed photo + the "why choose us" card stacked, so the
+                story side gets a real visual instead of text-only. */}
+            <div className="grid gap-6">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-sm ring-1 ring-hairline">
+                <Image
+                  src={IMAGES.moversWorking.src}
+                  alt={IMAGES.moversWorking.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="border border-hairline bg-white p-8">
+                <p className="eyebrow mb-4">Why Customers Choose Us</p>
+                <ul className="space-y-4 text-sm text-slate">
+                  <li className="flex gap-3">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    Transparent, flat-rate pricing with no hidden fees
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    Fully insured moves for total peace of mind
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    Experienced crew trained in careful handling
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    Flexible scheduling, including short-notice moves
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

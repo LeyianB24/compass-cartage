@@ -1,101 +1,61 @@
 // src/components/ServiceCard.tsx
 "use client";
 
-import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, LucideIcon } from "lucide-react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { IMAGES, SERVICE_IMAGES, type ServiceImageKey } from "@/lib/images";
 
-export type ServiceCardProps = {
+type ServiceCardProps = {
   title: string;
   description: string;
   index: number;
-  icon?: LucideIcon;
-  href?: string;
-  onClick?: () => void;
+  imageKey: ServiceImageKey;
 };
 
 export default function ServiceCard({
   title,
   description,
   index,
-  icon: Icon,
-  href,
-  onClick,
+  imageKey,
 }: ServiceCardProps) {
-  const shouldReduceMotion = useReducedMotion();
-
-  const formattedIndex = String(index + 1).padStart(2, "0");
-
-  const cardContent = (
-    <>
-      <div className="flex items-center justify-between">
-        <span className="font-display text-sm font-medium text-gold">
-          {formattedIndex}
-        </span>
-        {Icon && (
-          <Icon
-            size={20}
-            className="text-navy-deep/60 transition-colors duration-300 group-hover:text-gold"
-            aria-hidden="true"
-          />
-        )}
-      </div>
-
-      <h3 className="mt-4 font-display text-xl font-semibold text-navy-deep transition-colors duration-300 group-hover:text-navy">
-        {title}
-      </h3>
-
-      <p className="mt-2 text-sm leading-relaxed text-slate">{description}</p>
-
-      <div className="mt-6 flex items-center justify-between">
-        {/* Underline accent that expands on hover */}
-        <span
-          className="block h-px w-8 bg-gold transition-all duration-300 group-hover:w-16"
-          aria-hidden="true"
-        />
-
-        {href && (
-          <span className="flex items-center gap-1 text-xs font-semibold text-navy-deep opacity-0 transition-all duration-300 group-hover:opacity-100">
-            <span>Learn more</span>
-            <ArrowUpRight
-              size={14}
-              className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              aria-hidden="true"
-            />
-          </span>
-        )}
-      </div>
-    </>
-  );
-
-  const motionProps = {
-    initial: shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 24 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-60px" },
-    transition: {
-      delay: shouldReduceMotion ? 0 : (index % 3) * 0.08,
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
-    },
-    whileHover: shouldReduceMotion ? undefined : { y: -4 },
-  };
-
-  const sharedClasses =
-    "group relative block border border-hairline bg-white p-7 shadow-xs transition-all duration-300 hover:border-navy-deep hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2 rounded-xs";
-
-  if (href) {
-    return (
-      <motion.div {...motionProps}>
-        <Link href={href} className={sharedClasses} onClick={onClick}>
-          {cardContent}
-        </Link>
-      </motion.div>
-    );
-  }
+  const img = IMAGES[SERVICE_IMAGES[title as keyof typeof SERVICE_IMAGES] ?? imageKey];
 
   return (
-    <motion.div className={sharedClasses} {...motionProps} onClick={onClick}>
-      {cardContent}
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ delay: (index % 3) * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -4 }}
+      className="group relative isolate overflow-hidden border border-hairline bg-white p-7 transition-colors duration-300 hover:border-navy-deep"
+    >
+      {/* Hover-reveal photograph — sits behind the content, fades + zooms
+          in on hover. A navy wash keeps the text legible on top. */}
+      <div className="pointer-events-none absolute inset-0 -z-[1] overflow-hidden">
+        <Image
+          src={img.src}
+          alt={img.alt}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover opacity-0 transition-all duration-500 ease-out group-hover:scale-105 group-hover:opacity-100"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/70 to-navy-deep/55 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      </div>
+
+      <div className="relative transition-colors duration-300 group-hover:text-paper">
+        <span className="font-display text-sm text-gold">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h3 className="mt-3 font-display text-xl font-semibold text-navy-deep transition-colors duration-300 group-hover:text-paper">
+          {title}
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-slate transition-colors duration-300 group-hover:text-paper/80">
+          {description}
+        </p>
+
+        {/* Subtle underline that grows in on hover — echoes the route-line motif */}
+        <span className="mt-5 block h-px w-8 bg-gold transition-all duration-300 group-hover:w-16" />
+      </div>
     </motion.div>
   );
 }

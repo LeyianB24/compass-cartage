@@ -2,7 +2,9 @@
 import type { Metadata } from "next";
 import ServiceCard from "@/components/ServiceCard";
 import CallToAction from "@/components/CallToAction";
+import PageHero from "@/components/PageHero";
 import { SERVICES } from "@/lib/constants";
+import { IMAGES } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -81,14 +83,15 @@ export default function ServicesPage() {
         >
           <div className="section-padding mx-auto max-w-content">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {SERVICES.map((service, i) => (
-                <ServiceCard
-                  key={service.slug || service.title}
-                  title={service.title}
-                  description={service.description}
-                  index={i}
-                />
-              ))}
+            {SERVICES.map((service, i) => (
+              <ServiceCard
+                key={service.title}
+                title={service.title}
+                description={service.description}
+                index={i}
+                imageKey={service.imageKey}
+              />
+            ))}
             </div>
           </div>
         </section>

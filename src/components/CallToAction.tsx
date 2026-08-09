@@ -1,79 +1,86 @@
 // src/components/CallToAction.tsx
+"use client";
+
 import Link from "next/link";
-import { ArrowRight, Phone } from "lucide-react";
-import { BUSINESS } from "@/lib/constants";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 type CallToActionProps = {
   heading?: string;
   subtext?: string;
-  primaryCtaText?: string;
-  primaryCtaHref?: string;
-  showPhoneOption?: boolean;
+  /** Override the default backdrop photograph. */
+  image?: { src: string; alt: string };
 };
 
 export default function CallToAction({
   heading = "Ready to book your move?",
   subtext = "Tell us where you're headed and we'll get back to you with a free, no-obligation quote.",
-  primaryCtaText = "Get a Free Quote",
-  primaryCtaHref = "/quote",
-  showPhoneOption = true,
+  image = IMAGES.truckSunnyDay,
 }: CallToActionProps) {
   return (
-    <section
-      aria-labelledby="cta-heading"
-      className="bg-navy-deep relative overflow-hidden border-t border-hairline/10 py-16 md:py-20"
-    >
-      {/* Decorative ambient background accent */}
+    <section className="relative isolate overflow-hidden bg-navy-deep">
+      {/* Full-bleed backdrop photograph with a slow Ken-Burns zoom so the
+          band feels alive without pulling focus. */}
+      <motion.div
+        initial={{ scale: 1.08 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 8, ease: "easeOut" }}
+        className="absolute inset-0 -z-[2]"
+      >
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+      </motion.div>
+
+      {/* Navy wash for legibility — heavier on the left where the text sits,
+          lighter on the right so the photograph still breathes. */}
       <div
-        className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold/10 blur-3xl"
         aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-gold/5 blur-3xl"
-        aria-hidden="true"
+        className="absolute inset-0 -z-[1] bg-gradient-to-r from-navy-deep/95 via-navy-deep/85 to-navy-deep/65"
       />
 
-      <div className="section-padding mx-auto flex max-w-content flex-col items-start justify-between gap-8 relative md:flex-row md:items-center">
-        {/* Content Group */}
+      <div className="section-padding mx-auto flex max-w-content flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
         <div className="max-w-xl">
-          <p className="eyebrow mb-2 text-gold-soft">Take the Next Step</p>
-          <h2
-            id="cta-heading"
-            className="font-display text-2xl font-semibold tracking-tight text-paper sm:text-3xl md:text-4xl"
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-2xl font-semibold text-paper md:text-3xl"
           >
             {heading}
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-paper/75 sm:text-base">
-            {subtext}
-          </p>
-        </div>
-
-        {/* Action Buttons Group */}
-        <div className="flex flex-col sm:flex-row shrink-0 items-stretch sm:items-center gap-3.5 w-full md:w-auto">
-          {/* Primary Action Button */}
-          <Link
-            href={primaryCtaHref}
-            className="group inline-flex items-center justify-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-navy-deep shadow-sm transition-all duration-200 hover:bg-gold-soft hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-deep"
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-2 text-sm text-paper/75"
           >
-            <span>{primaryCtaText}</span>
-            <ArrowRight
-              size={16}
-              className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-          </Link>
-
-          {/* Optional Direct Call Secondary Button */}
-          {showPhoneOption && BUSINESS?.phone && (
-            <a
-              href={`tel:${BUSINESS.phone}`}
-              className="inline-flex items-center justify-center gap-2 rounded-sm border border-paper/20 px-5 py-3.5 text-sm font-semibold text-paper transition-colors duration-200 hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy-deep"
-            >
-              <Phone size={15} className="text-gold" aria-hidden="true" />
-              <span>Call {BUSINESS.phone}</span>
-            </a>
-          )}
+            {subtext}
+          </motion.p>
         </div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Link
+            href="/quote"
+            className="group flex shrink-0 items-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
+          >
+            Get a Free Quote
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

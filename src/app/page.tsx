@@ -85,14 +85,15 @@ export default function HomePage() {
 
             {/* Services Grid */}
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {SERVICES.slice(0, 3).map((service, i) => (
-                <ServiceCard
-                  key={service.slug || service.title}
-                  title={service.title}
-                  description={service.description}
-                  index={i}
-                />
-              ))}
+            {SERVICES.slice(0, 3).map((service, i) => (
+              <ServiceCard
+                key={service.title}
+                title={service.title}
+                description={service.description}
+                index={i}
+                imageKey={service.imageKey}
+              />
+            ))}
             </div>
           </div>
         </section>
