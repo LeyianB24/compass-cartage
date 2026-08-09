@@ -2,7 +2,9 @@
 import type { Metadata } from "next";
 import { MapPin, Navigation } from "lucide-react";
 import CallToAction from "@/components/CallToAction";
+import PageHero from "@/components/PageHero";
 import { SERVICE_AREAS, BUSINESS } from "@/lib/constants";
+import { IMAGES } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: "Service Area",
@@ -37,31 +39,12 @@ export default function ServiceAreaPage() {
 
       <div className="flex flex-col min-h-full">
         {/* Page Hero Header */}
-        <section
-          aria-labelledby="service-area-heading"
-          className="border-b border-hairline bg-white relative overflow-hidden"
-        >
-          {/* Subtle Background Accent */}
-          <div className="absolute inset-0 bg-gradient-to-b from-paper/40 to-transparent pointer-events-none" />
-
-          <div className="section-padding mx-auto max-w-content py-16 md:py-24 relative">
-            <div className="max-w-2xl">
-              <p className="eyebrow mb-3 tracking-wider text-xs font-bold uppercase text-gold">
-                Coverage Map
-              </p>
-              <h1
-                id="service-area-heading"
-                className="font-display text-4xl font-semibold tracking-tight text-navy-deep sm:text-5xl"
-              >
-                {BUSINESS.serviceAreaShort || "Proudly serving our local community"}
-              </h1>
-              <p className="mt-4 text-base leading-relaxed text-slate md:text-lg">
-                Based locally and moving families and businesses across the
-                region. Not seeing your city listed below? Reach out to our team — we regularly accommodate long-distance moves beyond our core zones.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          image={IMAGES.truckSunnyDay}
+          eyebrow="Coverage Map"
+          title={BUSINESS.serviceAreaShort || "Proudly serving our local community"}
+          lead="Based locally and moving families and businesses across the region. Not seeing your city listed below? Reach out to our team — we regularly accommodate long-distance moves beyond our core zones."
+        />
 
         {/* Cities Grid Section */}
         <section

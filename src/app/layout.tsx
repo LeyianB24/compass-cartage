@@ -4,6 +4,7 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { IMAGES } from "@/lib/images";
 
 // Optimize fonts using standard Next.js configuration
 const fraunces = Fraunces({

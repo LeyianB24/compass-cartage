@@ -50,31 +50,12 @@ export default function ServicesPage() {
 
       <div className="flex flex-col min-h-full">
         {/* Page Hero Header Section */}
-        <section
-          aria-labelledby="services-page-heading"
-          className="border-b border-hairline bg-white relative overflow-hidden"
-        >
-          {/* Subtle Background Accent */}
-          <div className="absolute inset-0 bg-gradient-to-b from-paper/50 to-transparent pointer-events-none" />
-
-          <div className="section-padding mx-auto max-w-content py-16 md:py-24 relative">
-            <div className="max-w-2xl">
-              <p className="eyebrow mb-3 tracking-wider text-xs font-bold uppercase text-gold">
-                Our Capabilities
-              </p>
-              <h1
-                id="services-page-heading"
-                className="font-display text-4xl font-semibold tracking-tight text-navy-deep sm:text-5xl"
-              >
-                Moving services built around you
-              </h1>
-              <p className="mt-4 text-base leading-relaxed text-slate md:text-lg">
-                Whether it&apos;s a studio apartment or a full office floor, we
-                scope every job the same way: carefully, transparently, and completely on your schedule.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          image={IMAGES.indoorsWithTools}
+          eyebrow="Our Capabilities"
+          title="Moving services built around you"
+          lead="Whether it's a studio apartment or a full office floor, we scope every job the same way: carefully, transparently, and completely on your schedule."
+        />
 
         {/* Main Services Grid */}
         <section

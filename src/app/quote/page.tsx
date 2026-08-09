@@ -1,7 +1,10 @@
 // src/app/quote/page.tsx
 import type { Metadata } from "next";
+import Image from "next/image";
 import QuoteForm from "@/components/QuoteForm";
+import PageHero from "@/components/PageHero";
 import { BUSINESS } from "@/lib/constants";
+import { IMAGES } from "@/lib/images";
 import { Phone, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -11,40 +14,61 @@ export const metadata: Metadata = {
 
 export default function QuotePage() {
   return (
-    <section className="bg-paper">
-      <div className="section-padding mx-auto max-w-content py-16 md:py-20">
-        <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
-          <div>
-            <p className="eyebrow mb-3">Get a Free Quote</p>
-            <h1 className="font-display text-4xl font-semibold leading-tight text-navy-deep">
-              Let&apos;s plan your move
-            </h1>
-            <p className="mt-4 text-sm leading-relaxed text-slate">
-              Fill out the form and we&apos;ll follow up with a free,
-              no-obligation quote — usually within one business day.
-            </p>
-
-            <div className="mt-8 space-y-3 border-t border-hairline pt-6">
-              <a
-                href={BUSINESS.phoneHref}
-                className="flex items-center gap-3 text-sm font-medium text-navy-deep"
-              >
-                <Phone size={16} className="text-gold" />
-                {BUSINESS.phone}
-              </a>
-              <a
-                href={`mailto:${BUSINESS.email}`}
-                className="flex items-center gap-3 text-sm font-medium text-navy-deep"
-              >
-                <Mail size={16} className="text-gold" />
-                {BUSINESS.email}
-              </a>
-            </div>
-          </div>
-
-          <QuoteForm />
+    <>
+      <PageHero
+        image={IMAGES.moversWorking}
+        eyebrow="Get a Free Quote"
+        title="Let's plan your move"
+        lead="Fill out the form below and we'll follow up with a free, no-obligation quote — usually within one business day."
+      >
+        {/* Right-aligned contact aside inside the hero */}
+        <div className="space-y-3 border-t border-paper/15 pt-6">
+          <a
+            href={BUSINESS.phoneHref}
+            className="flex items-center gap-3 text-sm font-medium text-paper hover:text-gold-soft"
+          >
+            <Phone size={16} className="text-gold-soft" />
+            {BUSINESS.phone}
+          </a>
+          <a
+            href={`mailto:${BUSINESS.email}`}
+            className="flex items-center gap-3 text-sm font-medium text-paper hover:text-gold-soft"
+          >
+            <Mail size={16} className="text-gold-soft" />
+            {BUSINESS.email}
+          </a>
         </div>
-      </div>
-    </section>
+      </PageHero>
+
+      <section className="bg-paper">
+        <div className="section-padding mx-auto max-w-content py-16 md:py-20">
+          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-12">
+            {/* Aside: a framed photo + reassurance copy beside the form,
+                so the left column stays useful instead of empty. */}
+            <aside className="md:pt-2">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-sm ring-1 ring-hairline">
+                <Image
+                  src={IMAGES.detailTexture.src}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  className="-scale-x-100 object-cover opacity-40"
+                />
+              </div>
+              <h2 className="mt-6 font-display text-xl font-semibold text-navy-deep">
+                No surprise fees. Ever.
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-slate">
+                The quote you receive is the price you pay. We'll walk
+                through access, stairs, and any oversized items up front so
+                there are no surprises on moving day.
+              </p>
+            </aside>
+
+            <QuoteForm />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
