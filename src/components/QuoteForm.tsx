@@ -1,15 +1,43 @@
 // src/components/QuoteForm.tsx
 "use client";
 
-import { useState, FormEvent, useId } from "react";
+import { useState, FormEvent, useId, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, RefreshCw, Sparkles, Check } from "lucide-react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export default function QuoteForm() {
+function QuoteFormContent() {
+  const searchParams = useSearchParams();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Pre-fill fields from calculator or inventory planner query parameters
+  const moveSizeParam = searchParams.get("moveSize") || "";
+  const estMin = searchParams.get("estMin");
+  const estMax = searchParams.get("estMax");
+  const inventoryParam = searchParams.get("inventory");
+  const cuFtParam = searchParams.get("cuFt");
+
+  const [notesDefault, setNotesDefault] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+
+  useEffect(() => {
+    if (moveSizeParam) {
+      setSelectedSize(moveSizeParam);
+    }
+    const notesParts: string[] = [];
+    if (estMin && estMax) {
+      notesParts.push(`[Calculator Estimate: $${estMin} - $${estMax}]`);
+    }
+    if (inventoryParam) {
+      notesParts.push(`[Inventory (${cuFtParam || "0"} cu ft): ${inventoryParam}]`);
+    }
+    if (notesParts.length > 0) {
+      setNotesDefault(notesParts.join("\n"));
+    }
+  }, [moveSizeParam, estMin, estMax, inventoryParam, cuFtParam]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,7 +77,7 @@ export default function QuoteForm() {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="flex flex-col items-center border border-hairline bg-white px-8 py-16 text-center shadow-xs"
+        className="flex flex-col items-center border border-hairline bg-white px-8 py-16 text-center shadow-xs rounded-card"
       >
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
           <CheckCircle2 size={36} className="text-gold" />
@@ -77,9 +105,21 @@ export default function QuoteForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="border border-hairline bg-white p-6 md:p-8 shadow-xs"
+      className="border border-hairline bg-white p-6 md:p-8 shadow-xs rounded-card"
       noValidate
     >
+      {(estMin || inventoryParam) && (
+        <div className="mb-6 rounded-sm border border-gold/40 bg-gold/5 p-4 flex items-center gap-3 text-xs text-navy-deep">
+          <Sparkles size={18} className="text-gold shrink-0" />
+          <div>
+            <p className="font-semibold">Calculated Details Pre-Loaded!</p>
+            <p className="text-slate text-[11px]">
+              Your estimate and inventory selections have been automatically attached to your request notes below.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Full Name" name="name" required placeholder="John Doe" />
         <Field
@@ -121,14 +161,18 @@ export default function QuoteForm() {
           <select
             id="moveSize"
             name="moveSize"
+            value={selectedSize}
+            onChange={(e) => setSelectedSize(e.target.value)}
             className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             <option value="">Select size</option>
             <option value="studio">Studio</option>
             <option value="1-bedroom">1 Bedroom</option>
             <option value="2-bedroom">2 Bedroom</option>
-            <option value="3-bedroom">3+ Bedroom</option>
-            <option value="office">Office / Commercial</option>
+            <option value="3-bedroom">3 Bedroom</option>
+            <option value="4-plus-bedroom">4+ Bedroom House</option>
+            <option value="office-small">Small Office</option>
+            <option value="office-large">Office / Commercial</option>
           </select>
         </div>
 
@@ -137,12 +181,13 @@ export default function QuoteForm() {
             htmlFor="notes"
             className="mb-1.5 block text-sm font-medium text-navy-deep"
           >
-            Additional Notes
+            Additional Notes & Inventory
           </label>
           <textarea
             id="notes"
             name="notes"
             rows={4}
+            defaultValue={notesDefault}
             placeholder="Anything we should know — stairs, elevator access, fragile items, preferred times, etc."
             className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           />
@@ -175,6 +220,14 @@ export default function QuoteForm() {
         {status === "submitting" ? "Sending..." : "Request My Free Quote"}
       </button>
     </form>
+  );
+}
+
+export default function QuoteForm() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-sm text-slate">Loading quote form...</div>}>
+      <QuoteFormContent />
+    </Suspense>
   );
 }
 

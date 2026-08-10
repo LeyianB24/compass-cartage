@@ -180,4 +180,4 @@ export const SERVICE_IMAGES = {
   "Short-Notice Moves": "moversNeededToday",
 } as const;
 
-export type ServiceImageKey = keyof typeof SERVICE_IMAGES;
+export type ServiceImageKey = keyof typeof IMAGES;

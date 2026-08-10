@@ -110,24 +110,26 @@ export default function RootLayout({
       className={`${fraunces.variable} ${inter.variable} scroll-smooth`}
     >
       <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased selection:bg-gold selection:text-navy-deep">
-        {/* Accessibility Skip Link */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-navy-deep focus:px-4 focus:py-2 focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-gold"
-        >
-          Skip to main content
-        </a>
+        <ThemeProvider>
+          {/* Accessibility Skip Link */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-navy-deep focus:px-4 focus:py-2 focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-gold"
+          >
+            Skip to main content
+          </a>
 
-        {/* Top Header / Navigation */}
-        <Navbar />
+          {/* Top Header / Navigation */}
+          <Navbar />
 
-        {/* Dynamic Page Content */}
-        <div id="main-content" className="flex flex-1 flex-col">
-          {children}
-        </div>
+          {/* Dynamic Page Content */}
+          <div id="main-content" className="flex flex-1 flex-col">
+            {children}
+          </div>
 
-        {/* Global Footer */}
-        <Footer />
+          {/* Global Footer */}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

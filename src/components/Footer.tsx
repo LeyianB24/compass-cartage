@@ -6,10 +6,15 @@ import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, ArrowUpRight } from "lucide-react";
 import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
 
-const NAV_LINKS = [
+const QUICK_LINKS = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Service Area", href: "/service-area" },
+  { label: "Cost Calculator", href: "/calculator" },
+  { label: "Inventory Planner", href: "/inventory" },
+  { label: "Moving Checklist", href: "/checklist" },
+  { label: "Coverage Map", href: "/service-area" },
+  { label: "Moving FAQ", href: "/faq" },
+  { label: "Work Gallery", href: "/gallery" },
   { label: "Get a Quote", href: "/quote" },
 ];
 
@@ -101,15 +106,32 @@ export default function Footer() {
             </Link>
 
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-paper/70">
-              {BUSINESS?.tagline || "Moving services built around you"}. Serving households and businesses across the region with moves that show up on time and are handled with care.
+              {BUSINESS?.tagline || "Moving services built around you"}. Serving households and businesses across Calgary, Airdrie, Cochrane, and Alberta with moves that show up on time and are handled with care.
             </p>
           </div>
 
           {/* Navigation Column */}
           <div>
             <p className="eyebrow mb-4 text-gold-soft">Quick Links</p>
-            <ul className="space-y-2.5 text-sm text-paper/75">
-              {NAV_LINKS.map((link) => (
+            <ul className="space-y-2.5 text-xs lg:text-sm text-paper/75">
+              {QUICK_LINKS.slice(0, 5).map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-block transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tools & Planning Column */}
+          <div>
+            <p className="eyebrow mb-4 text-gold-soft">Tools & Hubs</p>
+            <ul className="space-y-2.5 text-xs lg:text-sm text-paper/75">
+              {QUICK_LINKS.slice(5).map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -125,7 +147,7 @@ export default function Footer() {
           {/* Contact Column */}
           <div>
             <p className="eyebrow mb-4 text-gold-soft">Contact Us</p>
-            <ul className="space-y-3 text-sm text-paper/75">
+            <ul className="space-y-3 text-xs lg:text-sm text-paper/75">
               {BUSINESS?.phone && (
                 <li className="flex items-center gap-2.5">
                   <Phone size={15} className="shrink-0 text-gold" aria-hidden="true" />
@@ -156,31 +178,6 @@ export default function Footer() {
               )}
             </ul>
           </div>
-
-          {/* Areas Column */}
-          <div>
-            <div className="flex items-center justify-between">
-              <p className="eyebrow mb-4 text-gold-soft">Service Area</p>
-            </div>
-            <ul className="space-y-2 text-sm text-paper/75">
-              {SERVICE_AREAS?.slice(0, 5).map((area) => (
-                <li key={area} className="transition-colors duration-200 hover:text-paper">
-                  {area}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/service-area"
-              className="group mt-3 inline-flex items-center gap-1 text-xs font-semibold text-gold transition-colors duration-200 hover:text-gold-soft"
-            >
-              <span>View all regions</span>
-              <ArrowUpRight
-                size={13}
-                className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </Link>
-          </div>
         </div>
 
         {/* Sub-Footer / Copyright */}
@@ -201,4 +198,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+}

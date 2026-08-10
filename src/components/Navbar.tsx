@@ -5,12 +5,18 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Calculator, Package, CalendarCheck, HelpCircle, Images } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
-  { label: "Service Area", href: "/service-area" },
+  { label: "Calculator", href: "/calculator", icon: Calculator },
+  { label: "Inventory", href: "/inventory", icon: Package },
+  { label: "Checklist", href: "/checklist", icon: CalendarCheck },
+  { label: "Coverage", href: "/service-area" },
+  { label: "FAQ", href: "/faq", icon: HelpCircle },
+  { label: "Gallery", href: "/gallery", icon: Images },
   { label: "About", href: "/about" },
 ];
 
@@ -79,14 +85,14 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Main Navigation">
+        <nav className="hidden items-center gap-5 lg:gap-6 lg:flex" aria-label="Main Navigation">
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm transition-colors duration-200 rounded-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep ${
+                className={`relative text-xs lg:text-sm transition-colors duration-200 rounded-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep ${
                   isActive
                     ? "font-semibold text-navy-deep"
                     : "font-medium text-slate hover:text-navy-deep"
@@ -105,36 +111,42 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Desktop Call To Actions */}
-        <div className="hidden items-center gap-5 md:flex">
+        {/* Desktop Call To Actions & Theme Toggle */}
+        <div className="hidden items-center gap-4 md:flex">
           {BUSINESS?.phone && (
             <a
               href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
-              className="flex items-center gap-2 text-sm font-medium text-navy-deep transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep rounded-xs"
+              className="flex items-center gap-1.5 text-xs lg:text-sm font-medium text-navy-deep transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep rounded-xs"
             >
-              <Phone size={16} strokeWidth={2} className="text-gold" aria-hidden="true" />
-              {BUSINESS.phone}
+              <Phone size={15} strokeWidth={2} className="text-gold" aria-hidden="true" />
+              <span>{BUSINESS.phone}</span>
             </a>
           )}
+
+          <ThemeToggle />
+
           <Link
             href="/quote"
-            className="rounded-sm bg-navy-deep px-5 py-2.5 text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2"
+            className="rounded-sm bg-navy-deep px-4 py-2 text-xs lg:text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2"
           >
             Get a Free Quote
           </Link>
         </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <button
-          type="button"
-          className="rounded-md p-2 text-navy-deep transition-colors hover:bg-paper-dark md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep"
-          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-        </button>
+        {/* Mobile Menu & Theme Toggle */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="rounded-md p-2 text-navy-deep transition-colors hover:bg-paper-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep"
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+          </button>
+        </div>
       </motion.div>
 
       {/* Animated Mobile Menu Panel */}
@@ -155,14 +167,15 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`py-3 text-base transition-colors ${
+                    className={`flex items-center justify-between py-2.5 text-base transition-colors ${
                       isActive
                         ? "font-semibold text-gold"
                         : "font-medium text-navy-deep hover:text-gold"
                     }`}
                     onClick={() => setOpen(false)}
                   >
-                    {link.label}
+                    <span>{link.label}</span>
+                    {link.icon && <link.icon size={16} className="text-slate-light" />}
                   </Link>
                 );
               })}
@@ -191,4 +204,4 @@ export default function Navbar() {
       </AnimatePresence>
     </header>
   );
-}
+}
