@@ -1,6 +1,9 @@
 /* src/app/globals.css */
 @import "tailwindcss";
 
+/* Class-based dark mode (toggled on <html>, follows system on first load) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* --------------------------------------------------------------------------
    Tailwind v4 Theme Configuration
    Registers custom color tokens, font stacks, radii, and container widths directly 
@@ -31,6 +34,24 @@
   /* Easing curves for deliberate UI transitions */
   --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Dark mode token overrides — mirrors the navy palette but tuned for
+   night surfaces. Applied when <html> has the `dark` class.
+   -------------------------------------------------------------------------- */
+.dark {
+  --color-paper: #06121f;
+  --color-paper-muted: #0a1a2c;
+  --color-navy-deep: #f7f6f2;
+  --color-navy: #e4c65c;
+  --color-slate: #a8b3c4;
+  --color-slate-light: #6b7a90;
+  --color-hairline: rgba(228, 198, 92, 0.18);
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 /* --------------------------------------------------------------------------
