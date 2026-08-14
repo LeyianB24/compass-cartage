@@ -1,6 +1,5 @@
 // src/lib/constants.ts
 // Single source of truth for business info used across the site.
-// Update these values here and they'll update everywhere automatically.
 
 import type { ServiceImageKey } from "./images";
 
@@ -8,26 +7,27 @@ export const BUSINESS = {
   name: "Compass Cartage",
   tagline: "Fast • Reliable • Affordable",
   owner: "Howard Langat",
-  phone: "(587) 501-7519",
-  phoneHref: "tel:+15875017519", // used for click-to-call links
-  email: "compasscartage@gmail.com",
-  serviceAreaShort: "Serving Metro Area & Beyond",
+  phone: "(587) 501-7519", // TEMPORARY — will change once office line is set up
+  phoneHref: "tel:+15875017519",
+  email: "info@compasscartage.ca", // update once domain email is live
+  serviceAreaShort: "Proudly Serving Edmonton & Alberta",
 };
 
-// Expanded list of primary and secondary coverage zones
+// CORRECTED: Compass Cartage is based in Edmonton, not Calgary.
+// Local = Edmonton metro (daily service, no long-distance surcharge).
+// Long-distance-within-Alberta = quote-based, less frequent, ordered
+// Red Deer → Calgary → Lethbridge → Medicine Hat per client's own ordering.
 export const SERVICE_AREAS = [
-  "Calgary",
-  "Airdrie",
-  "Cochrane",
-  "Okotoks",
-  "Chestermere",
-  "Canmore",
-  "Banff",
-  "Red Deer",
   "Edmonton",
+  "Spruce Grove",
+  "St. Albert",
+  "Leduc",
+  "Sherwood Park",
+  "Beaumont",
+  "Red Deer",
+  "Calgary",
   "Lethbridge",
-  "High River",
-  "Strathmore",
+  "Medicine Hat",
 ];
 
 // Coverage Detail for Interactive Coverage Checker
@@ -42,102 +42,104 @@ export type CoverageZoneDetail = {
 
 export const DETAILED_COVERAGE_ZONES: CoverageZoneDetail[] = [
   {
-    city: "Calgary",
-    region: "Metro Calgary",
-    postalPrefixes: ["T2A", "T2B", "T2C", "T2E", "T2G", "T2H", "T2J", "T2K", "T2L", "T2M", "T2N", "T2P", "T2R", "T2S", "T2T", "T2V", "T2W", "T2X", "T2Y", "T2Z", "T3A", "T3B", "T3C", "T3E", "T3G", "T3H", "T3J", "T3K", "T3L", "T3M", "T3N", "T3P", "T3R", "T3S"],
+    city: "Edmonton",
+    region: "Capital Region",
+    postalPrefixes: [
+      "T5A", "T5B", "T5C", "T5E", "T5G", "T5H", "T5J", "T5K", "T5L", "T5M",
+      "T5N", "T5P", "T5R", "T5S", "T5T", "T5V", "T5W", "T5X", "T5Y", "T5Z",
+      "T6A", "T6B", "T6C", "T6E", "T6G", "T6H", "T6J", "T6K", "T6L", "T6M",
+      "T6N", "T6P", "T6R", "T6S", "T6T", "T6V", "T6W", "T6X",
+    ],
     travelFeeTier: "Standard",
     estTransitTime: "Same-Day Local",
-    description: "Core service hub. Full availability for local home, apartment, and office relocations with zero extended travel surcharges.",
+    description:
+      "Core service hub. Full availability for local home, apartment, and office relocations with zero extended travel surcharges.",
   },
   {
-    city: "Airdrie",
-    region: "Rocky View County",
-    postalPrefixes: ["T4A", "T4B"],
-    travelFeeTier: "Standard",
-    estTransitTime: "30 mins from base",
-    description: "Daily service routes connecting Airdrie to Calgary and surrounding communities.",
-  },
-  {
-    city: "Cochrane",
-    region: "Rocky View County",
-    postalPrefixes: ["T4C"],
-    travelFeeTier: "Standard",
-    estTransitTime: "35 mins from base",
-    description: "Full service residential and mountain-transition moves across Cochrane.",
-  },
-  {
-    city: "Okotoks",
-    region: "Foothills County",
-    postalPrefixes: ["T1S"],
-    travelFeeTier: "Standard",
-    estTransitTime: "35 mins from base",
-    description: "Seamless moves for families and businesses throughout Okotoks and Foothills County.",
-  },
-  {
-    city: "Chestermere",
-    region: "Rocky View County",
-    postalPrefixes: ["T1X"],
+    city: "Spruce Grove",
+    region: "Capital Region",
+    postalPrefixes: ["T7X"],
     travelFeeTier: "Standard",
     estTransitTime: "25 mins from base",
-    description: "Quick-dispatch local moves and packing services around Chestermere Lake.",
+    description: "Daily service routes connecting Spruce Grove to Edmonton.",
   },
   {
-    city: "High River",
-    region: "Foothills County",
-    postalPrefixes: ["T1V"],
-    travelFeeTier: "Regional",
-    estTransitTime: "45 mins from base",
-    description: "Dedicated regional moving crews for residential relocations.",
+    city: "St. Albert",
+    region: "Capital Region",
+    postalPrefixes: ["T8N"],
+    travelFeeTier: "Standard",
+    estTransitTime: "20 mins from base",
+    description: "Full local service for St. Albert homes and businesses.",
   },
   {
-    city: "Strathmore",
-    region: "Wheatland County",
-    postalPrefixes: ["T1P"],
-    travelFeeTier: "Regional",
-    estTransitTime: "50 mins from base",
-    description: "Scheduled moving and heavy item transport across Wheatland County.",
+    city: "Leduc",
+    region: "Capital Region",
+    postalPrefixes: ["T9E"],
+    travelFeeTier: "Standard",
+    estTransitTime: "30 mins from base",
+    description: "Regular routes serving Leduc and surrounding communities.",
   },
   {
-    city: "Canmore",
-    region: "Bow Valley",
-    postalPrefixes: ["T1W"],
-    travelFeeTier: "Regional",
-    estTransitTime: "1 hour 15 mins",
-    description: "Specialized mountain relocations with climate-controlled box trucks.",
+    city: "Sherwood Park",
+    region: "Strathcona County",
+    postalPrefixes: ["T8A", "T8B", "T8H"],
+    travelFeeTier: "Standard",
+    estTransitTime: "20 mins from base",
+    description: "Quick-dispatch local moves throughout Sherwood Park.",
   },
   {
-    city: "Banff",
-    region: "Bow Valley / National Park",
-    postalPrefixes: ["T1L"],
-    travelFeeTier: "Regional",
-    estTransitTime: "1 hour 30 mins",
-    description: "Permit-compliant residential and commercial moves within Banff National Park.",
+    city: "Beaumont",
+    region: "Capital Region",
+    postalPrefixes: ["T4X"],
+    travelFeeTier: "Standard",
+    estTransitTime: "30 mins from base",
+    description: "Full local service for Beaumont homes and businesses.",
   },
   {
     city: "Red Deer",
     region: "Central Alberta",
     postalPrefixes: ["T4N", "T4P", "T4R"],
     travelFeeTier: "Long Distance",
-    estTransitTime: "1 hour 45 mins",
-    description: "Direct highway relocations with guaranteed delivery timeframes.",
+    estTransitTime: "~1 hour 45 mins",
+    description:
+      "Long-distance relocation between Edmonton and Red Deer, quoted per move.",
   },
   {
-    city: "Edmonton",
-    region: "Capital Region",
-    postalPrefixes: ["T5A", "T5B", "T5C", "T5E", "T5G", "T5H", "T5J", "T5K", "T5L", "T5M", "T5N", "T5P", "T5R", "T5S", "T5T", "T5V", "T5W", "T5X", "T5Y", "T5Z", "T6A", "T6B", "T6C", "T6E", "T6G", "T6H", "T6J", "T6K", "T6L", "T6M", "T6N", "T6P", "T6R", "T6S", "T6T", "T6V", "T6W", "T6X"],
+    city: "Calgary",
+    region: "Southern Alberta",
+    postalPrefixes: [
+      "T2A", "T2B", "T2C", "T2E", "T2G", "T2H", "T2J", "T2K", "T2L", "T2M",
+      "T2N", "T2P", "T2R", "T2S", "T2T", "T2V", "T2W", "T2X", "T2Y", "T2Z",
+      "T3A", "T3B", "T3C", "T3E", "T3G", "T3H", "T3J", "T3K", "T3L", "T3M",
+      "T3N", "T3P", "T3R", "T3S",
+    ],
     travelFeeTier: "Long Distance",
-    estTransitTime: "3 hours",
-    description: "Calgary to Edmonton express inter-city relocation services.",
+    estTransitTime: "~3 hours",
+    description:
+      "Edmonton to Calgary long-distance relocation, scheduled and quoted per move.",
   },
   {
     city: "Lethbridge",
     region: "Southern Alberta",
     postalPrefixes: ["T1H", "T1J", "T1K"],
     travelFeeTier: "Long Distance",
-    estTransitTime: "2 hours 15 mins",
-    description: "Southern Alberta long-distance home and estate moving logistics.",
+    estTransitTime: "~4 hours",
+    description: "Long-distance moves from Edmonton to Lethbridge.",
+  },
+  {
+    city: "Medicine Hat",
+    region: "Southeastern Alberta",
+    postalPrefixes: ["T1A", "T1B", "T1C"],
+    travelFeeTier: "Long Distance",
+    estTransitTime: "~4.5 hours",
+    description: "Long-distance moves from Edmonton to Medicine Hat.",
   },
 ];
+
+// Client note: no maximum distance for moves outside Alberta, but those
+// are limited to twice a month (every two weeks) due to scheduling.
+export const OUT_OF_PROVINCE_NOTE =
+  "No maximum distance for moves outside Alberta — these are scheduled twice a month (every two weeks). Contact us to check the next available slot.";
 
 export type Service = {
   title: string;
@@ -145,52 +147,72 @@ export type Service = {
   imageKey: ServiceImageKey;
 };
 
+// Matches Howard's actual service list. Everything is quote-based —
+// free quotes, flexible scheduling.
 export const SERVICES: Service[] = [
   {
     title: "Local Moves",
     description:
-      "Full-service moving within the metro area — apartments, houses, and everything in between.",
+      "Full-service moving within Edmonton and surrounding communities — quoted upfront, no surprises.",
     imageKey: "indoorsWithTools",
   },
   {
     title: "Long-Distance Moves",
     description:
-      "Moving across the province or country? We handle logistics start to finish.",
+      "Moving across Alberta or beyond. No maximum distance for out-of-province moves — scheduled every two weeks.",
     imageKey: "truckSunnyDay",
   },
   {
-    title: "Packing & Unpacking",
+    title: "Storage Moves",
     description:
-      "Professional packing services to keep your belongings safe in transit.",
-    imageKey: "packingScene",
-  },
-  {
-    title: "Storage Solutions",
-    description:
-      "Short and long-term storage options for moves that need extra flexibility.",
+      "Moving items into or out of storage, handled with the same care as a full household move.",
     imageKey: "storageWarehouse",
   },
   {
-    title: "Commercial & Office Moves",
+    title: "Furniture Storage",
     description:
-      "Minimize downtime with efficient office and commercial relocation services.",
-    imageKey: "officeMove",
+      "Short and long-term storage for furniture between moves, renovations, or downsizing.",
+    imageKey: "storageWarehouse",
   },
   {
-    title: "Appliance & Heavy Items",
+    title: "Couch & Appliance Delivery",
     description:
-      "Fridges, pianos, safes, and gym equipment — moved with the right tools and crew.",
+      "Single large-item delivery — couches, fridges, washers/dryers, and more.",
     imageKey: "fridgeAppliance",
   },
   {
-    title: "Short-Notice Moves",
+    title: "Single-Item Moves",
     description:
-      "Need to move this week? We keep flexible slots open for last-minute and same-day jobs.",
+      "Just need one thing moved? We handle single-item jobs without a full crew markup.",
+    imageKey: "fridgeAppliance",
+  },
+  {
+    title: "Moving-Related Packing",
+    description:
+      "Packing help so your belongings travel safely, without you doing it all yourself.",
+    imageKey: "packingScene",
+  },
+  {
+    title: "Loading & Unloading",
+    description:
+      "Renting your own truck? We'll handle the heavy lifting on either end.",
+    imageKey: "indoorsWithTools",
+  },
+  {
+    title: "Junk Removal",
+    description:
+      "Clearing out items you don't want to bring with you — responsibly disposed of.",
+    imageKey: "storageWarehouse",
+  },
+  {
+    title: "Last-Minute & Same-Day Moves",
+    description:
+      "Flexible scheduling for moves that can't wait — especially for smaller jobs.",
     imageKey: "moversNeededToday",
   },
 ];
 
-// Brand colors — mirrors the navy/gold theme from the business card & rate card.
+// Brand colors — matches business card, rate card, and website.
 export const BRAND_COLORS = {
   navy: "#0b1f3a",
   navyDeep: "#071426",
@@ -200,6 +222,7 @@ export const BRAND_COLORS = {
 
 // -----------------------------------------------------------------------------
 // Interactive Moving Cost Estimator Configurations
+// (kept as-is — not geography-dependent)
 // -----------------------------------------------------------------------------
 export type MoveSizeOption = {
   id: string;
@@ -294,7 +317,7 @@ export const SPECIALTY_ADDONS = [
 ];
 
 // -----------------------------------------------------------------------------
-// Inventory Planner Items
+// Inventory Planner Items (kept as-is — not geography-dependent)
 // -----------------------------------------------------------------------------
 export type InventoryCategory = {
   name: string;
@@ -369,7 +392,7 @@ export const INVENTORY_CATEGORIES: InventoryCategory[] = [
 ];
 
 // -----------------------------------------------------------------------------
-// Relocation Checklist Timeline
+// Relocation Checklist Timeline (kept as-is — not geography-dependent)
 // -----------------------------------------------------------------------------
 export type ChecklistMilestone = {
   id: string;
@@ -448,7 +471,7 @@ export const RELOCATION_CHECKLIST: ChecklistMilestone[] = [
 ];
 
 // -----------------------------------------------------------------------------
-// Searchable FAQ Data
+// Searchable FAQ Data (kept as-is — not geography-dependent)
 // -----------------------------------------------------------------------------
 export type FaqItem = {
   id: string;
@@ -498,12 +521,12 @@ export const FAQ_DATA: FaqItem[] = [
     id: "faq-7",
     category: "Services & Storage",
     question: "Do you offer short-notice or weekend moves?",
-    answer: "Yes! We keep flexible slots open for same-week and short-notice emergencies. We operate 7 days a week, including weekends and holidays, to accommodate your schedule.",
+    answer: "Yes! We keep flexible slots open for same-week and short-notice emergencies, especially for smaller jobs.",
   },
   {
     id: "faq-8",
     category: "Services & Storage",
-    question: "What if my new home isn't ready on moving day?",
-    answer: "We offer seamless vault storage solutions! We can store your belongings in our secure, climate-controlled storage facilities for overnight, days, or weeks until your new keys are handed over.",
+    question: "How often do you run moves outside Alberta?",
+    answer: "There's no maximum distance for moves outside Alberta, but these are scheduled twice a month (every two weeks) to keep logistics reliable. Reach out for the next available slot.",
   },
-];
+];

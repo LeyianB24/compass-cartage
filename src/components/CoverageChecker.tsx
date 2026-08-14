@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { Search, MapPin, CheckCircle2, AlertCircle, Clock, ShieldCheck } from "lucide-react";
-import { DETAILED_COVERAGE_ZONES, type CoverageZoneDetail } from "@/lib/constants";
+import { DETAILED_COVERAGE_ZONES, OUT_OF_PROVINCE_NOTE, type CoverageZoneDetail } from "@/lib/constants";
 
 export default function CoverageChecker() {
   const [query, setQuery] = useState("");
@@ -36,7 +36,7 @@ export default function CoverageChecker() {
           Check Your City or Postal Code Coverage
         </h2>
         <p className="mt-1 text-xs text-slate">
-          Enter your city name (e.g., Calgary, Airdrie, Canmore) or first 3 digits of your FSA postal code (e.g., T2A, T4C).
+          Enter your city name (e.g., Edmonton, St. Albert, Calgary) or first 3 digits of your FSA postal code (e.g., T5A, T8N).
         </p>
       </div>
 
@@ -45,7 +45,7 @@ export default function CoverageChecker() {
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-light" />
           <input
             type="text"
-            placeholder="e.g. Calgary, Airdrie, T2P, T4C..."
+            placeholder="e.g. Edmonton, Sherwood Park, T5A, T8N..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -90,9 +90,15 @@ export default function CoverageChecker() {
                     </div>
                     <div className="flex items-center gap-1.5 font-medium">
                       <ShieldCheck size={14} className="text-emerald-600" />
-                      <span>Fully Insured Regional Route</span>
+                      <span>Fully Insured Route</span>
                     </div>
                   </div>
+
+                  {matchedZone.travelFeeTier === "Long Distance" && (
+                    <p className="mt-3 border-t border-emerald-200/60 pt-3 text-[11px] text-slate">
+                      Long-distance moves are quote-based with flexible scheduling.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -102,10 +108,10 @@ export default function CoverageChecker() {
                 <AlertCircle size={22} className="text-gold shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-display text-base font-semibold text-navy-deep">
-                    Specialty / Extended Route Available
+                    Outside Standard Alberta Coverage
                   </h3>
                   <p className="mt-1 text-xs text-slate leading-relaxed">
-                    While &quot;{query}&quot; is outside our standard local zone, Compass Cartage frequently handles long-distance relocations across Alberta and Western Canada. Contact our dispatch team for a custom route estimate!
+                    While &quot;{query}&quot; is outside our standard Alberta zone, {OUT_OF_PROVINCE_NOTE}
                   </p>
                 </div>
               </div>
