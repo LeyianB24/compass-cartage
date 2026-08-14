@@ -1,7 +1,11 @@
 // src/app/api/quote/route.ts
+export const runtime = "nodejs"; // react-pdf needs Node APIs, not Edge
+
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { renderToBuffer } from "@react-pdf/renderer";
+import QuotePdf from "@/lib/QuotePdf";
 
 // Lazy-initialize Resend client to avoid build-time environment variable errors
 const getResendClient = () => {
@@ -115,7 +119,34 @@ export async function POST(req: NextRequest) {
     const safeSize = escapeHtml(data.moveSize);
     const safeNotes = escapeHtml(data.notes).replace(/\n/g, "<br/>");
 
-    // D. Email Template (Internal Notification)
+    // D. Generate the branded PDF summary once, attach to both emails
+    const submittedAt = new Date().toLocaleString("en-CA", {
+      dateStyle: "long",
+      timeStyle: "short",
+    });
+
+    const pdfBuffer = await renderToBuffer(
+      QuotePdf({
+        data: {
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          pickupAddress: data.pickupAddress,
+          dropoffAddress: data.dropoffAddress,
+          moveDate: data.moveDate,
+          moveSize: data.moveSize,
+          notes: data.notes,
+          submittedAt,
+        },
+      })
+    );
+
+    const pdfAttachment = {
+      filename: `compass-cartage-quote-${Date.now()}.pdf`,
+      content: pdfBuffer,
+    };
+
+    // E. Email Template (Internal Notification)
     const adminEmailHtml = `
       <!DOCTYPE html>
       <html>
@@ -137,12 +168,13 @@ export async function POST(req: NextRequest) {
             <div style="background-color: #f7f6f2; padding: 15px; border-radius: 6px; border-left: 4px solid #c9a227;">
               ${safeNotes}
             </div>
+            <p style="color:#8792a2;font-size:12px;margin-top:20px;">A branded PDF summary is attached.</p>
           </div>
         </body>
       </html>
     `;
 
-    // E. Email Template (Customer Auto-Confirmation)
+    // F. Email Template (Customer Auto-Confirmation)
     const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
@@ -152,7 +184,7 @@ export async function POST(req: NextRequest) {
               We Received Your Moving Quote Request!
             </h2>
             <p>Hi ${safeName},</p>
-            <p>Thank you for reaching out to <strong>Compass Cartage</strong>. We’ve received your quote request and our team is currently reviewing your details.</p>
+            <p>Thank you for reaching out to <strong>Compass Cartage</strong>. We&rsquo;ve received your quote request and our team is currently reviewing your details.</p>
             <p>We will get back to you within 24 hours with a detailed estimate.</p>
             <div style="background-color: #f7f6f2; padding: 15px; border-radius: 6px; margin: 20px 0;">
               <p style="margin: 0 0 8px 0;"><strong>Summary of your details:</strong></p>
@@ -162,6 +194,7 @@ export async function POST(req: NextRequest) {
                 <li><strong>Preferred Date:</strong> ${safeDate}</li>
               </ul>
             </div>
+            <p style="color:#4a5568;font-size:13px;">A PDF copy of your submitted details is attached for your records.</p>
             <p>If you need to make urgent changes, simply reply to this email or call our team directly.</p>
             <p style="margin-top: 30px; color: #4a5568; font-size: 0.9em;">Best regards,<br/><strong>Compass Cartage Team</strong></p>
           </div>
@@ -169,7 +202,7 @@ export async function POST(req: NextRequest) {
       </html>
     `;
 
-    // F. Dispatch Emails via Resend
+    // G. Dispatch Emails via Resend, each with the PDF attached
     await Promise.all([
       // Email 1: To the business owner/dispatch team
       resend.emails.send({
@@ -178,6 +211,7 @@ export async function POST(req: NextRequest) {
         replyTo: data.email,
         subject: `New Quote Request — ${data.name} (${data.moveSize})`,
         html: adminEmailHtml,
+        attachments: [pdfAttachment],
       }),
       // Email 2: Instant confirmation receipt to the customer
       resend.emails.send({
@@ -185,6 +219,7 @@ export async function POST(req: NextRequest) {
         to: data.email,
         subject: "We've received your quote request | Compass Cartage",
         html: customerEmailHtml,
+        attachments: [pdfAttachment],
       }),
     ]);
 
