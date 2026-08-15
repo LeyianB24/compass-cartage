@@ -1,7 +1,7 @@
-// src/middleware.ts
+// src/proxy.ts
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const isLoginPage = req.nextUrl.pathname === "/admin/login";
   const session = req.cookies.get("admin_session")?.value;
 
