@@ -45,7 +45,7 @@ export default function FilterableGallery() {
               className={`rounded-sm px-5 py-2.5 text-xs font-semibold transition-all ${
                 activeTab === tab
                   ? "bg-gold text-navy-deep shadow-xs"
-                  : "border border-hairline bg-white text-slate hover:border-gold/50 hover:text-navy-deep"
+                  : "border border-hairline bg-paper-muted text-slate hover:border-gold/50 hover:text-navy-deep"
               }`}
             >
               {tab}
@@ -66,7 +66,7 @@ export default function FilterableGallery() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, delay: idx * 0.04 }}
               onClick={() => setSelectedImage(img)}
-              className="group relative isolate aspect-[4/3] cursor-pointer overflow-hidden rounded-card border border-hairline bg-white shadow-2xs"
+              className="group relative isolate aspect-[4/3] cursor-pointer overflow-hidden rounded-card border border-hairline bg-paper-muted shadow-2xs"
             >
               <Image
                 src={img.src}
@@ -78,7 +78,7 @@ export default function FilterableGallery() {
 
               {/* Legibility wash & zoom icon reveal on hover */}
               <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 via-navy-deep/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col justify-between p-6">
-                <div className="self-end rounded-full bg-white/20 p-2 text-paper backdrop-blur">
+                <div className="self-end rounded-full bg-paper-muted/20 p-2 text-paper backdrop-blur">
                   <ZoomIn size={18} />
                 </div>
                 <div>

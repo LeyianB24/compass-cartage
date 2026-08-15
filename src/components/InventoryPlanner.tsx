@@ -85,7 +85,7 @@ export default function InventoryPlanner() {
   const activeCategoryObj = INVENTORY_CATEGORIES.find((c) => c.name === activeCategory)!;
 
   return (
-    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-white shadow-lg overflow-hidden">
+    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Top Header */}
       <div className="bg-navy-deep px-6 py-6 text-paper md:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -161,7 +161,7 @@ export default function InventoryPlanner() {
                       <button
                         type="button"
                         onClick={() => handleRemove(item.id)}
-                        className="flex h-7 w-7 items-center justify-center rounded-xs border border-hairline bg-white text-navy-deep shadow-2xs transition-colors hover:bg-red-50 hover:text-red-600"
+                        className="flex h-7 w-7 items-center justify-center rounded-xs border border-hairline bg-paper-muted text-navy-deep shadow-2xs transition-colors hover:bg-red-50 hover:text-red-600"
                         aria-label={`Remove one ${item.name}`}
                       >
                         <Minus size={14} />
@@ -207,7 +207,7 @@ export default function InventoryPlanner() {
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3 border-b border-hairline pb-4">
-              <div className="rounded-xs bg-white p-3 border border-hairline">
+              <div className="rounded-xs bg-paper-muted p-3 border border-hairline">
                 <div className="flex items-center gap-1.5 text-xs text-slate">
                   <Box size={14} className="text-gold" />
                   <span>Total Volume</span>
@@ -217,7 +217,7 @@ export default function InventoryPlanner() {
                 </p>
               </div>
 
-              <div className="rounded-xs bg-white p-3 border border-hairline">
+              <div className="rounded-xs bg-paper-muted p-3 border border-hairline">
                 <div className="flex items-center gap-1.5 text-xs text-slate">
                   <Scale size={14} className="text-gold" />
                   <span>Est. Weight</span>
@@ -259,7 +259,7 @@ export default function InventoryPlanner() {
 
             {/* Selected items list snippet */}
             {selectedSummaryList.length > 0 && (
-              <div className="mt-5 rounded-xs bg-white p-3 border border-hairline">
+              <div className="mt-5 rounded-xs bg-paper-muted p-3 border border-hairline">
                 <p className="text-[11px] font-semibold text-navy-deep mb-1">
                   Selected Items ({totalItemCount}):
                 </p>

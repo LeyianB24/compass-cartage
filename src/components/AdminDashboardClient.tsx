@@ -58,7 +58,7 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
             className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
               filter === f
                 ? "bg-navy-deep text-paper"
-                : "bg-white text-slate border border-hairline hover:border-navy-deep"
+                : "bg-paper-muted text-slate border border-hairline hover:border-navy-deep"
             }`}
           >
             {f === "ALL" ? "All" : f.charAt(0) + f.slice(1).toLowerCase()}
@@ -68,7 +68,7 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
 
       <div className="mt-6 space-y-4">
         {filtered.length === 0 && (
-          <p className="rounded-card border border-hairline bg-white p-8 text-center text-sm text-slate">
+          <p className="rounded-card border border-hairline bg-paper-muted p-8 text-center text-sm text-slate">
             No requests match this filter.
           </p>
         )}
@@ -92,7 +92,7 @@ function StatCard({
   accent?: boolean;
 }) {
   return (
-    <div className="rounded-card border border-hairline bg-white p-4 shadow-xs">
+    <div className="rounded-card border border-hairline bg-paper-muted p-4 shadow-xs">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-display font-semibold text-navy-deep">{value}</p>
         <div className={`flex h-8 w-8 items-center justify-center rounded-full ${accent ? "bg-gold/15 text-gold" : "bg-navy-deep/5 text-navy-deep"}`}>

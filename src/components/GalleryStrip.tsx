@@ -92,14 +92,14 @@ export default function GalleryStrip() {
             <button
               aria-label="Previous slide"
               onClick={() => paginate(-1)}
-              className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/25 bg-white/5 text-paper backdrop-blur transition-colors hover:bg-white/15"
+              className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/25 bg-paper-muted/5 text-paper backdrop-blur transition-colors hover:bg-paper-muted/15"
             >
               <ArrowLeft size={18} />
             </button>
             <button
               aria-label="Next slide"
               onClick={() => paginate(1)}
-              className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/25 bg-white/5 text-paper backdrop-blur transition-colors hover:bg-white/15"
+              className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/25 bg-paper-muted/5 text-paper backdrop-blur transition-colors hover:bg-paper-muted/15"
             >
               <ArrowRight size={18} />
             </button>

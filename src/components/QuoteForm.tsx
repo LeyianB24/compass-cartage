@@ -92,7 +92,7 @@ function QuoteFormContent() {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="flex flex-col items-center border border-hairline bg-white px-8 py-16 text-center shadow-xs rounded-card"
+        className="flex flex-col items-center border border-hairline bg-paper-muted px-8 py-16 text-center shadow-xs rounded-card"
       >
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
           <CheckCircle2 size={36} className="text-gold" />
@@ -117,7 +117,7 @@ function QuoteFormContent() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border border-hairline bg-white p-6 md:p-8 shadow-xs rounded-card" noValidate>
+    <form onSubmit={handleSubmit} className="border border-hairline bg-paper-muted p-6 md:p-8 shadow-xs rounded-card" noValidate>
       {(estMin || inventoryParam) && (
         <div className="mb-6 rounded-sm border border-gold/40 bg-gold/5 p-4 flex items-center gap-3 text-xs text-navy-deep">
           <Sparkles size={18} className="text-gold shrink-0" />
@@ -147,7 +147,7 @@ function QuoteFormContent() {
             name="moveSize"
             value={selectedSize}
             onChange={(e) => setSelectedSize(e.target.value)}
-            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep transition-colors focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             <option value="">Select size</option>
             <option value="studio">Studio</option>
@@ -170,7 +170,7 @@ function QuoteFormContent() {
             rows={4}
             defaultValue={notesDefault}
             placeholder="Anything we should know — stairs, elevator access, fragile items, preferred times, etc."
-            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           />
         </div>
 
@@ -280,7 +280,7 @@ function Field({ label, name, type = "text", required = false, className = "", p
         name={name}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
       />
     </div>
   );

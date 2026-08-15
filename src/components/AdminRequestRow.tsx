@@ -71,7 +71,7 @@ export default function AdminRequestRow({ request }: Props) {
   }
 
   return (
-    <div className="rounded-card border border-hairline bg-white shadow-xs">
+    <div className="rounded-card border border-hairline bg-paper-muted shadow-xs">
       <button
         onClick={() => setExpanded((v) => !v)}
         className="flex w-full items-center justify-between gap-4 p-5 text-left"
@@ -162,7 +162,7 @@ export default function AdminRequestRow({ request }: Props) {
                   type="date"
                   value={bookDate}
                   onChange={(e) => setBookDate(e.target.value)}
-                  className="rounded-xs border border-hairline bg-white px-3 py-1.5 text-xs"
+                  className="rounded-xs border border-hairline bg-paper-muted px-3 py-1.5 text-xs"
                 />
               </div>
               <div>
@@ -170,7 +170,7 @@ export default function AdminRequestRow({ request }: Props) {
                 <select
                   value={moveType}
                   onChange={(e) => setMoveType(e.target.value as never)}
-                  className="rounded-xs border border-hairline bg-white px-3 py-1.5 text-xs"
+                  className="rounded-xs border border-hairline bg-paper-muted px-3 py-1.5 text-xs"
                 >
                   <option value="LOCAL">Local (Edmonton area)</option>
                   <option value="LONG_DISTANCE_ALBERTA">Long-Distance (Alberta)</option>

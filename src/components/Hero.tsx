@@ -101,7 +101,7 @@ export default function Hero() {
             </Link>
             <a
               href={BUSINESS.phoneHref}
-              className="flex items-center justify-center gap-2 rounded-sm border border-paper/25 bg-white/5 px-7 py-3.5 text-sm font-semibold text-paper backdrop-blur transition-colors hover:bg-white/10"
+              className="flex items-center justify-center gap-2 rounded-sm border border-paper/25 bg-paper-muted/5 px-7 py-3.5 text-sm font-semibold text-paper backdrop-blur transition-colors hover:bg-paper-muted/10"
             >
               <Phone size={16} className="text-gold-soft" />
               {BUSINESS.phone}

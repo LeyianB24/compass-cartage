@@ -88,7 +88,7 @@ export default function MovingChecklist() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-white shadow-lg overflow-hidden">
+    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Top Header */}
       <div className="bg-navy-deep px-6 py-6 text-paper md:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -109,7 +109,7 @@ export default function MovingChecklist() {
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 rounded-sm border border-paper/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-paper transition-colors hover:bg-white/20"
+              className="inline-flex items-center gap-1.5 rounded-sm border border-paper/20 bg-paper-muted/10 px-3.5 py-1.5 text-xs font-semibold text-paper transition-colors hover:bg-paper-muted/20"
             >
               <Download size={14} />
               <span>Print Checklist</span>
@@ -134,7 +134,7 @@ export default function MovingChecklist() {
               {completedCount} of {totalTasksCount} Completed ({progressPercent}%)
             </span>
           </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-paper-muted/10">
             <motion.div
               className="h-full bg-gold"
               initial={{ width: 0 }}
@@ -202,7 +202,7 @@ export default function MovingChecklist() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="border-t border-hairline p-4 md:p-6 space-y-3 bg-white"
+                    className="border-t border-hairline p-4 md:p-6 space-y-3 bg-paper-muted"
                   >
                     {milestoneTasks.map((task) => {
                       const isChecked = Boolean(completedTasks[task.id]);
@@ -213,7 +213,7 @@ export default function MovingChecklist() {
                           className={`group flex cursor-pointer items-start gap-3.5 rounded-sm border p-3.5 transition-all ${
                             isChecked
                               ? "border-emerald-200 bg-emerald-50/40 text-slate-light"
-                              : "border-hairline bg-white hover:border-gold/60"
+                              : "border-hairline bg-paper-muted hover:border-gold/60"
                           }`}
                         >
                           <div className="mt-0.5 shrink-0 text-gold transition-transform group-hover:scale-110">

@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-[70vh] items-center justify-center bg-paper px-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm border border-hairline bg-white p-8 shadow-xs rounded-card">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm border border-hairline bg-paper-muted p-8 shadow-xs rounded-card">
         <div className="mb-6 flex flex-col items-center text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-deep/5">
             <Lock size={20} className="text-navy-deep" />
@@ -52,7 +52,7 @@ export default function AdminLoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         />
 
         {error && <p className="mt-3 text-sm text-red-600">{error}</p>}

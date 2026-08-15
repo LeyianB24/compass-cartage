@@ -57,7 +57,7 @@ export default function Testimonials() {
               {REVIEWS.map((review) => (
                 <figure
                   key={review.name}
-                  className="flex flex-col justify-between border border-hairline bg-white p-6"
+                  className="flex flex-col justify-between border border-hairline bg-paper-muted p-6"
                 >
                   <figcaption>
                     <div className="flex gap-0.5">

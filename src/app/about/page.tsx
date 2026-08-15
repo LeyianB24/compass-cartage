@@ -54,7 +54,7 @@ export default function AboutPage() {
                   className="object-cover"
                 />
               </div>
-              <div className="border border-hairline bg-white p-8">
+              <div className="border border-hairline bg-paper-muted p-8">
                 <p className="eyebrow mb-4">Why Customers Choose Us</p>
                 <ul className="space-y-4 text-sm text-slate">
                   <li className="flex gap-3">

@@ -29,7 +29,7 @@ export default function FaqAccordion() {
   return (
     <div className="mx-auto max-w-4xl space-y-8">
       {/* Search & Category Filter Header */}
-      <div className="rounded-card border border-hairline bg-white p-6 shadow-sm space-y-6">
+      <div className="rounded-card border border-hairline bg-paper-muted p-6 shadow-sm space-y-6">
         <div className="relative">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-light" />
           <input
@@ -37,7 +37,7 @@ export default function FaqAccordion() {
             placeholder="Search questions (e.g. insurance, packing, stairs, deposit)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-sm border border-hairline bg-paper pl-11 pr-4 py-3 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full rounded-sm border border-hairline bg-paper pl-11 pr-4 py-3 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           />
         </div>
 
@@ -61,7 +61,7 @@ export default function FaqAccordion() {
       {/* Accordion List */}
       <div className="space-y-3">
         {filteredFaqs.length === 0 ? (
-          <div className="rounded-card border border-hairline bg-white p-12 text-center">
+          <div className="rounded-card border border-hairline bg-paper-muted p-12 text-center">
             <HelpCircle size={32} className="mx-auto text-slate-light" />
             <h3 className="mt-3 font-display text-lg font-semibold text-navy-deep">
               No matching questions found
@@ -78,8 +78,8 @@ export default function FaqAccordion() {
                 key={faq.id}
                 className={`rounded-sm border transition-all ${
                   isOpen
-                    ? "border-gold bg-white shadow-xs"
-                    : "border-hairline bg-white hover:border-slate-light"
+                    ? "border-gold bg-paper-muted shadow-xs"
+                    : "border-hairline bg-paper-muted hover:border-slate-light"
                 }`}
               >
                 <button

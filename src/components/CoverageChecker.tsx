@@ -27,7 +27,7 @@ export default function CoverageChecker() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl rounded-card border border-hairline bg-white p-6 shadow-md md:p-8">
+    <div className="mx-auto max-w-4xl rounded-card border border-hairline bg-paper-muted p-6 shadow-md md:p-8">
       <div className="text-center max-w-xl mx-auto">
         <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gold/15 text-gold mb-3">
           <MapPin size={22} />
@@ -51,7 +51,7 @@ export default function CoverageChecker() {
               setQuery(e.target.value);
               setHasSearched(false);
             }}
-            className="w-full rounded-sm border border-hairline bg-paper pl-11 pr-4 py-3 text-sm text-navy-deep placeholder:text-slate-light focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="w-full rounded-sm border border-hairline bg-paper pl-11 pr-4 py-3 text-sm text-navy-deep placeholder:text-slate-light focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           />
         </div>
         <button

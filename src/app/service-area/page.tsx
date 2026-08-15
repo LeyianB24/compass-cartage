@@ -70,7 +70,7 @@ export default function ServiceAreaPage() {
               {DETAILED_COVERAGE_ZONES.map((zone) => (
                 <div
                   key={zone.city}
-                  className="group relative flex flex-col justify-between rounded-card border border-hairline bg-white p-6 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-gold/60 hover:shadow-md"
+                  className="group relative flex flex-col justify-between rounded-card border border-hairline bg-paper-muted p-6 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-gold/60 hover:shadow-md"
                 >
                   <div>
                     <div className="flex items-center justify-between">

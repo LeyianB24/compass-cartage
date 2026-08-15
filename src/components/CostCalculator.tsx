@@ -59,7 +59,7 @@ export default function CostCalculator() {
   }).toString();
 
   return (
-    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-white shadow-lg overflow-hidden">
+    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Header bar */}
       <div className="bg-navy-deep px-6 py-6 text-paper md:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -86,7 +86,7 @@ export default function CostCalculator() {
                 className={`flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-all ${
                   step === s
                     ? "bg-gold text-navy-deep"
-                    : "bg-white/10 text-paper/70 hover:bg-white/20"
+                    : "bg-paper-muted/10 text-paper/70 hover:bg-paper-muted/20"
                 }`}
               >
                 <span>Step {s}</span>
@@ -221,7 +221,7 @@ export default function CostCalculator() {
                           className={`h-9 w-9 rounded-sm border text-xs font-semibold transition-all ${
                             pickupStairs === num
                               ? "border-gold bg-navy-deep text-gold"
-                              : "border-hairline bg-white text-navy-deep hover:border-gold/50"
+                              : "border-hairline bg-paper-muted text-navy-deep hover:border-gold/50"
                           }`}
                         >
                           {num === 0 ? "Elev/Gnd" : `${num}`}
@@ -243,7 +243,7 @@ export default function CostCalculator() {
                           className={`h-9 w-9 rounded-sm border text-xs font-semibold transition-all ${
                             dropoffStairs === num
                               ? "border-gold bg-navy-deep text-gold"
-                              : "border-hairline bg-white text-navy-deep hover:border-gold/50"
+                              : "border-hairline bg-paper-muted text-navy-deep hover:border-gold/50"
                           }`}
                         >
                           {num === 0 ? "Elev/Gnd" : `${num}`}
@@ -269,7 +269,7 @@ export default function CostCalculator() {
                     }`}
                   >
                     <span
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-paper-muted shadow ring-0 transition duration-200 ease-in-out ${
                         hasElevator ? "translate-x-5" : "translate-x-0"
                       }`}
                     />
@@ -424,7 +424,7 @@ export default function CostCalculator() {
             </div>
 
             {/* Itemized list */}
-            <div className="mt-6 rounded-xs bg-white p-3 border border-hairline text-[11px] space-y-1.5">
+            <div className="mt-6 rounded-xs bg-paper-muted p-3 border border-hairline text-[11px] space-y-1.5">
               <div className="flex justify-between text-slate">
                 <span>Base ({selectedSize.label})</span>
                 <span>${selectedSize.basePrice}</span>

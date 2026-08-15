@@ -27,7 +27,7 @@ export default function ServiceCard({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ delay: (index % 3) * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -4 }}
-      className="group relative isolate overflow-hidden border border-hairline bg-white p-7 transition-colors duration-300 hover:border-navy-deep"
+      className="group relative isolate overflow-hidden border border-hairline bg-paper-muted p-7 transition-colors duration-300 hover:border-navy-deep"
     >
       {/* Hover-reveal photograph — sits behind the content, fades + zooms
           in on hover. A navy wash keeps the text legible on top. */}
