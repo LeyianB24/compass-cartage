@@ -1,53 +1,45 @@
 // src/app/api/quote/route.ts
-export const runtime = "nodejs"; // react-pdf needs Node APIs, not Edge
+export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { put } from "@vercel/blob";
 import { renderToBuffer } from "@react-pdf/renderer";
 import QuotePdf from "@/lib/QuotePdf";
 import { prisma } from "@/lib/prisma";
 
-// Lazy-initialize Resend client to avoid build-time environment variable errors
 const getResendClient = () => {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("Missing RESEND_API_KEY environment variable");
-  }
+  if (!apiKey) throw new Error("Missing RESEND_API_KEY environment variable");
   return new Resend(apiKey);
 };
 
 // -----------------------------------------------------------------------------
-// 1. In-Memory Rate Limiter (Basic DDoS & Spam Protection)
+// Rate Limiter
 // -----------------------------------------------------------------------------
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
-const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-const MAX_REQUESTS_PER_WINDOW = 5; // Max 5 requests per IP every 15 minutes
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const record = rateLimitMap.get(ip);
-
   if (!record) {
     rateLimitMap.set(ip, { count: 1, lastReset: now });
     return false;
   }
-
   if (now - record.lastReset > RATE_LIMIT_WINDOW_MS) {
     rateLimitMap.set(ip, { count: 1, lastReset: now });
     return false;
   }
-
-  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
-    return true;
-  }
-
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) return true;
   record.count += 1;
   return false;
 }
 
 // -----------------------------------------------------------------------------
-// 2. Strict Zod Validation Schema
+// Validation
 // -----------------------------------------------------------------------------
 const quoteSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100),
@@ -60,9 +52,10 @@ const quoteSchema = z.object({
   notes: z.string().trim().max(2000, "Notes cannot exceed 2000 characters").optional().default("None"),
 });
 
-// -----------------------------------------------------------------------------
-// 3. HTML Escaping Utility
-// -----------------------------------------------------------------------------
+const MAX_PHOTOS = 5;
+const MAX_PHOTO_SIZE = 8 * 1024 * 1024; // 8MB
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+
 function escapeHtml(str: string): string {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -72,12 +65,8 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-// -----------------------------------------------------------------------------
-// 4. API Route Handler
-// -----------------------------------------------------------------------------
 export async function POST(req: NextRequest) {
   try {
-    // A. Check Client IP & Apply Rate Limiting
     const clientIp =
       req.headers.get("x-forwarded-for")?.split(",")[0] ||
       req.headers.get("x-real-ip") ||
@@ -90,38 +79,54 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // B. Parse Request Body
-    const body = await req.json().catch(() => null);
-    if (!body) {
-      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    // Parse multipart form data instead of JSON — needed for file uploads
+    const form = await req.formData().catch(() => null);
+    if (!form) {
+      return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
     }
 
-    // C. Validate Input Against Zod Schema
-    const validation = quoteSchema.safeParse(body);
+    const rawFields = {
+      name: form.get("name")?.toString() || "",
+      email: form.get("email")?.toString() || "",
+      phone: form.get("phone")?.toString() || "",
+      pickupAddress: form.get("pickupAddress")?.toString() || "",
+      dropoffAddress: form.get("dropoffAddress")?.toString() || "",
+      moveDate: form.get("moveDate")?.toString() || "",
+      moveSize: form.get("moveSize")?.toString() || "",
+      notes: form.get("notes")?.toString() || "",
+    };
+
+    const validation = quoteSchema.safeParse(rawFields);
     if (!validation.success) {
       const firstError = validation.error.issues[0]?.message || "Invalid input";
       return NextResponse.json({ error: firstError }, { status: 400 });
     }
-
     const data = validation.data;
-    const resend = getResendClient();
 
-    // Environment Configurations
-    const senderEmail = process.env.SENDER_EMAIL || "Compass Cartage <onboarding@resend.dev>";
-    const recipientEmail = process.env.CONTACT_EMAIL || "compasscartage@gmail.com";
+    // Validate and upload photos
+    const photoFiles = form.getAll("photos").filter((f): f is File => f instanceof File && f.size > 0);
 
-    // Safe Escaped Values
-    const safeName = escapeHtml(data.name);
-    const safePhone = escapeHtml(data.phone);
-    const safeEmail = escapeHtml(data.email);
-    const safePickup = escapeHtml(data.pickupAddress);
-    const safeDropoff = escapeHtml(data.dropoffAddress);
-    const safeDate = escapeHtml(data.moveDate);
-    const safeSize = escapeHtml(data.moveSize);
-    const safeNotes = escapeHtml(data.notes).replace(/\n/g, "<br/>");
+    if (photoFiles.length > MAX_PHOTOS) {
+      return NextResponse.json({ error: `Maximum ${MAX_PHOTOS} photos allowed` }, { status: 400 });
+    }
+    for (const file of photoFiles) {
+      if (file.size > MAX_PHOTO_SIZE) {
+        return NextResponse.json({ error: `Photo "${file.name}" exceeds 8MB` }, { status: 400 });
+      }
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        return NextResponse.json({ error: `Unsupported photo type: ${file.type}` }, { status: 400 });
+      }
+    }
 
-    // D. Save the request to the database first — this is now the source
-    // of truth, independent of whether the emails succeed or fail.
+    const photoUrls: string[] = [];
+    for (const file of photoFiles) {
+      const blob = await put(`quote-photos/${Date.now()}-${file.name}`, file, {
+        access: "public",
+      });
+      photoUrls.push(blob.url);
+    }
+
+    // Save to database — source of truth, independent of email success
     const savedRequest = await prisma.quoteRequest.create({
       data: {
         name: data.name,
@@ -132,14 +137,24 @@ export async function POST(req: NextRequest) {
         moveDate: data.moveDate,
         moveSize: data.moveSize,
         notes: data.notes,
+        photoUrls,
       },
     });
 
-    // E. Generate the branded PDF summary once, attach to both emails
-    const submittedAt = new Date().toLocaleString("en-CA", {
-      dateStyle: "long",
-      timeStyle: "short",
-    });
+    const resend = getResendClient();
+    const senderEmail = process.env.SENDER_EMAIL || "Compass Cartage <onboarding@resend.dev>";
+    const recipientEmail = process.env.CONTACT_EMAIL || "compasscartage@gmail.com";
+
+    const safeName = escapeHtml(data.name);
+    const safePhone = escapeHtml(data.phone);
+    const safeEmail = escapeHtml(data.email);
+    const safePickup = escapeHtml(data.pickupAddress);
+    const safeDropoff = escapeHtml(data.dropoffAddress);
+    const safeDate = escapeHtml(data.moveDate);
+    const safeSize = escapeHtml(data.moveSize);
+    const safeNotes = escapeHtml(data.notes).replace(/\n/g, "<br/>");
+
+    const submittedAt = new Date().toLocaleString("en-CA", { dateStyle: "long", timeStyle: "short" });
 
     const pdfBuffer = await renderToBuffer(
       QuotePdf({
@@ -156,21 +171,20 @@ export async function POST(req: NextRequest) {
         },
       })
     );
+    const pdfAttachment = { filename: `compass-cartage-quote-${Date.now()}.pdf`, content: pdfBuffer };
 
-    const pdfAttachment = {
-      filename: `compass-cartage-quote-${Date.now()}.pdf`,
-      content: pdfBuffer,
-    };
+    const photoLinksHtml = photoUrls.length
+      ? `<p><strong>Photos:</strong><br/>${photoUrls
+          .map((url, i) => `<a href="${url}" target="_blank">Photo ${i + 1}</a>`)
+          .join(" &middot; ")}</p>`
+      : "";
 
-    // E. Email Template (Internal Notification)
     const adminEmailHtml = `
       <!DOCTYPE html>
       <html>
         <body style="font-family: Arial, sans-serif; background-color: #f7f6f2; color: #071426; margin: 0; padding: 20px;">
           <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e3e1da;">
-            <h2 style="color: #071426; border-bottom: 2px solid #c9a227; padding-bottom: 10px; margin-top: 0;">
-              New Quote Request
-            </h2>
+            <h2 style="color: #071426; border-bottom: 2px solid #c9a227; padding-bottom: 10px; margin-top: 0;">New Quote Request</h2>
             <p><strong>Client Name:</strong> ${safeName}</p>
             <p><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #0b1f3a;">${safeEmail}</a></p>
             <p><strong>Phone:</strong> <a href="tel:${safePhone}" style="color: #0b1f3a;">${safePhone}</a></p>
@@ -179,26 +193,22 @@ export async function POST(req: NextRequest) {
             <p><strong>Moving To:</strong> ${safeDropoff}</p>
             <p><strong>Preferred Date:</strong> ${safeDate}</p>
             <p><strong>Move Size:</strong> ${safeSize}</p>
+            ${photoLinksHtml}
             <hr style="border: none; border-top: 1px solid #e3e1da; margin: 20px 0;" />
             <p><strong>Notes / Special Instructions:</strong></p>
-            <div style="background-color: #f7f6f2; padding: 15px; border-radius: 6px; border-left: 4px solid #c9a227;">
-              ${safeNotes}
-            </div>
+            <div style="background-color: #f7f6f2; padding: 15px; border-radius: 6px; border-left: 4px solid #c9a227;">${safeNotes}</div>
             <p style="color:#8792a2;font-size:12px;margin-top:20px;">A branded PDF summary is attached.</p>
           </div>
         </body>
       </html>
     `;
 
-    // F. Email Template (Customer Auto-Confirmation)
     const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
         <body style="font-family: Arial, sans-serif; background-color: #f7f6f2; color: #071426; margin: 0; padding: 20px;">
           <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e3e1da;">
-            <h2 style="color: #071426; border-bottom: 2px solid #c9a227; padding-bottom: 10px; margin-top: 0;">
-              We Received Your Moving Quote Request!
-            </h2>
+            <h2 style="color: #071426; border-bottom: 2px solid #c9a227; padding-bottom: 10px; margin-top: 0;">We Received Your Moving Quote Request!</h2>
             <p>Hi ${safeName},</p>
             <p>Thank you for reaching out to <strong>Compass Cartage</strong>. We&rsquo;ve received your quote request and our team is currently reviewing your details.</p>
             <p>We will get back to you within 24 hours with a detailed estimate.</p>
@@ -218,12 +228,8 @@ export async function POST(req: NextRequest) {
       </html>
     `;
 
-    // H. Dispatch Emails via Resend, each with the PDF attached.
-    // If email sending fails, the request is still safely saved in the
-    // database — don't report a false error to the customer.
     try {
       await Promise.all([
-        // Email 1: To the business owner/dispatch team
         resend.emails.send({
           from: senderEmail,
           to: recipientEmail,
@@ -232,7 +238,6 @@ export async function POST(req: NextRequest) {
           html: adminEmailHtml,
           attachments: [pdfAttachment],
         }),
-        // Email 2: Instant confirmation receipt to the customer
         resend.emails.send({
           from: senderEmail,
           to: data.email,
@@ -246,11 +251,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Quote request submitted successfully.",
-        id: savedRequest.id,
-      },
+      { success: true, message: "Quote request submitted successfully.", id: savedRequest.id },
       { status: 200 }
     );
   } catch (err) {

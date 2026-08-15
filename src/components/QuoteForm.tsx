@@ -1,10 +1,10 @@
 // src/components/QuoteForm.tsx
 "use client";
 
-import { useState, FormEvent, useId, useEffect, Suspense } from "react";
+import { useState, FormEvent, useId, useEffect, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, CheckCircle2, AlertCircle, RefreshCw, Sparkles, Check } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, RefreshCw, Sparkles, ImagePlus, X } from "lucide-react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -12,8 +12,9 @@ function QuoteFormContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [photos, setPhotos] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Pre-fill fields from calculator or inventory planner query parameters
   const moveSizeParam = searchParams.get("moveSize") || "";
   const estMin = searchParams.get("estMin");
   const estMax = searchParams.get("estMax");
@@ -24,20 +25,26 @@ function QuoteFormContent() {
   const [selectedSize, setSelectedSize] = useState("");
 
   useEffect(() => {
-    if (moveSizeParam) {
-      setSelectedSize(moveSizeParam);
-    }
+    if (moveSizeParam) setSelectedSize(moveSizeParam);
     const notesParts: string[] = [];
-    if (estMin && estMax) {
-      notesParts.push(`[Calculator Estimate: $${estMin} - $${estMax}]`);
-    }
-    if (inventoryParam) {
-      notesParts.push(`[Inventory (${cuFtParam || "0"} cu ft): ${inventoryParam}]`);
-    }
-    if (notesParts.length > 0) {
-      setNotesDefault(notesParts.join("\n"));
-    }
+    if (estMin && estMax) notesParts.push(`[Calculator Estimate: $${estMin} - $${estMax}]`);
+    if (inventoryParam) notesParts.push(`[Inventory (${cuFtParam || "0"} cu ft): ${inventoryParam}]`);
+    if (notesParts.length > 0) setNotesDefault(notesParts.join("\n"));
   }, [moveSizeParam, estMin, estMax, inventoryParam, cuFtParam]);
+
+  const MAX_PHOTOS = 5;
+  const MAX_SIZE_MB = 8;
+
+  function handlePhotoSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    const valid = files.filter((f) => f.size <= MAX_SIZE_MB * 1024 * 1024);
+    setPhotos((prev) => [...prev, ...valid].slice(0, MAX_PHOTOS));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function removePhoto(index: number) {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,23 +52,31 @@ function QuoteFormContent() {
     setErrorMsg("");
 
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const formData = new FormData(form);
+    // Remove the raw file input's default entries, attach our controlled photos array instead
+    formData.delete("photos");
+    photos.forEach((file) => formData.append("photos", file));
 
     try {
       const res = await fetch("/api/quote", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: formData, // no Content-Type header — browser sets the multipart boundary
       });
 
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error || "Request failed");
+      }
 
       setStatus("success");
       form.reset();
-    } catch {
+      setPhotos([]);
+    } catch (err) {
       setStatus("error");
       setErrorMsg(
-        "Something went wrong sending your request. Please try again or call us directly."
+        err instanceof Error && err.message !== "Request failed"
+          ? err.message
+          : "Something went wrong sending your request. Please try again or call us directly."
       );
     }
   }
@@ -89,7 +104,6 @@ function QuoteFormContent() {
           Thanks for reaching out — we&apos;ll review your move details and get
           back to you shortly with a free quote.
         </p>
-
         <button
           type="button"
           onClick={handleReset}
@@ -103,11 +117,7 @@ function QuoteFormContent() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="border border-hairline bg-white p-6 md:p-8 shadow-xs rounded-card"
-      noValidate
-    >
+    <form onSubmit={handleSubmit} className="border border-hairline bg-white p-6 md:p-8 shadow-xs rounded-card" noValidate>
       {(estMin || inventoryParam) && (
         <div className="mb-6 rounded-sm border border-gold/40 bg-gold/5 p-4 flex items-center gap-3 text-xs text-navy-deep">
           <Sparkles size={18} className="text-gold shrink-0" />
@@ -122,40 +132,14 @@ function QuoteFormContent() {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Full Name" name="name" required placeholder="John Doe" />
-        <Field
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          required
-          placeholder="(555) 000-0000"
-        />
-        <Field
-          label="Email"
-          name="email"
-          type="email"
-          required
-          className="sm:col-span-2"
-          placeholder="john@example.com"
-        />
-        <Field
-          label="Moving From"
-          name="pickupAddress"
-          required
-          placeholder="City, ZIP, or address"
-        />
-        <Field
-          label="Moving To"
-          name="dropoffAddress"
-          required
-          placeholder="City, ZIP, or address"
-        />
+        <Field label="Phone Number" name="phone" type="tel" required placeholder="(555) 000-0000" />
+        <Field label="Email" name="email" type="email" required className="sm:col-span-2" placeholder="john@example.com" />
+        <Field label="Moving From" name="pickupAddress" required placeholder="City, ZIP, or address" />
+        <Field label="Moving To" name="dropoffAddress" required placeholder="City, ZIP, or address" />
         <Field label="Preferred Move Date" name="moveDate" type="date" />
 
         <div>
-          <label
-            htmlFor="moveSize"
-            className="mb-1.5 block text-sm font-medium text-navy-deep"
-          >
+          <label htmlFor="moveSize" className="mb-1.5 block text-sm font-medium text-navy-deep">
             Home / Move Size
           </label>
           <select
@@ -177,10 +161,7 @@ function QuoteFormContent() {
         </div>
 
         <div className="sm:col-span-2">
-          <label
-            htmlFor="notes"
-            className="mb-1.5 block text-sm font-medium text-navy-deep"
-          >
+          <label htmlFor="notes" className="mb-1.5 block text-sm font-medium text-navy-deep">
             Additional Notes & Inventory
           </label>
           <textarea
@@ -191,6 +172,53 @@ function QuoteFormContent() {
             placeholder="Anything we should know — stairs, elevator access, fragile items, preferred times, etc."
             className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep placeholder:text-slate-light transition-colors focus:border-gold focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           />
+        </div>
+
+        {/* Photo upload */}
+        <div className="sm:col-span-2">
+          <label className="mb-1.5 block text-sm font-medium text-navy-deep">
+            Photos of Items or Space (optional)
+          </label>
+          <p className="mb-3 text-xs text-slate-light">
+            Up to {MAX_PHOTOS} photos, {MAX_SIZE_MB}MB each — helps us give a more accurate quote.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            {photos.map((file, i) => (
+              <div key={i} className="relative h-20 w-20 overflow-hidden rounded-xs border border-hairline">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`Upload preview ${i + 1}`}
+                  className="h-full w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removePhoto(i)}
+                  className="absolute right-0.5 top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-navy-deep/80 text-white"
+                  aria-label="Remove photo"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            ))}
+
+            {photos.length < MAX_PHOTOS && (
+              <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xs border border-dashed border-hairline bg-paper text-slate-light transition-colors hover:border-gold hover:text-gold">
+                <ImagePlus size={20} />
+                <span className="text-[10px]">Add photo</span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  name="photos"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoSelect}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
         </div>
       </div>
 
@@ -214,9 +242,7 @@ function QuoteFormContent() {
         disabled={status === "submitting"}
         className="mt-6 flex w-full items-center justify-center gap-2 rounded-sm bg-navy-deep px-7 py-3.5 text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        {status === "submitting" && (
-          <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-        )}
+        {status === "submitting" && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
         {status === "submitting" ? "Sending..." : "Request My Free Quote"}
       </button>
     </form>
@@ -240,29 +266,13 @@ interface FieldProps {
   placeholder?: string;
 }
 
-function Field({
-  label,
-  name,
-  type = "text",
-  required = false,
-  className = "",
-  placeholder = "",
-}: FieldProps) {
+function Field({ label, name, type = "text", required = false, className = "", placeholder = "" }: FieldProps) {
   const id = useId();
-
   return (
     <div className={className}>
-      <label
-        htmlFor={id}
-        className="mb-1.5 block text-sm font-medium text-navy-deep"
-      >
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-navy-deep">
         {label}
-        {required && (
-          <span className="text-gold" aria-hidden="true">
-            {" "}
-            *
-          </span>
-        )}
+        {required && <span className="text-gold" aria-hidden="true"> *</span>}
       </label>
       <input
         id={id}
