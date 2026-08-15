@@ -6,6 +6,7 @@ import { Resend } from "resend";
 import { z } from "zod";
 import { renderToBuffer } from "@react-pdf/renderer";
 import QuotePdf from "@/lib/QuotePdf";
+import { prisma } from "@/lib/prisma";
 
 // Lazy-initialize Resend client to avoid build-time environment variable errors
 const getResendClient = () => {
@@ -119,7 +120,22 @@ export async function POST(req: NextRequest) {
     const safeSize = escapeHtml(data.moveSize);
     const safeNotes = escapeHtml(data.notes).replace(/\n/g, "<br/>");
 
-    // D. Generate the branded PDF summary once, attach to both emails
+    // D. Save the request to the database first — this is now the source
+    // of truth, independent of whether the emails succeed or fail.
+    const savedRequest = await prisma.quoteRequest.create({
+      data: {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        pickupAddress: data.pickupAddress,
+        dropoffAddress: data.dropoffAddress,
+        moveDate: data.moveDate,
+        moveSize: data.moveSize,
+        notes: data.notes,
+      },
+    });
+
+    // E. Generate the branded PDF summary once, attach to both emails
     const submittedAt = new Date().toLocaleString("en-CA", {
       dateStyle: "long",
       timeStyle: "short",
@@ -202,29 +218,39 @@ export async function POST(req: NextRequest) {
       </html>
     `;
 
-    // G. Dispatch Emails via Resend, each with the PDF attached
-    await Promise.all([
-      // Email 1: To the business owner/dispatch team
-      resend.emails.send({
-        from: senderEmail,
-        to: recipientEmail,
-        replyTo: data.email,
-        subject: `New Quote Request — ${data.name} (${data.moveSize})`,
-        html: adminEmailHtml,
-        attachments: [pdfAttachment],
-      }),
-      // Email 2: Instant confirmation receipt to the customer
-      resend.emails.send({
-        from: senderEmail,
-        to: data.email,
-        subject: "We've received your quote request | Compass Cartage",
-        html: customerEmailHtml,
-        attachments: [pdfAttachment],
-      }),
-    ]);
+    // H. Dispatch Emails via Resend, each with the PDF attached.
+    // If email sending fails, the request is still safely saved in the
+    // database — don't report a false error to the customer.
+    try {
+      await Promise.all([
+        // Email 1: To the business owner/dispatch team
+        resend.emails.send({
+          from: senderEmail,
+          to: recipientEmail,
+          replyTo: data.email,
+          subject: `New Quote Request — ${data.name} (${data.moveSize})`,
+          html: adminEmailHtml,
+          attachments: [pdfAttachment],
+        }),
+        // Email 2: Instant confirmation receipt to the customer
+        resend.emails.send({
+          from: senderEmail,
+          to: data.email,
+          subject: "We've received your quote request | Compass Cartage",
+          html: customerEmailHtml,
+          attachments: [pdfAttachment],
+        }),
+      ]);
+    } catch (emailErr) {
+      console.error("Email sending failed (request still saved):", emailErr);
+    }
 
     return NextResponse.json(
-      { success: true, message: "Quote request submitted successfully." },
+      {
+        success: true,
+        message: "Quote request submitted successfully.",
+        id: savedRequest.id,
+      },
       { status: 200 }
     );
   } catch (err) {

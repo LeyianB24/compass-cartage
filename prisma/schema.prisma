@@ -1,0 +1,59 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  BOOKED
+  COMPLETED
+  DECLINED
+}
+
+enum MoveType {
+  LOCAL
+  LONG_DISTANCE_ALBERTA
+  OUT_OF_PROVINCE
+}
+
+model QuoteRequest {
+  id             String        @id @default(cuid())
+  name           String
+  phone          String
+  email          String
+  pickupAddress  String
+  dropoffAddress String
+  moveDate       String?
+  moveSize       String?
+  notes          String?
+  photoUrls      String[]      @default([])
+  status         RequestStatus @default(NEW)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  bookedSlot     BookedSlot?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model BookedSlot {
+  id             String       @id @default(cuid())
+  date           DateTime
+  moveType       MoveType
+  quoteRequestId String?      @unique
+  quoteRequest   QuoteRequest? @relation(fields: [quoteRequestId], references: [id])
+  createdAt      DateTime     @default(now())
+
+  @@index([date])
+  @@index([moveType])
+}
