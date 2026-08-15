@@ -1,8 +1,8 @@
 // src/app/admin/page.tsx
 import { prisma } from "@/lib/prisma";
-import AdminRequestRow from "@/components/AdminRequestRow";
+import AdminDashboardClient from "@/components/AdminDashboardClient";
 
-export const dynamic = "force-dynamic"; // always show fresh data, never cache
+export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const requests = await prisma.quoteRequest.findMany({
@@ -10,24 +10,22 @@ export default async function AdminPage() {
     include: { bookedSlot: true },
   });
 
-  return (
-    <div className="min-h-screen bg-paper">
-      <div className="section-padding mx-auto max-w-content py-12">
-        <p className="eyebrow mb-2">Compass Cartage</p>
-        <h1 className="font-display text-3xl font-semibold text-navy-deep">Quote Requests</h1>
-        <p className="mt-1 text-sm text-slate">{requests.length} total requests</p>
+  const stats = {
+    total: requests.length,
+    new: requests.filter((r) => r.status === "NEW").length,
+    booked: requests.filter((r) => r.status === "BOOKED").length,
+    completed: requests.filter((r) => r.status === "COMPLETED").length,
+  };
 
-        <div className="mt-8 space-y-4">
-          {requests.length === 0 && (
-            <p className="rounded-card border border-hairline bg-white p-8 text-center text-sm text-slate">
-              No quote requests yet.
-            </p>
-          )}
-          {requests.map((r) => (
-            <AdminRequestRow key={r.id} request={r} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  // Serialize dates for the client component
+  const serialized = requests.map((r) => ({
+    ...r,
+    createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
+    bookedSlot: r.bookedSlot
+      ? { date: r.bookedSlot.date.toISOString(), moveType: r.bookedSlot.moveType }
+      : null,
+  }));
+
+  return <AdminDashboardClient requests={serialized} stats={stats} />;
 }

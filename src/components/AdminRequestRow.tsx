@@ -18,10 +18,21 @@ type Props = {
     notes: string | null;
     photoUrls: string[];
     status: string;
-    createdAt: Date;
-    bookedSlot: { date: Date; moveType: string } | null;
+    createdAt: string;
+    bookedSlot: { date: string; moveType: string } | null;
   };
 };
+
+function timeAgo(dateStr: string): string {
+  const diffMs = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
 
 const STATUS_OPTIONS = ["NEW", "CONTACTED", "QUOTED", "BOOKED", "COMPLETED", "DECLINED"];
 const STATUS_COLORS: Record<string, string> = {
@@ -76,6 +87,7 @@ export default function AdminRequestRow({ request }: Props) {
             {request.pickupAddress} → {request.dropoffAddress} &middot; {request.moveSize || "size not specified"}
           </p>
         </div>
+        <span className="shrink-0 text-[11px] text-slate-light">{timeAgo(request.createdAt)}</span>
         <ChevronDown size={18} className={`text-slate transition-transform ${expanded ? "rotate-180" : ""}`} />
       </button>
 
@@ -94,7 +106,7 @@ export default function AdminRequestRow({ request }: Props) {
             <div className="flex items-center gap-2 text-navy-deep">
               <MapPin size={14} className="text-gold" />
               {request.bookedSlot
-                ? `Booked: ${new Date(request.bookedSlot.date).toLocaleDateString()} (${request.bookedSlot.moveType})`
+                ? `Booked: ${new Date(request.bookedSlot.date).toLocaleDateString("en-CA")} (${request.bookedSlot.moveType.replace(/_/g, " ")})`
                 : "Not yet booked"}
             </div>
           </div>
