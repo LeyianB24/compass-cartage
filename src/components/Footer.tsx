@@ -3,8 +3,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, ArrowUpRight } from "lucide-react";
-import { BUSINESS, SERVICE_AREAS } from "@/lib/constants";
+import { Phone, Mail, MapPin } from "lucide-react";
+import { BUSINESS } from "@/lib/constants";
 
 const QUICK_LINKS = [
   { label: "Home", href: "/" },

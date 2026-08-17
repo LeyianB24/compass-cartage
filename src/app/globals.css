@@ -71,6 +71,7 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
@@ -136,8 +137,8 @@
   /* Interactive Glassmorphism Surface Utility */
   .surface-glass {
     background-color: rgb(247 246 242 / 0.8);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   /* Subtle Card Hover Elevation Effect */
