@@ -68,7 +68,7 @@ function escapeHtml(str: string): string {
 export async function POST(req: NextRequest) {
   try {
     const clientIp =
-      req.headers.get("x-forwarded-for")?.split(",")[0] ||
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
       req.headers.get("x-real-ip") ||
       "127.0.0.1";
 
@@ -120,7 +120,9 @@ export async function POST(req: NextRequest) {
 
     const photoUrls: string[] = [];
     for (const file of photoFiles) {
-      const blob = await put(`quote-photos/${Date.now()}-${file.name}`, file, {
+      const rawExt = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const safeKey = `quote-photos/${Date.now()}-${crypto.randomUUID()}.${rawExt}`;
+      const blob = await put(safeKey, file, {
         access: "public",
       });
       photoUrls.push(blob.url);

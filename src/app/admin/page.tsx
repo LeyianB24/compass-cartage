@@ -1,10 +1,17 @@
 // src/app/admin/page.tsx
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { verifyAdminAuth } from "@/lib/auth";
 import AdminDashboardClient from "@/components/AdminDashboardClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  const isAuthorized = await verifyAdminAuth();
+  if (!isAuthorized) {
+    redirect("/admin/login");
+  }
+
   const requests = await prisma.quoteRequest.findMany({
     orderBy: { createdAt: "desc" },
     include: { bookedSlot: true },
