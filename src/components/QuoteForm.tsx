@@ -1,7 +1,7 @@
 // src/components/QuoteForm.tsx
 "use client";
 
-import { useState, FormEvent, useId, useEffect, Suspense, useRef } from "react";
+import { useState, FormEvent, useId, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, CheckCircle2, AlertCircle, RefreshCw, Sparkles, ImagePlus, X } from "lucide-react";
@@ -21,16 +21,15 @@ function QuoteFormContent() {
   const inventoryParam = searchParams.get("inventory");
   const cuFtParam = searchParams.get("cuFt");
 
-  const [notesDefault, setNotesDefault] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
+  const [userSelectedSize, setUserSelectedSize] = useState<string | null>(null);
+  const selectedSize = userSelectedSize ?? moveSizeParam;
 
-  useEffect(() => {
-    if (moveSizeParam) setSelectedSize(moveSizeParam);
+  const notesDefault = (() => {
     const notesParts: string[] = [];
     if (estMin && estMax) notesParts.push(`[Calculator Estimate: $${estMin} - $${estMax}]`);
     if (inventoryParam) notesParts.push(`[Inventory (${cuFtParam || "0"} cu ft): ${inventoryParam}]`);
-    if (notesParts.length > 0) setNotesDefault(notesParts.join("\n"));
-  }, [moveSizeParam, estMin, estMax, inventoryParam, cuFtParam]);
+    return notesParts.join("\n");
+  })();
 
   const MAX_PHOTOS = 5;
   const MAX_SIZE_MB = 8;
@@ -146,7 +145,7 @@ function QuoteFormContent() {
             id="moveSize"
             name="moveSize"
             value={selectedSize}
-            onChange={(e) => setSelectedSize(e.target.value)}
+            onChange={(e) => setUserSelectedSize(e.target.value)}
             className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep transition-colors focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             <option value="">Select size</option>

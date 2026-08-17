@@ -1,13 +1,12 @@
 // src/components/MovingChecklist.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckSquare,
   Square,
   Calendar,
-  Sparkles,
   Download,
   RotateCcw,
   CheckCircle2,
@@ -19,9 +18,29 @@ import { RELOCATION_CHECKLIST, type ChecklistMilestone } from "@/lib/constants";
 
 const STORAGE_KEY = "compass_cartage_checklist_state";
 
+const EMPTY_TASKS: Record<string, boolean> = {};
+
+function getStoredTasks(): Record<string, boolean> {
+  if (typeof window === "undefined") return EMPTY_TASKS;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch {}
+  return EMPTY_TASKS;
+}
+
+function subscribeTasks(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+
 export default function MovingChecklist() {
+  const storedTasks = useSyncExternalStore<Record<string, boolean>>(
+    subscribeTasks,
+    getStoredTasks,
+    () => EMPTY_TASKS
+  );
   const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({});
-  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [expandedMilestones, setExpandedMilestones] = useState<Record<string, boolean>>({
     "8-weeks": true,
     "4-weeks": true,
@@ -31,24 +50,15 @@ export default function MovingChecklist() {
     "post-move": true,
   });
 
-  // Load saved state from localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setCompletedTasks(JSON.parse(saved));
-      }
-    } catch {
-      // Ignore fallback
-    }
-  }, []);
+  const activeCompleted = { ...storedTasks, ...completedTasks };
 
   // Persist state to localStorage
   const toggleTask = (id: string) => {
     setCompletedTasks((prev) => {
-      const next = { ...prev, [id]: !prev[id] };
+      const currentVal = id in prev ? prev[id] : storedTasks[id] || false;
+      const next = { ...prev, [id]: !currentVal };
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...storedTasks, ...next }));
       } catch {
         // Ignore fallback
       }
@@ -76,7 +86,7 @@ export default function MovingChecklist() {
   RELOCATION_CHECKLIST.forEach((m) => {
     m.tasks.forEach((t) => {
       totalTasksCount++;
-      if (completedTasks[t.id]) completedCount++;
+      if (activeCompleted[t.id]) completedCount++;
     });
   });
 
@@ -150,7 +160,7 @@ export default function MovingChecklist() {
         {RELOCATION_CHECKLIST.map((milestone: ChecklistMilestone) => {
           const isExpanded = expandedMilestones[milestone.id];
           const milestoneTasks = milestone.tasks;
-          const milestoneCompleted = milestoneTasks.filter((t) => completedTasks[t.id]).length;
+          const milestoneCompleted = milestoneTasks.filter((t) => activeCompleted[t.id]).length;
           const isAllDone = milestoneCompleted === milestoneTasks.length;
 
           return (
@@ -205,7 +215,7 @@ export default function MovingChecklist() {
                     className="border-t border-hairline p-4 md:p-6 space-y-3 bg-paper-muted"
                   >
                     {milestoneTasks.map((task) => {
-                      const isChecked = Boolean(completedTasks[task.id]);
+                      const isChecked = Boolean(activeCompleted[task.id]);
                       return (
                         <div
                           key={task.id}

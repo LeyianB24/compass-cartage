@@ -3,7 +3,7 @@
 // using @react-pdf/renderer. Rendered to a buffer in the API route and
 // attached to both the customer confirmation and the internal Howard email.
 
-import { Document, Page, Text, View, Svg, Path, Circle, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, Svg, Path, StyleSheet } from "@react-pdf/renderer";
 import { BUSINESS } from "./constants";
 
 const NAVY = "#0b1f3a";
