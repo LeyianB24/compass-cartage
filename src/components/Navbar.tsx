@@ -8,6 +8,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import { Menu, X, Phone, Calculator, Package, CalendarCheck, HelpCircle, Images } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 import ThemeToggle from "@/components/ThemeToggle";
+import BrandMark from "@/components/BrandMark";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
@@ -49,36 +50,7 @@ export default function Navbar() {
           onClick={() => setOpen(false)}
           aria-label={`${BUSINESS?.name || "Compass Cartage"} Home`}
         >
-          <svg
-            viewBox="0 0 48 48"
-            className="h-9 w-9 shrink-0 transition-transform duration-200 hover:scale-105"
-            fill="none"
-            aria-hidden="true"
-          >
-            <rect
-              x="4"
-              y="4"
-              width="40"
-              height="40"
-              rx="9"
-              stroke="#0b1f3a"
-              strokeWidth="2"
-            />
-            <path
-              d="M15 30 L24 14 L33 30"
-              stroke="#c9a227"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-            <path
-              d="M19.5 24 L28.5 24"
-              stroke="#0b1f3a"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-            />
-          </svg>
+          <BrandMark className="h-9 w-9" />
           <span className="font-display text-lg font-semibold leading-none text-navy-deep">
             {BUSINESS?.name || "Compass Cartage"}
           </span>

@@ -24,7 +24,7 @@ export default function PageHero({
   children,
 }: PageHeroProps) {
   return (
-    <section className="relative isolate overflow-hidden border-b border-hairline bg-navy-deep text-paper">
+    <section className="relative isolate overflow-hidden border-b border-hairline bg-[#071426] dark:bg-[#030914] text-[#f7f6f2]">
       {/* Backdrop photograph */}
       <Image
         src={image.src}
@@ -35,16 +35,14 @@ export default function PageHero({
         className="object-cover object-center"
       />
 
-      {/* Legibility overlays:
-          - a left-to-right navy wash so type reads on the image,
-          - a subtle bottom fade into the page that softens the seam. */}
+      {/* Legibility overlays */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[1] bg-gradient-to-r from-navy-deep/92 via-navy-deep/80 to-navy-deep/55"
+        className="absolute inset-0 -z-[1] bg-gradient-to-r from-[#071426]/95 via-[#071426]/85 to-[#071426]/60 dark:from-[#030914]/95 dark:via-[#030914]/85 dark:to-[#030914]/65"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-navy-deep to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-[#071426] dark:from-[#030914] to-transparent"
       />
 
       {/* Signature route-line motif along the lower edge */}
@@ -68,12 +66,12 @@ export default function PageHero({
       <div className="section-padding mx-auto max-w-content py-20 md:py-28">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end">
           <div>
-            <p className="eyebrow mb-3 text-gold-soft">{eyebrow}</p>
-            <h1 className="font-display text-4xl font-semibold leading-[1.1] text-paper md:text-5xl lg:text-6xl">
+            <p className="eyebrow mb-3 text-[#e4c65c]">{eyebrow}</p>
+            <h1 className="font-display text-4xl font-semibold leading-[1.1] text-[#f7f6f2] md:text-5xl lg:text-6xl">
               {title}
             </h1>
             {lead && (
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-paper/75 md:text-lg">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#f7f6f2]/80 md:text-lg">
                 {lead}
               </p>
             )}

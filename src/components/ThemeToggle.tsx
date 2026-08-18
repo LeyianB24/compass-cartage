@@ -10,9 +10,8 @@ const emptySubscribe = () => () => {};
 
 /**
  * Floating dark-mode toggle. Renders a compact icon button that swaps
- * between Sun (light) and Moon (dark) with a tiny rotation crossfade.
- * Renders an invisible placeholder until mounted to avoid hydration
- * mismatch (the resolved theme isn't known on the server).
+ * between Sun (light) and Moon (dark) with a smooth rotation crossfade.
+ * Renders an invisible placeholder until mounted to avoid hydration mismatch.
  */
 export default function ThemeToggle() {
   const { resolved, toggle } = useTheme();
@@ -29,7 +28,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="relative flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-paper-muted/60 text-navy-deep transition-colors hover:border-gold hover:text-gold dark:border-paper/15 dark:bg-paper-muted/5 dark:text-paper dark:hover:border-gold-soft dark:hover:text-gold-soft"
+      className="relative flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-paper-muted/80 text-navy-deep transition-all duration-200 hover:border-gold hover:text-gold dark:border-gold/30 dark:bg-[#071426] dark:text-[#e4c65c] dark:hover:border-gold dark:hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
     >
       {mounted ? (
         <motion.span
@@ -39,7 +38,11 @@ export default function ThemeToggle() {
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="block"
         >
-          {isDark ? <Moon size={16} /> : <Sun size={16} />}
+          {isDark ? (
+            <Moon size={16} className="text-[#e4c65c]" />
+          ) : (
+            <Sun size={16} className="text-navy-deep" />
+          )}
         </motion.span>
       ) : (
         <span className="block h-4 w-4" />
@@ -47,4 +50,3 @@ export default function ThemeToggle() {
     </button>
   );
 }
-

@@ -1,32 +1,26 @@
 // src/components/BrandMark.tsx
+import Image from "next/image";
+
+type BrandMarkProps = {
+  className?: string;
+  size?: number;
+};
 
 /**
- * Inline brand mark derived from the official "Compass Cartage —
- * Maritime & Highway Shield" concept (Compass-Cartage-Shield-Mark.svg
- * in /public/logos). Inlined (rather than <img src>) and rewritten to
- * use currentColor so it adapts to light/dark text contexts
- * automatically. The compass star keeps the gold accent.
+ * Official Compass Cartage Brand Logo Mark
+ * Renders the official logo from /public/logos/compass-cartage logo.jpeg
  */
-export default function BrandMark({ className = "" }: { className?: string }) {
+export default function BrandMark({ className = "h-9 w-9", size = 36 }: BrandMarkProps) {
   return (
-    <svg
-      viewBox="0 0 100 100"
-      fill="none"
-      className={className}
-      aria-hidden="true"
-    >
-      <path
-        d="M50 10 L82 22 V50 C82 70 50 90 50 90 C50 90 18 70 18 50 V22 L50 10 Z"
-        stroke="currentColor"
-        strokeWidth="3"
-        fill="none"
+    <div className={`relative overflow-hidden rounded-sm border border-gold/30 shrink-0 ${className}`}>
+      <Image
+        src="/logos/compass-cartage logo.jpeg"
+        alt="Compass Cartage Logo"
+        width={size}
+        height={size}
+        className="h-full w-full object-cover"
+        priority
       />
-      <path d="M38 78 L47 48" stroke="currentColor" strokeWidth="2" />
-      <path d="M62 78 L53 48" stroke="currentColor" strokeWidth="2" />
-      <polygon
-        points="50,22 54,36 68,36 56,44 60,58 50,48 40,58 44,44 32,36 46,36"
-        fill="#c9a227"
-      />
-    </svg>
+    </div>
   );
 }

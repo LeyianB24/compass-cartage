@@ -87,17 +87,17 @@ export default function InventoryPlanner() {
   return (
     <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Top Header */}
-      <div className="bg-navy-deep px-6 py-6 text-paper md:px-10">
+      <div className="bg-[#071426] dark:bg-[#030914] px-6 py-6 text-[#f7f6f2] md:px-10 border-b border-gold/20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-gold/15 text-gold">
               <Package size={22} />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold text-paper md:text-2xl">
+              <h2 className="font-display text-xl font-semibold text-[#f7f6f2] md:text-2xl">
                 Room-by-Room Inventory Planner
               </h2>
-              <p className="text-xs text-paper/70">
+              <p className="text-xs text-[#f7f6f2]/75">
                 Select your furniture & boxes to calculate total cubic volume (cu ft) and weight.
               </p>
             </div>

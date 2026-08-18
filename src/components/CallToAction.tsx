@@ -20,7 +20,7 @@ export default function CallToAction({
   image = IMAGES.truckSunnyDay,
 }: CallToActionProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-deep">
+    <section className="relative isolate overflow-hidden bg-[#071426] dark:bg-[#030914] text-[#f7f6f2]">
       {/* Full-bleed backdrop photograph with a slow Ken-Burns zoom so the
           band feels alive without pulling focus. */}
       <motion.div
@@ -43,7 +43,7 @@ export default function CallToAction({
           lighter on the right so the photograph still breathes. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[1] bg-gradient-to-r from-navy-deep/95 via-navy-deep/85 to-navy-deep/65"
+        className="absolute inset-0 -z-[1] bg-gradient-to-r from-[#071426]/95 via-[#071426]/85 to-[#071426]/65 dark:from-[#030914]/95 dark:via-[#030914]/85 dark:to-[#030914]/65"
       />
 
       <div className="section-padding mx-auto flex max-w-content flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
@@ -53,7 +53,7 @@ export default function CallToAction({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-2xl font-semibold text-paper md:text-3xl"
+            className="font-display text-2xl font-semibold text-[#f7f6f2] md:text-3xl"
           >
             {heading}
           </motion.h2>
@@ -62,7 +62,7 @@ export default function CallToAction({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-2 text-sm text-paper/75"
+            className="mt-2 text-sm text-[#f7f6f2]/80"
           >
             {subtext}
           </motion.p>
@@ -75,7 +75,7 @@ export default function CallToAction({
         >
           <Link
             href="/quote"
-            className="group flex shrink-0 items-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
+            className="group flex shrink-0 items-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-[#071426] transition-colors hover:bg-gold-soft"
           >
             Get a Free Quote
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

@@ -18,15 +18,13 @@ const fadeUp = {
 };
 
 export default function Hero() {
-  // Subtle parallax on the backdrop image — drifts down slower than the
-  // page as the user scrolls, giving the hero quiet depth without
-  // distracting motion. (Reduced-motion is honored via globals.css.)
+  // Subtle parallax on the backdrop image
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 600], ["0%", "12%"]);
   const overlayY = useTransform(scrollY, [0, 600], ["0%", "6%"]);
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-hairline bg-navy-deep text-paper">
+    <section className="relative isolate overflow-hidden border-b border-hairline bg-[#071426] dark:bg-[#030914] text-[#f7f6f2]">
       {/* Backdrop photograph with parallax drift */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 -z-[2] scale-110">
         <Image
@@ -39,17 +37,15 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* Legibility overlays:
-          - left-weighted navy wash so the headline reads clearly,
-          - subtle vignette top + bottom to anchor the content. */}
+      {/* Legibility overlays */}
       <motion.div
         aria-hidden="true"
         style={{ y: overlayY }}
-        className="absolute inset-0 -z-[1] bg-gradient-to-br from-navy-deep/92 via-navy-deep/75 to-navy-deep/55"
+        className="absolute inset-0 -z-[1] bg-gradient-to-br from-[#071426]/95 via-[#071426]/80 to-[#071426]/60 dark:from-[#030914]/95 dark:via-[#030914]/85 dark:to-[#030914]/65"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-navy-deep to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-[#071426] dark:from-[#030914] to-transparent"
       />
 
       <div className="section-padding mx-auto grid max-w-content gap-12 py-20 md:grid-cols-2 md:items-center md:py-28">
@@ -59,16 +55,16 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="eyebrow mb-5 text-gold-soft"
+            className="eyebrow mb-5 text-[#e4c65c]"
           >
             {BUSINESS.serviceAreaShort}
           </motion.p>
 
-          <h1 className="font-display text-4xl font-semibold leading-[1.05] text-paper md:text-5xl lg:text-6xl">
+          <h1 className="font-display text-4xl font-semibold leading-[1.05] text-[#f7f6f2] md:text-5xl lg:text-6xl">
             <motion.span custom={1} variants={fadeUp} initial="hidden" animate="show" className="block">
               Moving day,
             </motion.span>
-            <motion.span custom={2} variants={fadeUp} initial="hidden" animate="show" className="block text-gold-soft">
+            <motion.span custom={2} variants={fadeUp} initial="hidden" animate="show" className="block text-[#e4c65c]">
               handled with care.
             </motion.span>
           </h1>
@@ -78,7 +74,7 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-6 max-w-md text-base leading-relaxed text-paper/80 md:text-lg"
+            className="mt-6 max-w-md text-base leading-relaxed text-[#f7f6f2]/80 md:text-lg"
           >
             {BUSINESS.tagline}. From a single studio to a full office
             relocation, Compass Cartage gets you there on time and in one
@@ -94,28 +90,23 @@ export default function Hero() {
           >
             <Link
               href="/quote"
-              className="group flex items-center justify-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
+              className="group flex items-center justify-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-[#071426] transition-colors hover:bg-gold-soft"
             >
               Get a Free Quote
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             </Link>
             <a
               href={BUSINESS.phoneHref}
-              className="flex items-center justify-center gap-2 rounded-sm border border-paper/25 bg-paper-muted/5 px-7 py-3.5 text-sm font-semibold text-paper backdrop-blur transition-colors hover:bg-paper-muted/10"
+              className="flex items-center justify-center gap-2 rounded-sm border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-semibold text-[#f7f6f2] backdrop-blur transition-colors hover:bg-white/10"
             >
-              <Phone size={16} className="text-gold-soft" />
+              <Phone size={16} className="text-[#e4c65c]" />
               {BUSINESS.phone}
             </a>
           </motion.div>
         </div>
 
-        {/* Right-hand visual: a framed photograph layered above the
-            animated route SVG. The photo grounds the abstract route
-            metaphor in a real moment — movers at work — while the SVG
-            keeps the brand's "we get you there" signature motif. */}
+        {/* Right-hand visual */}
         <div className="relative hidden aspect-square items-center justify-center md:flex">
-          {/* Framed photograph — sits behind the SVG, slightly rotated
-              like a stacked editorial print. */}
           <motion.div
             initial={{ opacity: 0, scale: 0.94, rotate: -3 }}
             animate={{ opacity: 1, scale: 1, rotate: -3 }}
@@ -131,77 +122,28 @@ export default function Hero() {
             />
           </motion.div>
 
-          {/* Animated route: path draws itself in, then a marker travels
-              along it on a loop — the visual metaphor for "we get you there". */}
           <svg viewBox="0 0 400 400" className="relative h-full w-full" fill="none">
             <motion.circle
               cx="200"
               cy="200"
               r="170"
+              stroke="#c9a227"
+              strokeWidth="1.2"
+              strokeDasharray="3 8"
+              strokeOpacity="0.45"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+            />
+            <path
+              d="M 60 260 C 120 120, 260 300, 340 140"
               stroke="#e4c65c"
-              strokeOpacity="0.35"
-              strokeWidth="1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            />
-
-            <motion.path
-              d="M40 320 C 120 260, 140 140, 200 200 S 320 100, 360 80"
-              stroke="#c9a227"
               strokeWidth="2"
-              strokeDasharray="2 12"
+              strokeDasharray="4 6"
               strokeLinecap="round"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 1.6, delay: 0.4, ease: "easeInOut" }}
             />
-
-            {/* Traveling marker — loops along the same path indefinitely */}
-            <motion.circle
-              r="6"
-              fill="#e4c65c"
-              stroke="#c9a227"
-              strokeWidth="2"
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                offsetDistance: ["0%", "100%"],
-              }}
-              transition={{
-                opacity: { delay: 2, duration: 0.3 },
-                offsetDistance: {
-                  delay: 2,
-                  duration: 3.5,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  ease: "easeInOut",
-                },
-              }}
-              style={{
-                offsetPath:
-                  "path('M40 320 C 120 260, 140 140, 200 200 S 320 100, 360 80')",
-              }}
-            />
-
-            <motion.circle
-              cx="360"
-              cy="80"
-              r="5"
-              fill="#c9a227"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 1.9, duration: 0.3 }}
-            />
-            <motion.circle
-              cx="40"
-              cy="320"
-              r="5"
-              fill="#e4c65c"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.4, duration: 0.3 }}
-            />
+            <circle cx="60" cy="260" r="5" fill="#c9a227" />
+            <circle cx="340" cy="140" r="6" fill="#e4c65c" />
           </svg>
         </div>
       </div>
