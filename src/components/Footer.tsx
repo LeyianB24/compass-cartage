@@ -188,7 +188,9 @@ export default function Footer() {
           <p className="flex items-center gap-1">
             <span>Site built by</span>
             <a
-              href="mailto:technologiesbezalel@gmail.com"
+              href="https://www.bezalel.website/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium text-gold-soft transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold rounded-xs"
             >
               Bezalel Technologies
