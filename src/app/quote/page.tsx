@@ -59,7 +59,7 @@ export default function QuotePage() {
                 No surprise fees. Ever.
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate">
-                The quote you receive is the price you pay. We'll walk
+                The quote you receive is the price you pay. We&apos;ll walk
                 through access, stairs, and any oversized items up front so
                 there are no surprises on moving day.
               </p>

@@ -4,8 +4,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ZoomIn, Camera } from "lucide-react";
-import { GALLERY, IMAGES, type ImageAsset } from "@/lib/images";
+import { X, ZoomIn } from "lucide-react";
+import { IMAGES, type ImageAsset } from "@/lib/images";
 
 type GalleryCategory = "All" | "Local Crew" | "Packing & Prep" | "Trucks & Transport" | "Specialty Items";
 

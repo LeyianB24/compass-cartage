@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ChevronDown, HelpCircle, Sparkles } from "lucide-react";
+import { Search, ChevronDown, HelpCircle } from "lucide-react";
 import { FAQ_DATA, type FaqItem } from "@/lib/constants";
 
 export default function FaqAccordion() {

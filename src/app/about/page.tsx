@@ -38,7 +38,7 @@ export default function AboutPage() {
               <p className="mt-4 leading-relaxed text-slate">
                 Every job — big or small, local or long-distance — gets the
                 same standard: clear communication, careful handling, and a
-                price that doesn't change on move-in day.
+                price that doesn&apos;t change on move-in day.
               </p>
             </div>
 
