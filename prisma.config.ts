@@ -1,6 +1,9 @@
 // prisma.config.ts
 import { config } from "dotenv";
-config({ path: ".env.local" });
+
+// Load standard .env first, then override with .env.local if present
+config({ path: ".env" });
+config({ path: ".env.local", override: true });
 
 import { defineConfig, env } from "prisma/config";
 
@@ -11,6 +14,6 @@ export default defineConfig({
   },
   datasource: {
     // CLI commands (migrate, studio) use the DIRECT (non-pooled) connection
-    url: env("DIRECT_URL"),
+    url: env("DIRECT_URL") || env("DATABASE_URL"),
   },
 });
