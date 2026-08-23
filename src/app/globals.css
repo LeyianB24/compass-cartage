@@ -5,20 +5,21 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* --------------------------------------------------------------------------
-   Tailwind v4 Theme Configuration — Corporate Blue/Orange palette
-   Same token names as before (bg-navy-deep, text-gold, etc.) — only the
-   underlying hex values changed, so components don't need editing.
+   Tailwind v4 Theme Configuration — Edmonton Reliable Movers Design System
+   Light: Dark Teal (#004B87), Light Beige (#C2B280), Soft Salmon (#EABB81), Light Gray (#F8F9FA)
+   Dark: Very Dark Gray (#121212), Dark Charcoal (#1E1E1E), Electric Sky Blue (#00A3E0)
    -------------------------------------------------------------------------- */
 @theme {
-  --color-navy: #004e72;        /* was #0b1f3a — mid blue, hover/accent role */
-  --color-navy-deep: #092634;   /* was #071426 — darkest, footer/deep text */
-  --color-gold: #ff6e42;        /* was #c9a227 — primary accent, now orange */
-  --color-gold-soft: #ff8f66;   /* was #e4c65c — lighter orange for dark-bg text */
-  --color-paper: #f9f9f9;       /* was #f7f6f2 — page background */
-  --color-paper-muted: #ededed; /* was #ededeb — card surfaces */
-  --color-slate: #4a5568;       /* unchanged — body text stays neutral */
-  --color-slate-light: #8792a2; /* unchanged */
-  --color-hairline: #e1e4e6;    /* slightly cooler to pair with blue */
+  --color-navy: #004b87;        /* Dark Teal Blue — Primary light brand */
+  --color-navy-deep: #071f36;   /* Deep Teal Navy — Headings & dark text */
+  --color-gold: #004b87;        /* Primary CTA color in light mode */
+  --color-gold-soft: #c2b280;   /* Light Beige / Tan — warm regional accent */
+  --color-salmon: #eabb81;      /* Soft Salmon accent */
+  --color-paper: #f8f9fa;       /* Very Light Gray page backdrop */
+  --color-paper-muted: #ffffff; /* Crisp white card surfaces in light mode */
+  --color-slate: #4a5568;       /* Body copy neutral */
+  --color-slate-light: #8792a2; /* Secondary text */
+  --color-hairline: #e2e8f0;    /* Clean neutral borders */
 
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -36,16 +37,19 @@
 }
 
 /* --------------------------------------------------------------------------
-   Dark mode token overrides — same structure as before, new palette
+   Dark mode token overrides — Sophisticated Dark Mode with Electric Sky Blue
    -------------------------------------------------------------------------- */
 .dark {
-  --color-paper: #061520;
-  --color-paper-muted: #0a1f2c;
-  --color-navy-deep: #f9f9f9;
-  --color-navy: #ff8f66;
-  --color-slate: #a8b3c4;
-  --color-slate-light: #6b7a90;
-  --color-hairline: rgba(255, 143, 102, 0.18);
+  --color-paper: #121212;
+  --color-paper-muted: #1e1e1e;
+  --color-navy-deep: #f8f9fa;
+  --color-navy: #00a3e0;        /* Electric Sky Blue */
+  --color-gold: #00a3e0;        /* Bright Sky Blue CTA in dark mode */
+  --color-gold-soft: #38bdf8;   /* Lighter glowing sky blue */
+  --color-salmon: #ffb74d;      /* Warm amber glow */
+  --color-slate: #94a3b8;
+  --color-slate-light: #64748b;
+  --color-hairline: rgba(0, 163, 224, 0.22);
 }
 
 .dark {

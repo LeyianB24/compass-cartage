@@ -1,9 +1,9 @@
 // src/app/page.tsx
 import { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import Hero from "@/components/Hero";
-import ServiceCard from "@/components/ServiceCard";
+import AboutAuthority from "@/components/AboutAuthority";
+import FeaturedServicesMatrix from "@/components/FeaturedServicesMatrix";
+import ProcessTimeline from "@/components/ProcessTimeline";
 import StatsCounter from "@/components/StatsCounter";
 import Testimonials from "@/components/Testimonials";
 import GalleryStrip from "@/components/GalleryStrip";
@@ -11,13 +11,13 @@ import CallToAction from "@/components/CallToAction";
 import { SERVICES } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Trusted Moving Services | One Crew for Every Move",
+  title: "Edmonton's Premier Movers | One Trusted Crew for Every Move",
   description:
-    "Professional, reliable residential and commercial moving services. Get a stress-free move with our experienced team.",
+    "Moving Edmonton & Alberta since 2012. Professional residential, commercial, and storage solutions with upfront, binding quotes and zero hidden fees.",
   openGraph: {
-    title: "Trusted Moving Services | One Crew for Every Move",
+    title: "Edmonton's Premier Movers | One Trusted Crew for Every Move",
     description:
-      "Professional, reliable residential and commercial moving services.",
+      "Professional, reliable residential and commercial moving services across Edmonton and Alberta.",
     type: "website",
   },
 };
@@ -27,8 +27,15 @@ export default function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MovingCompany",
-    name: "Your Moving Company Name",
-    description: "Professional residential and commercial moving services.",
+    name: "Compass Cartage — Edmonton Premier Movers",
+    description: "Professional residential, commercial, and storage moving services.",
+    telephone: "+1-587-501-7519",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Edmonton",
+      addressRegion: "AB",
+      addressCountry: "CA",
+    },
     offers: SERVICES.slice(0, 3).map((service) => ({
       "@type": "Offer",
       itemOffered: {
@@ -48,71 +55,28 @@ export default function HomePage() {
       />
 
       <main className="relative w-full overflow-hidden">
-        {/* Hero Section */}
+        {/* 1. Hero Section with Interactive Quote Widget */}
         <Hero />
 
-        {/* Services Preview Section */}
-        <section
-          aria-labelledby="services-heading"
-          className="bg-paper relative border-y border-navy-deep/5 py-16 md:py-24"
-        >
-          <div className="section-padding mx-auto max-w-content">
-            {/* Header Flex Container */}
-            <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-              <div className="max-w-2xl">
-                <p className="eyebrow mb-3 tracking-wider text-xs font-bold uppercase text-gold">
-                  What We Do
-                </p>
-                <h2
-                  id="services-heading"
-                  className="font-display text-3xl font-semibold tracking-tight text-navy-deep sm:text-4xl"
-                >
-                  Every kind of move, one trusted crew
-                </h2>
-              </div>
+        {/* 2. About Us & Local Authority Section (Light Mode Feature) */}
+        <AboutAuthority />
 
-              <Link
-                href="/services"
-                className="group inline-flex items-center gap-2 text-sm font-semibold text-navy-deep transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 rounded-sm"
-              >
-                <span>View all services</span>
-                <ArrowRight
-                  size={16}
-                  className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </Link>
-            </div>
+        {/* 3. Featured Services Matrix (Residential, Commercial, Storage) */}
+        <FeaturedServicesMatrix />
 
-            {/* Services Grid */}
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.slice(0, 3).map((service, i) => (
-              <ServiceCard
-                key={service.title}
-                title={service.title}
-                description={service.description}
-                index={i}
-                imageKey={service.imageKey}
-              />
-            ))}
-            </div>
-          </div>
-        </section>
+        {/* 4. Interactive Step-by-Step Process Timeline */}
+        <ProcessTimeline />
 
-        {/* Stats Counter Section */}
-        <section aria-label="Company Statistics">
-          <StatsCounter />
-        </section>
+        {/* 5. Company Statistics Counter */}
+        <StatsCounter />
 
-        {/* Testimonials Section */}
-        <section aria-label="Customer Reviews">
-          <Testimonials />
-        </section>
+        {/* 6. Customer Reviews & Testimonials */}
+        <Testimonials />
 
-        {/* Gallery — a curated strip of moving-day photographs */}
+        {/* 7. Gallery — A Look at Moving Day */}
         <GalleryStrip />
 
-        {/* Call To Action Section */}
+        {/* 8. Call To Action Band */}
         <CallToAction />
       </main>
     </>

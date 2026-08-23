@@ -4,16 +4,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, Phone, ShieldCheck, MapPin } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 import { IMAGES } from "@/lib/images";
+import HeroQuickQuote from "@/components/HeroQuickQuote";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.09, duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { delay: i * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
@@ -24,12 +25,12 @@ export default function Hero() {
   const overlayY = useTransform(scrollY, [0, 600], ["0%", "6%"]);
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-hairline bg-navy-deep dark:bg-[#030d14] text-paper">
+    <section className="relative isolate overflow-hidden border-b border-hairline bg-navy-deep dark:bg-[#121212] text-white">
       {/* Backdrop photograph with parallax drift */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 -z-[2] scale-110">
         <Image
-          src={IMAGES.heroMovers.src}
-          alt={IMAGES.heroMovers.alt}
+          src={IMAGES.truckSunnyDay.src}
+          alt={IMAGES.truckSunnyDay.alt}
           fill
           priority
           sizes="100vw"
@@ -37,35 +38,37 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* Legibility overlays */}
+      {/* Legibility overlays tuned for both light and dark modes */}
       <motion.div
         aria-hidden="true"
         style={{ y: overlayY }}
-        className="absolute inset-0 -z-[1] bg-gradient-to-br from-[#092634]/95 via-[#092634]/80 to-[#092634]/60 dark:from-[#030d14]/95 dark:via-[#030d14]/85 dark:to-[#030d14]/65"
+        className="absolute inset-0 -z-[1] bg-gradient-to-r from-[#002d52]/95 via-[#004b87]/85 to-[#002d52]/75 dark:from-[#121212]/98 dark:via-[#121212]/90 dark:to-[#071f36]/75"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-[#092634] dark:from-[#030d14] to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-paper dark:from-[#121212] to-transparent"
       />
 
-      <div className="section-padding mx-auto grid max-w-content gap-12 py-20 md:grid-cols-2 md:items-center md:py-28">
+      <div className="section-padding mx-auto grid max-w-content gap-12 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
+        {/* Left Column: Core Value Proposition */}
         <div>
-          <motion.p
+          <motion.div
             custom={0}
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="eyebrow mb-5 text-gold-soft"
+            className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-semibold tracking-wide text-gold-soft backdrop-blur dark:border-[#00a3e0]/30 dark:bg-[#00a3e0]/10 dark:text-[#38bdf8]"
           >
-            {BUSINESS.serviceAreaShort}
-          </motion.p>
+            <MapPin size={13} className="text-gold-soft dark:text-[#00a3e0]" />
+            <span>MOVING EDMONTON & ALBERTA SINCE 2012</span>
+          </motion.div>
 
-          <h1 className="font-display text-4xl font-semibold leading-[1.05] text-paper md:text-5xl lg:text-6xl">
+          <h1 className="font-display text-4xl font-semibold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
             <motion.span custom={1} variants={fadeUp} initial="hidden" animate="show" className="block">
-              Moving day,
+              EDMONTON&rsquo;S
             </motion.span>
-            <motion.span custom={2} variants={fadeUp} initial="hidden" animate="show" className="block text-gold-soft">
-              handled with care.
+            <motion.span custom={2} variants={fadeUp} initial="hidden" animate="show" className="block text-gold-soft dark:text-[#00a3e0]">
+              PREMIER MOVERS.
             </motion.span>
           </h1>
 
@@ -74,11 +77,10 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-6 max-w-md text-base leading-relaxed text-paper/80 md:text-lg"
+            className="mt-5 max-w-lg text-base leading-relaxed text-white/85 md:text-lg"
           >
-            {BUSINESS.tagline}. From a single studio to a full office
-            relocation, Compass Cartage gets you there on time and in one
-            piece.
+            Secure, efficient, and friendly relocation services. From downtown condos to full corporate
+            relocations across Alberta, our experienced team delivers on time with zero hidden fees.
           </motion.p>
 
           <motion.div
@@ -86,65 +88,50 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-9 flex flex-col gap-3 sm:flex-row"
+            className="mt-8 flex flex-wrap items-center gap-4"
           >
             <Link
               href="/quote"
-              className="group flex items-center justify-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
+              className="flex items-center gap-2 rounded-sm bg-white px-7 py-3.5 text-xs font-bold text-navy shadow-lg transition-all hover:bg-gold-soft hover:text-navy-deep dark:bg-[#00a3e0] dark:text-[#092634] dark:shadow-[0_0_20px_rgba(0,163,224,0.4)] dark:hover:bg-[#38bdf8]"
             >
-              Get a Free Quote
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <span>Get a Free Quote</span>
+              <ArrowRight size={15} />
             </Link>
+
             <a
               href={BUSINESS.phoneHref}
-              className="flex items-center justify-center gap-2 rounded-sm border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-semibold text-paper backdrop-blur transition-colors hover:bg-white/10"
+              className="flex items-center gap-2 rounded-sm border border-white/25 bg-white/5 px-6 py-3.5 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/15"
             >
-              <Phone size={16} className="text-gold-soft" />
-              {BUSINESS.phone}
+              <Phone size={15} className="text-gold-soft dark:text-[#00a3e0]" />
+              <span>{BUSINESS.phone}</span>
             </a>
+          </motion.div>
+
+          <motion.div
+            custom={5}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="mt-8 flex flex-wrap items-center gap-6 text-xs text-white/75"
+          >
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={16} className="text-gold-soft dark:text-[#00a3e0]" />
+              <span>100% Licensed & Insured</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={16} className="text-gold-soft dark:text-[#00a3e0]" />
+              <span>WCB Alberta Certified</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={16} className="text-gold-soft dark:text-[#00a3e0]" />
+              <span>Transparent Binding Quotes</span>
+            </div>
           </motion.div>
         </div>
 
-        {/* Right-hand visual */}
-        <div className="relative hidden aspect-square items-center justify-center md:flex">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94, rotate: -3 }}
-            animate={{ opacity: 1, scale: 1, rotate: -3 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute left-2 top-4 h-56 w-44 overflow-hidden rounded-sm shadow-2xl ring-1 ring-gold/30"
-          >
-            <Image
-              src={IMAGES.indoorsWithTools.src}
-              alt={IMAGES.indoorsWithTools.alt}
-              fill
-              sizes="180px"
-              className="object-cover"
-            />
-          </motion.div>
-
-          <svg viewBox="0 0 400 400" className="relative h-full w-full" fill="none">
-            <motion.circle
-              cx="200"
-              cy="200"
-              r="170"
-              stroke="#ff6e42"
-              strokeWidth="1.2"
-              strokeDasharray="3 8"
-              strokeOpacity="0.45"
-              initial={{ rotate: 0 }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            />
-            <path
-              d="M 60 260 C 120 120, 260 300, 340 140"
-              stroke="#ff8f66"
-              strokeWidth="2"
-              strokeDasharray="4 6"
-              strokeLinecap="round"
-            />
-            <circle cx="60" cy="260" r="5" fill="#ff6e42" />
-            <circle cx="340" cy="140" r="6" fill="#ff8f66" />
-          </svg>
+        {/* Right Column: Interactive Quote Card */}
+        <div className="flex justify-center lg:justify-end">
+          <HeroQuickQuote />
         </div>
       </div>
     </section>

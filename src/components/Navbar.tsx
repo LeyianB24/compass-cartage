@@ -99,7 +99,7 @@ export default function Navbar() {
 
           <Link
             href="/quote"
-            className="rounded-sm bg-navy-deep px-4 py-2 text-xs lg:text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep focus-visible:ring-offset-2"
+            className="rounded-sm bg-navy px-4 py-2 text-xs lg:text-sm font-semibold text-white shadow-xs transition-all hover:bg-navy-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy dark:bg-[#00a3e0] dark:text-[#092634] dark:shadow-[0_0_15px_rgba(0,163,224,0.35)] dark:hover:bg-[#38bdf8]"
           >
             Get a Free Quote
           </Link>

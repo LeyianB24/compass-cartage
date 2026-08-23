@@ -4,6 +4,7 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileNav from "@/components/StickyMobileNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { IMAGES } from "@/lib/images";
 
@@ -129,6 +130,9 @@ export default function RootLayout({
 
           {/* Global Footer */}
           <Footer />
+
+          {/* Mobile Bottom Sticky Navigation Dock */}
+          <StickyMobileNav />
         </ThemeProvider>
       </body>
     </html>

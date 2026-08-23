@@ -212,12 +212,14 @@ export const SERVICES: Service[] = [
   },
 ];
 
-// Brand colors — matches business card, rate card, and website.
+// Brand colors — matches website design tokens.
 export const BRAND_COLORS = {
-  navy: "#004e72",
-  navyDeep: "#092634",
-  gold: "#ff6e42",
-  goldSoft: "#ff8f66",
+  navy: "#004b87",
+  navyDeep: "#071f36",
+  gold: "#004b87",
+  goldSoft: "#c2b280",
+  skyBlue: "#00a3e0",
+  salmon: "#eabb81",
 };
 
 // -----------------------------------------------------------------------------
