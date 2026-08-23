@@ -62,7 +62,7 @@ export default function Testimonials() {
                   <figcaption>
                     <div className="flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} size={14} fill="#c9a227" stroke="#c9a227" />
+                        <Star key={i} size={14} fill="#ff6e42" stroke="#ff6e42" />
                       ))}
                     </div>
                     <blockquote className="mt-4 text-sm leading-relaxed text-slate">

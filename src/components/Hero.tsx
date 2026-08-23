@@ -24,7 +24,7 @@ export default function Hero() {
   const overlayY = useTransform(scrollY, [0, 600], ["0%", "6%"]);
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-hairline bg-[#071426] dark:bg-[#030914] text-[#f7f6f2]">
+    <section className="relative isolate overflow-hidden border-b border-hairline bg-navy-deep dark:bg-[#030d14] text-paper">
       {/* Backdrop photograph with parallax drift */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 -z-[2] scale-110">
         <Image
@@ -41,11 +41,11 @@ export default function Hero() {
       <motion.div
         aria-hidden="true"
         style={{ y: overlayY }}
-        className="absolute inset-0 -z-[1] bg-gradient-to-br from-[#071426]/95 via-[#071426]/80 to-[#071426]/60 dark:from-[#030914]/95 dark:via-[#030914]/85 dark:to-[#030914]/65"
+        className="absolute inset-0 -z-[1] bg-gradient-to-br from-[#092634]/95 via-[#092634]/80 to-[#092634]/60 dark:from-[#030d14]/95 dark:via-[#030d14]/85 dark:to-[#030d14]/65"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-[#071426] dark:from-[#030914] to-transparent"
+        className="absolute inset-x-0 bottom-0 -z-[1] h-24 bg-gradient-to-t from-[#092634] dark:from-[#030d14] to-transparent"
       />
 
       <div className="section-padding mx-auto grid max-w-content gap-12 py-20 md:grid-cols-2 md:items-center md:py-28">
@@ -55,16 +55,16 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="eyebrow mb-5 text-[#e4c65c]"
+            className="eyebrow mb-5 text-gold-soft"
           >
             {BUSINESS.serviceAreaShort}
           </motion.p>
 
-          <h1 className="font-display text-4xl font-semibold leading-[1.05] text-[#f7f6f2] md:text-5xl lg:text-6xl">
+          <h1 className="font-display text-4xl font-semibold leading-[1.05] text-paper md:text-5xl lg:text-6xl">
             <motion.span custom={1} variants={fadeUp} initial="hidden" animate="show" className="block">
               Moving day,
             </motion.span>
-            <motion.span custom={2} variants={fadeUp} initial="hidden" animate="show" className="block text-[#e4c65c]">
+            <motion.span custom={2} variants={fadeUp} initial="hidden" animate="show" className="block text-gold-soft">
               handled with care.
             </motion.span>
           </h1>
@@ -74,7 +74,7 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-6 max-w-md text-base leading-relaxed text-[#f7f6f2]/80 md:text-lg"
+            className="mt-6 max-w-md text-base leading-relaxed text-paper/80 md:text-lg"
           >
             {BUSINESS.tagline}. From a single studio to a full office
             relocation, Compass Cartage gets you there on time and in one
@@ -90,16 +90,16 @@ export default function Hero() {
           >
             <Link
               href="/quote"
-              className="group flex items-center justify-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-[#071426] transition-colors hover:bg-gold-soft"
+              className="group flex items-center justify-center gap-2 rounded-sm bg-gold px-7 py-3.5 text-sm font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
             >
               Get a Free Quote
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             </Link>
             <a
               href={BUSINESS.phoneHref}
-              className="flex items-center justify-center gap-2 rounded-sm border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-semibold text-[#f7f6f2] backdrop-blur transition-colors hover:bg-white/10"
+              className="flex items-center justify-center gap-2 rounded-sm border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-semibold text-paper backdrop-blur transition-colors hover:bg-white/10"
             >
-              <Phone size={16} className="text-[#e4c65c]" />
+              <Phone size={16} className="text-gold-soft" />
               {BUSINESS.phone}
             </a>
           </motion.div>
@@ -127,7 +127,7 @@ export default function Hero() {
               cx="200"
               cy="200"
               r="170"
-              stroke="#c9a227"
+              stroke="#ff6e42"
               strokeWidth="1.2"
               strokeDasharray="3 8"
               strokeOpacity="0.45"
@@ -137,13 +137,13 @@ export default function Hero() {
             />
             <path
               d="M 60 260 C 120 120, 260 300, 340 140"
-              stroke="#e4c65c"
+              stroke="#ff8f66"
               strokeWidth="2"
               strokeDasharray="4 6"
               strokeLinecap="round"
             />
-            <circle cx="60" cy="260" r="5" fill="#c9a227" />
-            <circle cx="340" cy="140" r="6" fill="#e4c65c" />
+            <circle cx="60" cy="260" r="5" fill="#ff6e42" />
+            <circle cx="340" cy="140" r="6" fill="#ff8f66" />
           </svg>
         </div>
       </div>

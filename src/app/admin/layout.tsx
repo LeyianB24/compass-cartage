@@ -9,9 +9,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/admin" className="flex items-center gap-3">
             <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none">
-              <rect x="4" y="4" width="40" height="40" rx="9" stroke="#e4c65c" strokeWidth="1.6" />
-              <path d="M15 30 L24 14 L33 30" stroke="#e4c65c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              <path d="M19.5 24 L28.5 24" stroke="#f7f6f2" strokeWidth="2" strokeLinecap="round" />
+              <rect x="4" y="4" width="40" height="40" rx="9" stroke="#ff8f66" strokeWidth="1.6" />
+              <path d="M15 30 L24 14 L33 30" stroke="#ff8f66" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              <path d="M19.5 24 L28.5 24" stroke="#f9f9f9" strokeWidth="2" strokeLinecap="round" />
             </svg>
             <div>
               <p className="font-display text-sm font-semibold text-paper leading-none">Compass Cartage</p>

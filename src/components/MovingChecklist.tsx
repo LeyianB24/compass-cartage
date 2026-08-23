@@ -262,7 +262,7 @@ export default function MovingChecklist() {
   return (
     <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Top Header Bar - Permanent Dark Surface */}
-      <div className="bg-[#071426] dark:bg-[#030914] px-6 py-6 text-[#f7f6f2] md:px-10 border-b border-gold/20">
+      <div className="bg-navy-deep dark:bg-[#030d14] px-6 py-6 text-paper md:px-10 border-b border-gold/20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3.5">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-gold/15 text-gold">
@@ -270,14 +270,14 @@ export default function MovingChecklist() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-display text-xl font-semibold text-[#f7f6f2] md:text-2xl">
+                <h2 className="font-display text-xl font-semibold text-paper md:text-2xl">
                   Interactive Moving Checklist
                 </h2>
                 <span className="hidden rounded-xs bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold-soft sm:inline-block">
                   Live Planner
                 </span>
               </div>
-              <p className="text-xs text-[#f7f6f2]/75">
+              <p className="text-xs text-paper/75">
                 8-week step-by-step relocation countdown with custom tasks and offline memory.
               </p>
             </div>
@@ -286,7 +286,7 @@ export default function MovingChecklist() {
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setShowAddModal(!showAddModal)}
-              className="inline-flex items-center gap-1.5 rounded-sm bg-gold px-3 py-1.5 text-xs font-semibold text-[#071426] transition-colors hover:bg-gold-soft"
+              className="inline-flex items-center gap-1.5 rounded-sm bg-gold px-3 py-1.5 text-xs font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
             >
               <Plus size={14} />
               <span>Add Custom Task</span>
@@ -294,7 +294,7 @@ export default function MovingChecklist() {
 
             <button
               onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#f7f6f2] transition-colors hover:bg-white/20"
+              className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-paper transition-colors hover:bg-white/20"
               title="Copy checklist markdown to clipboard"
             >
               {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -303,7 +303,7 @@ export default function MovingChecklist() {
 
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#f7f6f2] transition-colors hover:bg-white/20"
+              className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-paper transition-colors hover:bg-white/20"
             >
               <Download size={14} />
               <span>Print</span>
@@ -312,7 +312,7 @@ export default function MovingChecklist() {
             {completedCount > 0 && (
               <button
                 onClick={resetAll}
-                className="inline-flex items-center gap-1 text-xs text-[#f7f6f2]/60 hover:text-gold-soft transition-colors ml-1"
+                className="inline-flex items-center gap-1 text-xs text-paper/60 hover:text-gold-soft transition-colors ml-1"
                 title="Reset completed tasks"
               >
                 <RotateCcw size={13} />
@@ -324,7 +324,7 @@ export default function MovingChecklist() {
 
         {/* Global Progress Bar */}
         <div className="mt-6 border-t border-white/10 pt-4">
-          <div className="flex items-center justify-between text-xs text-[#f7f6f2]/90 mb-2">
+          <div className="flex items-center justify-between text-xs text-paper/90 mb-2">
             <div className="flex items-center gap-2">
               <span className="font-medium">Move Readiness Progress</span>
               {progressPercent === 100 && (

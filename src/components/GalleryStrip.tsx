@@ -28,7 +28,7 @@ export default function GalleryStrip() {
   const img = GALLERY[index];
 
   return (
-    <section className="relative isolate overflow-hidden border-y border-hairline bg-[#071426] dark:bg-[#030914] text-[#f7f6f2]">
+    <section className="relative isolate overflow-hidden border-y border-hairline bg-navy-deep dark:bg-[#030d14] text-paper">
       {/* Slideshow frame */}
       <div className="relative h-[60vh] min-h-[420px] w-full md:h-[68vh]">
         <AnimatePresence initial={false} custom={dir}>
@@ -49,15 +49,15 @@ export default function GalleryStrip() {
               className="object-cover"
             />
             {/* Bottom legibility wash */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#071426]/90 via-[#071426]/30 dark:from-[#030914]/95 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#092634]/90 via-[#092634]/30 dark:from-[#030d14]/95 to-transparent" />
           </motion.div>
         </AnimatePresence>
 
         {/* Content overlay */}
         <div className="section-padding absolute inset-x-0 bottom-0 mx-auto flex max-w-content items-end justify-between pb-8">
           <div className="max-w-md">
-            <span className="eyebrow text-[#e4c65c]">Moving Day in Action</span>
-            <p className="font-display mt-1 text-lg font-semibold text-[#f7f6f2] md:text-xl">
+            <span className="eyebrow text-gold-soft">Moving Day in Action</span>
+            <p className="font-display mt-1 text-lg font-semibold text-paper md:text-xl">
               {img.alt}
             </p>
           </div>

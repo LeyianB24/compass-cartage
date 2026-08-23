@@ -184,21 +184,21 @@ export async function POST(req: NextRequest) {
     const adminEmailHtml = `
       <!DOCTYPE html>
       <html>
-        <body style="font-family: Arial, sans-serif; background-color: #f7f6f2; color: #071426; margin: 0; padding: 20px;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e3e1da;">
-            <h2 style="color: #071426; border-bottom: 2px solid #c9a227; padding-bottom: 10px; margin-top: 0;">New Quote Request</h2>
+        <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #092634; margin: 0; padding: 20px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e1e4e6;">
+            <h2 style="color: #092634; border-bottom: 2px solid #ff6e42; padding-bottom: 10px; margin-top: 0;">New Quote Request</h2>
             <p><strong>Client Name:</strong> ${safeName}</p>
-            <p><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #0b1f3a;">${safeEmail}</a></p>
-            <p><strong>Phone:</strong> <a href="tel:${safePhone}" style="color: #0b1f3a;">${safePhone}</a></p>
-            <hr style="border: none; border-top: 1px solid #e3e1da; margin: 20px 0;" />
+            <p><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #004e72;">${safeEmail}</a></p>
+            <p><strong>Phone:</strong> <a href="tel:${safePhone}" style="color: #004e72;">${safePhone}</a></p>
+            <hr style="border: none; border-top: 1px solid #e1e4e6; margin: 20px 0;" />
             <p><strong>Moving From:</strong> ${safePickup}</p>
             <p><strong>Moving To:</strong> ${safeDropoff}</p>
             <p><strong>Preferred Date:</strong> ${safeDate}</p>
             <p><strong>Move Size:</strong> ${safeSize}</p>
             ${photoLinksHtml}
-            <hr style="border: none; border-top: 1px solid #e3e1da; margin: 20px 0;" />
+            <hr style="border: none; border-top: 1px solid #e1e4e6; margin: 20px 0;" />
             <p><strong>Notes / Special Instructions:</strong></p>
-            <div style="background-color: #f7f6f2; padding: 15px; border-radius: 6px; border-left: 4px solid #c9a227;">${safeNotes}</div>
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 6px; border-left: 4px solid #ff6e42;">${safeNotes}</div>
             <p style="color:#8792a2;font-size:12px;margin-top:20px;">A branded PDF summary is attached.</p>
           </div>
         </body>
@@ -208,13 +208,13 @@ export async function POST(req: NextRequest) {
     const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
-        <body style="font-family: Arial, sans-serif; background-color: #f7f6f2; color: #071426; margin: 0; padding: 20px;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e3e1da;">
-            <h2 style="color: #071426; border-bottom: 2px solid #c9a227; padding-bottom: 10px; margin-top: 0;">We Received Your Moving Quote Request!</h2>
+        <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #092634; margin: 0; padding: 20px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e1e4e6;">
+            <h2 style="color: #092634; border-bottom: 2px solid #ff6e42; padding-bottom: 10px; margin-top: 0;">We Received Your Moving Quote Request!</h2>
             <p>Hi ${safeName},</p>
             <p>Thank you for reaching out to <strong>Compass Cartage</strong>. We&rsquo;ve received your quote request and our team is currently reviewing your details.</p>
             <p>We will get back to you within 24 hours with a detailed estimate.</p>
-            <div style="background-color: #f7f6f2; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;">
               <p style="margin: 0 0 8px 0;"><strong>Summary of your details:</strong></p>
               <ul style="margin: 0; padding-left: 20px;">
                 <li><strong>Pickup:</strong> ${safePickup}</li>

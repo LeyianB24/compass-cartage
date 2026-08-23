@@ -5,21 +5,20 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* --------------------------------------------------------------------------
-   Tailwind v4 Theme Configuration
-   Registers custom color tokens, font stacks, radii, and container widths directly 
-   into the CSS engine. Automatically exposes standard utility classes:
-   (e.g., bg-navy-deep, text-gold, font-display, rounded-card, max-w-content)
+   Tailwind v4 Theme Configuration — Corporate Blue/Orange palette
+   Same token names as before (bg-navy-deep, text-gold, etc.) — only the
+   underlying hex values changed, so components don't need editing.
    -------------------------------------------------------------------------- */
 @theme {
-  --color-navy: #0b1f3a;
-  --color-navy-deep: #071426;
-  --color-gold: #c9a227;
-  --color-gold-soft: #e4c65c;
-  --color-paper: #f7f6f2;
-  --color-paper-muted: #ededeb;
-  --color-slate: #4a5568;
-  --color-slate-light: #8792a2;
-  --color-hairline: #e3e1da;
+  --color-navy: #004e72;        /* was #0b1f3a — mid blue, hover/accent role */
+  --color-navy-deep: #092634;   /* was #071426 — darkest, footer/deep text */
+  --color-gold: #ff6e42;        /* was #c9a227 — primary accent, now orange */
+  --color-gold-soft: #ff8f66;   /* was #e4c65c — lighter orange for dark-bg text */
+  --color-paper: #f9f9f9;       /* was #f7f6f2 — page background */
+  --color-paper-muted: #ededed; /* was #ededeb — card surfaces */
+  --color-slate: #4a5568;       /* unchanged — body text stays neutral */
+  --color-slate-light: #8792a2; /* unchanged */
+  --color-hairline: #e1e4e6;    /* slightly cooler to pair with blue */
 
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -37,17 +36,16 @@
 }
 
 /* --------------------------------------------------------------------------
-   Dark mode token overrides — mirrors the navy palette but tuned for
-   night surfaces. Applied when <html> has the `dark` class.
+   Dark mode token overrides — same structure as before, new palette
    -------------------------------------------------------------------------- */
 .dark {
-  --color-paper: #06121f;
-  --color-paper-muted: #0a1a2c;
-  --color-navy-deep: #f7f6f2;
-  --color-navy: #e4c65c;
+  --color-paper: #061520;
+  --color-paper-muted: #0a1f2c;
+  --color-navy-deep: #f9f9f9;
+  --color-navy: #ff8f66;
   --color-slate: #a8b3c4;
   --color-slate-light: #6b7a90;
-  --color-hairline: rgba(228, 198, 92, 0.18);
+  --color-hairline: rgba(255, 143, 102, 0.18);
 }
 
 .dark {

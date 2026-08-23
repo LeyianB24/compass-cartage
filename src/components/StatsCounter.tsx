@@ -29,7 +29,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
   }, [spring]);
 
   return (
-    <span className="font-display text-3xl font-semibold text-[#f7f6f2] md:text-4xl">
+    <span className="font-display text-3xl font-semibold text-paper md:text-4xl">
       <span ref={ref}>0</span>
       {suffix}
     </span>
@@ -38,7 +38,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 export default function StatsCounter() {
   return (
-    <section className="relative isolate overflow-hidden bg-[#071426] dark:bg-[#030914] text-[#f7f6f2]">
+    <section className="relative isolate overflow-hidden bg-navy-deep dark:bg-[#030d14] text-paper">
       {/* Backdrop photograph */}
       <Image
         src={IMAGES.packingScene.src}
@@ -50,7 +50,7 @@ export default function StatsCounter() {
       {/* Heavy navy wash so the gold-suffixed numbers stay crisp and on-brand */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[1] bg-[#071426]/90 dark:bg-[#030914]/92"
+        className="absolute inset-0 -z-[1] bg-[#092634]/90 dark:bg-[#030d14]/92"
       />
 
       <div className="section-padding mx-auto grid max-w-content gap-10 py-16 sm:grid-cols-3">
@@ -63,7 +63,7 @@ export default function StatsCounter() {
             transition={{ delay: i * 0.12, duration: 0.5 }}
           >
             <Counter value={stat.value} suffix={stat.suffix} />
-            <p className="mt-1 text-sm text-[#f7f6f2]/80">{stat.label}</p>
+            <p className="mt-1 text-sm text-paper/80">{stat.label}</p>
           </motion.div>
         ))}
       </div>

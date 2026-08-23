@@ -28,7 +28,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="relative flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-paper-muted/80 text-navy-deep transition-all duration-200 hover:border-gold hover:text-gold dark:border-gold/30 dark:bg-[#071426] dark:text-[#e4c65c] dark:hover:border-gold dark:hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+      className="relative flex h-9 w-9 items-center justify-center rounded-full border border-hairline bg-paper-muted/80 text-navy-deep transition-all duration-200 hover:border-gold hover:text-gold dark:border-gold/30 dark:bg-[#092634] dark:text-gold-soft dark:hover:border-gold dark:hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
     >
       {mounted ? (
         <motion.span
@@ -39,7 +39,7 @@ export default function ThemeToggle() {
           className="block"
         >
           {isDark ? (
-            <Moon size={16} className="text-[#e4c65c]" />
+            <Moon size={16} className="text-gold-soft" />
           ) : (
             <Sun size={16} className="text-navy-deep" />
           )}

@@ -6,12 +6,12 @@
 import { Document, Page, Text, View, Svg, Path, StyleSheet } from "@react-pdf/renderer";
 import { BUSINESS } from "./constants";
 
-const NAVY = "#0b1f3a";
-const NAVY_DEEP = "#071426";
-const GOLD = "#c9a227";
+const NAVY = "#004e72";
+const NAVY_DEEP = "#092634";
+const GOLD = "#ff6e42";
 const SLATE = "#4a5568";
-const HAIRLINE = "#e3e1da";
-const PAPER = "#f7f6f2";
+const HAIRLINE = "#e1e4e6";
+const PAPER = "#f9f9f9";
 
 const styles = StyleSheet.create({
   page: {
