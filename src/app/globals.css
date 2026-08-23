@@ -5,13 +5,13 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* --------------------------------------------------------------------------
-   Tailwind v4 Theme Configuration — Edmonton Reliable Movers Design System
-   Light: Dark Teal (#004B87), Light Beige (#C2B280), Soft Salmon (#EABB81), Light Gray (#F8F9FA)
+   Tailwind v4 Theme Configuration — Compass Cartage Design System
+   Light: Dark Teal (#004B87), Deep Navy (#071F36), Light Beige (#C2B280), Soft Salmon (#EABB81), Light Gray (#F8F9FA)
    Dark: Very Dark Gray (#121212), Dark Charcoal (#1E1E1E), Electric Sky Blue (#00A3E0)
    -------------------------------------------------------------------------- */
 @theme {
-  --color-navy: #004b87;        /* Dark Teal Blue — Primary light brand */
-  --color-navy-deep: #071f36;   /* Deep Teal Navy — Headings & dark text */
+  --color-navy: #004b87;        /* Dark Teal Blue — Primary brand color */
+  --color-navy-deep: #071f36;   /* Deep Teal Navy — Dark containers & brand accents */
   --color-gold: #004b87;        /* Primary CTA color in light mode */
   --color-gold-soft: #c2b280;   /* Light Beige / Tan — warm regional accent */
   --color-salmon: #eabb81;      /* Soft Salmon accent */
@@ -42,7 +42,6 @@
 .dark {
   --color-paper: #121212;
   --color-paper-muted: #1e1e1e;
-  --color-navy-deep: #f8f9fa;
   --color-navy: #00a3e0;        /* Electric Sky Blue */
   --color-gold: #00a3e0;        /* Bright Sky Blue CTA in dark mode */
   --color-gold-soft: #38bdf8;   /* Lighter glowing sky blue */

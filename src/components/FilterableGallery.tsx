@@ -78,12 +78,12 @@ export default function FilterableGallery() {
 
               {/* Legibility wash & zoom icon reveal on hover */}
               <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 via-navy-deep/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col justify-between p-6">
-                <div className="self-end rounded-full bg-paper-muted/20 p-2 text-paper backdrop-blur">
+                <div className="self-end rounded-full bg-white/20 p-2 text-white backdrop-blur">
                   <ZoomIn size={18} />
                 </div>
                 <div>
-                  <span className="eyebrow text-[10px] text-gold-soft">{img.category}</span>
-                  <p className="mt-1 text-xs font-medium text-paper line-clamp-2">{img.alt}</p>
+                  <span className="eyebrow text-[10px] text-gold-soft dark:text-[#38bdf8]">{img.category}</span>
+                  <p className="mt-1 text-xs font-medium text-white line-clamp-2">{img.alt}</p>
                 </div>
               </div>
             </motion.div>
@@ -99,18 +99,18 @@ export default function FilterableGallery() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deep/90 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full overflow-hidden rounded-card bg-navy-deep border border-gold/30 shadow-2xl"
+              className="relative max-w-4xl w-full overflow-hidden rounded-card bg-[#071f36] border border-white/20 shadow-2xl dark:bg-[#181818]"
             >
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 rounded-full bg-navy-deep/80 p-2 text-paper hover:bg-gold hover:text-navy-deep transition-colors"
+                className="absolute top-4 right-4 z-10 rounded-full bg-black/60 p-2 text-white hover:bg-[#00a3e0] hover:text-navy-deep transition-colors"
                 aria-label="Close modal"
               >
                 <X size={20} />
@@ -126,8 +126,8 @@ export default function FilterableGallery() {
                 />
               </div>
 
-              <div className="p-6 bg-navy-deep text-paper border-t border-hairline/20">
-                <p className="text-sm text-paper/80 font-medium">{selectedImage.alt}</p>
+              <div className="p-6 bg-[#071f36] text-white border-t border-white/10 dark:bg-[#181818]">
+                <p className="text-sm text-white/85 font-medium">{selectedImage.alt}</p>
               </div>
             </motion.div>
           </motion.div>

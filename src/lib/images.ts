@@ -18,18 +18,48 @@ export type ImageAsset = {
  * never hard-code a path elsewhere.
  */
 export const IMAGES = {
-  // Hero — the headline photograph: two movers carrying a box together,
-  // the core action the brand is built around.
+  // Hero headline photographs — newly provided high-resolution moving fleet & crew imagery
   heroMovers: {
-    src: "/images/portrait-two-smiling-professional-movers-effortlessly-carrying-cardboard-boxes-room-house-angled-top-view-young-male-334690896.webp",
-    alt: "Two smiling professional movers carrying cardboard boxes through a room, viewed from above",
+    src: "/images/hero 1.jpg",
+    alt: "Compass Cartage moving crew and fleet handling relocation",
+  },
+  hero1: {
+    src: "/images/hero 1.jpg",
+    alt: "Compass Cartage professional moving crew and truck in Edmonton",
+  },
+  hero2: {
+    src: "/images/hero 2.jpg",
+    alt: "Compass Cartage moving truck and uniformed relocation team",
+  },
+  hero3: {
+    src: "/images/hero 3.jpg",
+    alt: "Compass Cartage movers loading household belongings securely",
+  },
+  hero4: {
+    src: "/images/hero 4.jpg",
+    alt: "Compass Cartage residential relocation team at work",
+  },
+  hero5: {
+    src: "/images/hero 5.jpg",
+    alt: "Compass Cartage moving van and crew preparing items for transit",
+  },
+  hero6: {
+    src: "/images/hero 6.jpg",
+    alt: "Compass Cartage logistics transport and furniture protection",
+  },
+  hero7: {
+    src: "/images/hero 7.jpg",
+    alt: "Compass Cartage express relocation fleet across Alberta",
+  },
+  hero8: {
+    src: "/images/hero 8.jpg",
+    alt: "Compass Cartage dedicated moving crew and transport",
   },
 
-  // Movers loading a truck on a sunny day — used for the CTA band and
-  // the "we get you there" full-bleed moment.
+  // Movers loading a truck on a sunny day — used for the CTA band
   truckSunnyDay: {
-    src: "/images/professional-movers-carrying-boxes-truck-bright-sunny-day-two-uniformed-carry-large-under-clear-blue-sky-image-410839417.webp",
-    alt: "Professional movers in uniform carrying large boxes into a moving truck on a bright sunny day",
+    src: "/images/hero 2.jpg",
+    alt: "Professional movers in uniform with moving truck on moving day",
   },
 
   // Movers indoors with a tool case — used for inner page heroes and

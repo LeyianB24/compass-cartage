@@ -72,17 +72,17 @@ export default function Footer() {
               aria-label={`${BUSINESS?.name || "Compass Cartage"} - Home`}
             >
               <BrandMark className="h-9 w-9" />
-              <span className="font-display text-lg font-semibold tracking-tight text-paper">
+              <span className="font-display text-lg font-semibold tracking-tight text-white">
                 {BUSINESS?.name || "Compass Cartage"}
               </span>
             </Link>
 
-            <p className="mt-3 text-xs leading-relaxed text-paper/80 md:text-sm">
+            <p className="mt-3 text-xs leading-relaxed text-white/80 md:text-sm">
               {BUSINESS?.tagline || "Fast • Reliable • Affordable"}. Fully licensed and insured
               relocation services across Edmonton and Alberta.
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-gold-soft">
+            <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-gold-soft dark:text-[#38bdf8]">
               <span className="rounded-xs border border-gold/30 bg-gold/10 px-2 py-0.5">
                 100% Insured
               </span>
@@ -97,13 +97,13 @@ export default function Footer() {
 
           {/* Quick Links Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft">Navigation</p>
-            <ul className="space-y-2.5 text-xs lg:text-sm text-paper/80">
+            <p className="eyebrow mb-4 text-gold-soft dark:text-[#38bdf8]">Navigation</p>
+            <ul className="space-y-2.5 text-xs lg:text-sm text-white/80">
               {QUICK_LINKS.slice(0, 5).map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-block transition-colors duration-200 hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="inline-block transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {link.label}
                   </Link>
@@ -114,13 +114,13 @@ export default function Footer() {
 
           {/* Tools & Planning Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft">Tools & Hubs</p>
-            <ul className="space-y-2.5 text-xs lg:text-sm text-paper/80">
+            <p className="eyebrow mb-4 text-gold-soft dark:text-[#38bdf8]">Tools & Hubs</p>
+            <ul className="space-y-2.5 text-xs lg:text-sm text-white/80">
               {QUICK_LINKS.slice(5).map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-block transition-colors duration-200 hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="inline-block transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {link.label}
                   </Link>
@@ -131,14 +131,14 @@ export default function Footer() {
 
           {/* Contact Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft">Contact Us</p>
-            <ul className="space-y-3 text-xs lg:text-sm text-paper/80">
+            <p className="eyebrow mb-4 text-gold-soft dark:text-[#38bdf8]">Contact Us</p>
+            <ul className="space-y-3 text-xs lg:text-sm text-white/80">
               {BUSINESS?.phone && (
                 <li className="flex items-center gap-2.5">
-                  <Phone size={15} className="shrink-0 text-gold" aria-hidden="true" />
+                  <Phone size={15} className="shrink-0 text-gold-soft dark:text-[#00a3e0]" aria-hidden="true" />
                   <a
                     href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
-                    className="transition-colors duration-200 hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {BUSINESS.phone}
                   </a>
@@ -146,10 +146,10 @@ export default function Footer() {
               )}
               {BUSINESS?.email && (
                 <li className="flex items-center gap-2.5">
-                  <Mail size={15} className="shrink-0 text-gold" aria-hidden="true" />
+                  <Mail size={15} className="shrink-0 text-gold-soft dark:text-[#00a3e0]" aria-hidden="true" />
                   <a
                     href={`mailto:${BUSINESS.email}`}
-                    className="transition-colors duration-200 hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {BUSINESS.email}
                   </a>
@@ -157,7 +157,7 @@ export default function Footer() {
               )}
               {BUSINESS?.serviceAreaShort && (
                 <li className="flex items-start gap-2.5">
-                  <MapPin size={15} className="mt-0.5 shrink-0 text-gold" aria-hidden="true" />
+                  <MapPin size={15} className="mt-0.5 shrink-0 text-gold-soft dark:text-[#00a3e0]" aria-hidden="true" />
                   <span>{BUSINESS.serviceAreaShort}</span>
                 </li>
               )}
@@ -166,7 +166,7 @@ export default function Footer() {
         </div>
 
         {/* Sub-Footer / Copyright */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-paper/10 py-6 text-xs text-paper/60 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 text-xs text-white/60 md:flex-row">
           <p>
             © {currentYear} {BUSINESS?.name || "Compass Cartage"}. All rights reserved.
           </p>
@@ -176,7 +176,7 @@ export default function Footer() {
               href="https://www.bezalel.website/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-gold-soft transition-colors duration-200 hover:text-gold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold rounded-xs"
+              className="font-medium text-gold-soft transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold rounded-xs"
             >
               Bezalel Technologies
             </a>

@@ -61,17 +61,17 @@ export default function CostCalculator() {
   return (
     <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Header bar */}
-      <div className="bg-navy-deep dark:bg-[#030d14] px-6 py-6 text-paper md:px-10 border-b border-gold/20">
+      <div className="bg-navy-deep dark:bg-[#121212] px-6 py-6 text-white md:px-10 border-b border-hairline dark:border-white/10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-gold/15 text-gold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-navy/20 text-gold-soft dark:bg-[#00a3e0]/20 dark:text-[#00a3e0]">
               <Calculator size={22} />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold text-paper md:text-2xl">
+              <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
                 Instant Move Cost Estimator
               </h2>
-              <p className="text-xs text-paper/75">
+              <p className="text-xs text-white/80 dark:text-gray-300">
                 Transparent, itemized labor & logistics calculations with zero hidden fees
               </p>
             </div>
@@ -85,8 +85,8 @@ export default function CostCalculator() {
                 onClick={() => setStep(s)}
                 className={`flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-all ${
                   step === s
-                    ? "bg-gold text-navy-deep"
-                    : "bg-paper-muted/10 text-paper/70 hover:bg-paper-muted/20"
+                    ? "bg-gold-soft text-navy-deep font-bold dark:bg-[#00a3e0] dark:text-[#092634]"
+                    : "bg-white/10 text-white/80 hover:bg-white/20 dark:bg-white/5 dark:text-gray-300"
                 }`}
               >
                 <span>Step {s}</span>

@@ -50,8 +50,8 @@ export default function Navbar() {
           onClick={() => setOpen(false)}
           aria-label={`${BUSINESS?.name || "Compass Cartage"} Home`}
         >
-          <BrandMark className="h-9 w-9" />
-          <span className="font-display text-lg font-semibold leading-none text-navy-deep">
+          <BrandMark className="h-10 w-10" />
+          <span className="font-display text-lg font-semibold leading-none text-navy-deep dark:text-white">
             {BUSINESS?.name || "Compass Cartage"}
           </span>
         </Link>
@@ -66,15 +66,15 @@ export default function Navbar() {
                 href={link.href}
                 className={`relative text-xs lg:text-sm transition-colors duration-200 rounded-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep ${
                   isActive
-                    ? "font-semibold text-navy-deep"
-                    : "font-medium text-slate hover:text-navy-deep"
+                    ? "font-semibold text-navy dark:text-[#00a3e0]"
+                    : "font-medium text-slate hover:text-navy dark:text-gray-300 dark:hover:text-[#00a3e0]"
                 }`}
               >
                 {link.label}
                 {isActive && (
                   <motion.span
                     layoutId="activeNavIndicator"
-                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gold rounded-full"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-navy dark:bg-[#00a3e0] rounded-full"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -88,9 +88,9 @@ export default function Navbar() {
           {BUSINESS?.phone && (
             <a
               href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
-              className="flex items-center gap-1.5 text-xs lg:text-sm font-medium text-navy-deep transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep rounded-xs"
+              className="flex items-center gap-1.5 text-xs lg:text-sm font-medium text-navy-deep hover:text-navy dark:text-gray-200 dark:hover:text-[#00a3e0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep rounded-xs"
             >
-              <Phone size={15} strokeWidth={2} className="text-gold" aria-hidden="true" />
+              <Phone size={15} strokeWidth={2} className="text-navy dark:text-[#00a3e0]" aria-hidden="true" />
               <span>{BUSINESS.phone}</span>
             </a>
           )}
@@ -110,7 +110,7 @@ export default function Navbar() {
           <ThemeToggle />
           <button
             type="button"
-            className="rounded-md p-2 text-navy-deep transition-colors hover:bg-paper-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep"
+            className="rounded-md p-2 text-navy-deep hover:bg-paper-muted dark:text-white dark:hover:bg-[#1e1e1e] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-deep"
             aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -130,7 +130,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-hairline bg-paper md:hidden"
+            className="overflow-hidden border-t border-hairline bg-paper dark:bg-[#121212] md:hidden"
           >
             <nav className="section-padding flex flex-col gap-1 py-4" aria-label="Mobile Navigation">
               {NAV_LINKS.map((link) => {
@@ -141,13 +141,13 @@ export default function Navbar() {
                     href={link.href}
                     className={`flex items-center justify-between py-2.5 text-base transition-colors ${
                       isActive
-                        ? "font-semibold text-gold"
-                        : "font-medium text-navy-deep hover:text-gold"
+                        ? "font-semibold text-navy dark:text-[#00a3e0]"
+                        : "font-medium text-navy-deep hover:text-navy dark:text-gray-200 dark:hover:text-[#00a3e0]"
                     }`}
                     onClick={() => setOpen(false)}
                   >
                     <span>{link.label}</span>
-                    {link.icon && <link.icon size={16} className="text-slate-light" />}
+                    {link.icon && <link.icon size={16} className="text-slate-light dark:text-gray-400" />}
                   </Link>
                 );
               })}
@@ -155,17 +155,17 @@ export default function Navbar() {
               {BUSINESS?.phone && (
                 <a
                   href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
-                  className="flex items-center gap-2 py-3 text-base font-medium text-navy-deep hover:text-gold"
+                  className="flex items-center gap-2 py-3 text-base font-medium text-navy-deep hover:text-navy dark:text-gray-200 dark:hover:text-[#00a3e0]"
                   onClick={() => setOpen(false)}
                 >
-                  <Phone size={16} className="text-gold" aria-hidden="true" />
+                  <Phone size={16} className="text-navy dark:text-[#00a3e0]" aria-hidden="true" />
                   {BUSINESS.phone}
                 </a>
               )}
 
               <Link
                 href="/quote"
-                className="mt-3 rounded-sm bg-navy-deep px-5 py-3 text-center text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy"
+                className="mt-3 rounded-sm bg-navy px-5 py-3 text-center text-sm font-semibold text-white shadow-xs transition-all hover:bg-navy-deep dark:bg-[#00a3e0] dark:text-[#092634]"
                 onClick={() => setOpen(false)}
               >
                 Get a Free Quote

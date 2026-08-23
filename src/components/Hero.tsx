@@ -29,8 +29,8 @@ export default function Hero() {
       {/* Backdrop photograph with parallax drift */}
       <motion.div style={{ y: bgY }} className="absolute inset-0 -z-[2] scale-110">
         <Image
-          src={IMAGES.truckSunnyDay.src}
-          alt={IMAGES.truckSunnyDay.alt}
+          src={IMAGES.hero1.src}
+          alt={IMAGES.hero1.alt}
           fill
           priority
           sizes="100vw"

@@ -87,17 +87,17 @@ export default function InventoryPlanner() {
   return (
     <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
       {/* Top Header */}
-      <div className="bg-navy-deep dark:bg-[#030d14] px-6 py-6 text-paper md:px-10 border-b border-gold/20">
+      <div className="bg-navy-deep dark:bg-[#121212] px-6 py-6 text-white md:px-10 border-b border-hairline dark:border-white/10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-gold/15 text-gold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-navy/20 text-gold-soft dark:bg-[#00a3e0]/20 dark:text-[#00a3e0]">
               <Package size={22} />
             </div>
             <div>
-              <h2 className="font-display text-xl font-semibold text-paper md:text-2xl">
+              <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
                 Room-by-Room Inventory Planner
               </h2>
-              <p className="text-xs text-paper/75">
+              <p className="text-xs text-white/80 dark:text-gray-300">
                 Select your furniture & boxes to calculate total cubic volume (cu ft) and weight.
               </p>
             </div>
@@ -106,7 +106,7 @@ export default function InventoryPlanner() {
           {totalItemCount > 0 && (
             <button
               onClick={handleClear}
-              className="inline-flex items-center gap-1 text-xs text-paper/60 hover:text-gold"
+              className="inline-flex items-center gap-1 text-xs text-white/70 hover:text-gold-soft dark:hover:text-[#38bdf8] transition-colors"
             >
               <Trash2 size={14} />
               <span>Clear Inventory</span>
