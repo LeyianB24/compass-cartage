@@ -2,8 +2,25 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Phone, Mail, MapPin, Calendar, Image as ImageIcon, ChevronDown } from "lucide-react";
-import { bookMove, updateRequestStatus } from "@/lib/actions";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Calendar,
+  Image as ImageIcon,
+  ChevronDown,
+  Trash2,
+  XCircle,
+  MessageSquare,
+  Edit3,
+  Check,
+  Loader2,
+  Maximize2,
+  X,
+  Truck,
+} from "lucide-react";
+import { bookMove, updateRequestStatus, deleteQuoteRequest, cancelBooking, updateRequestNotes } from "@/lib/actions";
+import CommunicationModal from "./CommunicationModal";
 
 type Props = {
   request: {
@@ -34,23 +51,32 @@ function timeAgo(dateStr: string): string {
   return `${days}d ago`;
 }
 
-const STATUS_OPTIONS = ["NEW", "CONTACTED", "QUOTED", "BOOKED", "COMPLETED", "DECLINED"];
+const STATUS_OPTIONS = ["NEW", "CONTACTED", "QUOTED", "BOOKED", "COMPLETED", "DECLINED"] as const;
 const STATUS_COLORS: Record<string, string> = {
-  NEW: "bg-gold/15 text-gold",
-  CONTACTED: "bg-blue-100 text-blue-700",
-  QUOTED: "bg-purple-100 text-purple-700",
-  BOOKED: "bg-emerald-100 text-emerald-700",
-  COMPLETED: "bg-slate-100 text-slate",
-  DECLINED: "bg-red-100 text-red-700",
+  NEW: "bg-gold/15 text-gold border-gold/40",
+  CONTACTED: "bg-blue-500/15 text-blue-600 border-blue-500/30 dark:text-blue-400",
+  QUOTED: "bg-purple-500/15 text-purple-600 border-purple-500/30 dark:text-purple-400",
+  BOOKED: "bg-emerald-500/15 text-emerald-600 border-emerald-500/30 dark:text-emerald-400",
+  COMPLETED: "bg-slate-500/15 text-slate border-slate-500/30 dark:text-slate-300",
+  DECLINED: "bg-red-500/15 text-red-600 border-red-500/30 dark:text-red-400",
 };
 
 export default function AdminRequestRow({ request }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  // Modals & sub-states
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookDate, setBookDate] = useState(request.moveDate || "");
   const [moveType, setMoveType] = useState<"LOCAL" | "LONG_DISTANCE_ALBERTA" | "OUT_OF_PROVINCE">("LOCAL");
   const [bookError, setBookError] = useState("");
+
+  const [commOpen, setCommOpen] = useState(false);
+  const [previewPhoto, setPreviewPhoto] = useState<string | null>(null);
+
+  // Notes editing state
+  const [isEditingNotes, setIsEditingNotes] = useState(false);
+  const [noteContent, setNoteContent] = useState(request.notes || "");
 
   function handleStatusChange(newStatus: string) {
     startTransition(() => {
@@ -70,125 +96,371 @@ export default function AdminRequestRow({ request }: Props) {
     });
   }
 
+  function handleCancelBooking() {
+    if (!window.confirm("Cancel this booked slot and return status to Quoted?")) return;
+    startTransition(async () => {
+      await cancelBooking(request.id);
+    });
+  }
+
+  function handleDelete() {
+    if (!window.confirm(`Permanently remove lead for ${request.name}? This action cannot be undone.`)) return;
+    startTransition(async () => {
+      await deleteQuoteRequest(request.id);
+    });
+  }
+
+  function handleSaveNotes() {
+    startTransition(async () => {
+      await updateRequestNotes(request.id, noteContent);
+      setIsEditingNotes(false);
+    });
+  }
+
   return (
-    <div className="rounded-card border border-hairline bg-paper-muted shadow-xs">
-      <button
-        onClick={() => setExpanded((v) => !v)}
-        className="flex w-full items-center justify-between gap-4 p-5 text-left"
-      >
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <span className="font-display text-base font-semibold text-navy-deep">{request.name}</span>
-            <span className={`rounded-xs px-2 py-0.5 text-[10px] font-bold uppercase ${STATUS_COLORS[request.status]}`}>
-              {request.status}
+    <>
+      <div className="rounded-card border border-hairline bg-paper-muted shadow-xs transition-all hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:hover:border-gold/50">
+        {/* Row Header Bar */}
+        <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <div
+            onClick={() => setExpanded((v) => !v)}
+            className="flex-1 cursor-pointer"
+          >
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-display text-base font-bold text-navy-deep dark:text-white">
+                {request.name}
+              </span>
+              <span
+                className={`rounded-xs border px-2 py-0.5 font-mono text-[10px] font-bold uppercase ${STATUS_COLORS[request.status]}`}
+              >
+                {request.status}
+              </span>
+              {request.bookedSlot && (
+                <span className="rounded-xs border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                  Booked: {new Date(request.bookedSlot.date).toLocaleDateString("en-CA")} ({request.bookedSlot.moveType})
+                </span>
+              )}
+            </div>
+            <p className="mt-1 font-mono text-xs text-slate dark:text-gray-300 truncate max-w-xl">
+              {request.pickupAddress} → {request.dropoffAddress} &middot;{" "}
+              <span className="text-gold font-semibold">{request.moveSize || "Size not specified"}</span>
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+            <span className="font-mono text-[11px] text-slate-light dark:text-gray-400">
+              {timeAgo(request.createdAt)}
             </span>
+
+            {/* Quick Action Shortcuts */}
+            <button
+              onClick={() => setCommOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-xs border border-hairline bg-paper px-2.5 py-1.5 font-mono text-[11px] font-semibold text-navy-deep hover:border-gold dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:hover:border-gold"
+              title="Open client communication desk"
+            >
+              <MessageSquare size={13} className="text-gold" />
+              <span>Contact</span>
+            </button>
+
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="rounded-xs p-1 text-slate hover:text-navy-deep dark:text-gray-400 dark:hover:text-white"
+              aria-label="Toggle details"
+            >
+              <ChevronDown
+                size={18}
+                className={`transition-transform duration-200 ${expanded ? "rotate-180 text-gold" : ""}`}
+              />
+            </button>
           </div>
-          <p className="mt-1 text-xs text-slate">
-            {request.pickupAddress} → {request.dropoffAddress} &middot; {request.moveSize || "size not specified"}
-          </p>
         </div>
-        <span className="shrink-0 text-[11px] text-slate-light">{timeAgo(request.createdAt)}</span>
-        <ChevronDown size={18} className={`text-slate transition-transform ${expanded ? "rotate-180" : ""}`} />
-      </button>
 
-      {expanded && (
-        <div className="border-t border-hairline p-5">
-          <div className="grid gap-4 sm:grid-cols-2 text-sm">
-            <div className="flex items-center gap-2 text-navy-deep">
-              <Phone size={14} className="text-gold" /> {request.phone}
-            </div>
-            <div className="flex items-center gap-2 text-navy-deep">
-              <Mail size={14} className="text-gold" /> {request.email}
-            </div>
-            <div className="flex items-center gap-2 text-navy-deep">
-              <Calendar size={14} className="text-gold" /> {request.moveDate || "No date given"}
-            </div>
-            <div className="flex items-center gap-2 text-navy-deep">
-              <MapPin size={14} className="text-gold" />
-              {request.bookedSlot
-                ? `Booked: ${new Date(request.bookedSlot.date).toLocaleDateString("en-CA")} (${request.bookedSlot.moveType.replace(/_/g, " ")})`
-                : "Not yet booked"}
-            </div>
-          </div>
+        {/* Expanded Ledger Details */}
+        {expanded && (
+          <div className="border-t border-hairline p-5 bg-paper/30 dark:border-white/10 dark:bg-[#070c14]/40 space-y-5">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-xs">
+              <div className="rounded-xs border border-hairline bg-paper p-3 dark:border-white/10 dark:bg-[#070c14]">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-light dark:text-gray-400 block mb-1">
+                  Phone Number
+                </span>
+                <a
+                  href={`tel:${request.phone}`}
+                  className="flex items-center gap-1.5 font-semibold text-navy-deep hover:text-gold dark:text-white"
+                >
+                  <Phone size={13} className="text-gold shrink-0" /> {request.phone}
+                </a>
+              </div>
 
-          {request.notes && (
-            <p className="mt-4 rounded-xs border border-hairline bg-paper p-3 text-xs text-slate">{request.notes}</p>
-          )}
+              <div className="rounded-xs border border-hairline bg-paper p-3 dark:border-white/10 dark:bg-[#070c14]">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-light dark:text-gray-400 block mb-1">
+                  Email Address
+                </span>
+                <a
+                  href={`mailto:${request.email}`}
+                  className="flex items-center gap-1.5 font-semibold text-navy-deep hover:text-gold dark:text-white truncate"
+                >
+                  <Mail size={13} className="text-gold shrink-0" /> {request.email}
+                </a>
+              </div>
 
-          {request.photoUrls.length > 0 && (
-            <div className="mt-4">
-              <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-navy-deep">
-                <ImageIcon size={14} className="text-gold" /> Photos
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {request.photoUrls.map((url, i) => (
-                  <a key={i} href={url} target="_blank" rel="noreferrer">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={url} alt={`Uploaded photo ${i + 1}`} className="h-16 w-16 rounded-xs border border-hairline object-cover" />
-                  </a>
-                ))}
+              <div className="rounded-xs border border-hairline bg-paper p-3 dark:border-white/10 dark:bg-[#070c14]">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-light dark:text-gray-400 block mb-1">
+                  Preferred Move Date
+                </span>
+                <div className="flex items-center gap-1.5 font-semibold text-navy-deep dark:text-white">
+                  <Calendar size={13} className="text-gold shrink-0" />{" "}
+                  {request.moveDate || "Flexible / Not Given"}
+                </div>
+              </div>
+
+              <div className="rounded-xs border border-hairline bg-paper p-3 dark:border-white/10 dark:bg-[#070c14]">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-light dark:text-gray-400 block mb-1">
+                  Inventory Scope
+                </span>
+                <div className="flex items-center gap-1.5 font-semibold text-navy-deep dark:text-white">
+                  <Truck size={13} className="text-gold shrink-0" /> {request.moveSize || "Standard Move"}
+                </div>
               </div>
             </div>
-          )}
 
-          <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-hairline pt-4">
-            <label className="text-xs font-medium text-slate">Status:</label>
-            <select
-              value={request.status}
-              disabled={isPending}
-              onChange={(e) => handleStatusChange(e.target.value)}
-              className="rounded-xs border border-hairline bg-paper px-3 py-1.5 text-xs text-navy-deep focus:outline-none"
-            >
-              {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
+            {/* Origin and Destination Card */}
+            <div className="grid gap-3 sm:grid-cols-2 text-xs">
+              <div className="rounded-xs border border-hairline bg-paper p-3 dark:border-white/10 dark:bg-[#070c14]">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold block mb-1">
+                  Origin (Pickup Address)
+                </span>
+                <div className="flex items-start gap-1.5 text-slate dark:text-gray-200">
+                  <MapPin size={14} className="text-gold shrink-0 mt-0.5" />
+                  <span>{request.pickupAddress}</span>
+                </div>
+              </div>
 
-            {!request.bookedSlot && (
-              <button
-                onClick={() => setBookingOpen((v) => !v)}
-                className="rounded-xs bg-navy-deep px-3 py-1.5 text-xs font-semibold text-paper hover:bg-navy"
-              >
-                Book This Move
-              </button>
+              <div className="rounded-xs border border-hairline bg-paper p-3 dark:border-white/10 dark:bg-[#070c14]">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold block mb-1">
+                  Destination (Dropoff Address)
+                </span>
+                <div className="flex items-start gap-1.5 text-slate dark:text-gray-200">
+                  <MapPin size={14} className="text-gold shrink-0 mt-0.5" />
+                  <span>{request.dropoffAddress}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Notes Section with In-place Editing */}
+            <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-navy-deep dark:text-white">
+                  Dispatch & Customer Notes
+                </span>
+                {!isEditingNotes ? (
+                  <button
+                    onClick={() => setIsEditingNotes(true)}
+                    className="inline-flex items-center gap-1 font-mono text-[11px] text-gold hover:underline"
+                  >
+                    <Edit3 size={12} /> Edit Notes
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleSaveNotes}
+                      disabled={isPending}
+                      className="inline-flex items-center gap-1 rounded-xs bg-gold px-2 py-0.5 font-mono text-[10px] font-bold text-navy-deep hover:bg-gold-soft"
+                    >
+                      <Check size={11} /> Save
+                    </button>
+                    <button
+                      onClick={() => setIsEditingNotes(false)}
+                      className="font-mono text-[10px] text-slate hover:text-navy-deep dark:text-gray-400"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {isEditingNotes ? (
+                <textarea
+                  rows={3}
+                  value={noteContent}
+                  onChange={(e) => setNoteContent(e.target.value)}
+                  className="w-full rounded-xs border border-hairline bg-paper-muted p-2.5 text-xs text-navy-deep focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#0f172a] dark:text-white"
+                />
+              ) : (
+                <p className="text-xs text-slate dark:text-gray-300 leading-relaxed">
+                  {request.notes || "No special instructions recorded."}
+                </p>
+              )}
+            </div>
+
+            {/* Photo Attachments Lightbox */}
+            {request.photoUrls.length > 0 && (
+              <div>
+                <p className="mb-2 flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-wider text-navy-deep dark:text-white">
+                  <ImageIcon size={14} className="text-gold" /> Uploaded Photos ({request.photoUrls.length})
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {request.photoUrls.map((url, i) => (
+                    <div
+                      key={i}
+                      onClick={() => setPreviewPhoto(url)}
+                      className="group relative h-20 w-20 cursor-pointer overflow-hidden rounded-xs border border-hairline shadow-2xs"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={url}
+                        alt={`Photo ${i + 1}`}
+                        className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Maximize2 size={16} className="text-white" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Actions Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline pt-4 dark:border-white/10">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <label className="font-mono text-xs font-bold text-slate dark:text-gray-300">Status:</label>
+                  <select
+                    value={request.status}
+                    disabled={isPending}
+                    onChange={(e) => handleStatusChange(e.target.value)}
+                    className="rounded-xs border border-hairline bg-paper px-3 py-1.5 font-mono text-xs text-navy-deep focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#070c14] dark:text-white"
+                  >
+                    {STATUS_OPTIONS.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {!request.bookedSlot ? (
+                  <button
+                    onClick={() => setBookingOpen((v) => !v)}
+                    className="rounded-xs bg-navy-deep px-3.5 py-1.5 font-mono text-xs font-bold text-gold-soft shadow-xs hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                  >
+                    Schedule & Book Move
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleCancelBooking}
+                    disabled={isPending}
+                    className="inline-flex items-center gap-1 rounded-xs border border-red-500/30 bg-red-500/10 px-3 py-1.5 font-mono text-xs font-semibold text-red-600 hover:bg-red-500 hover:text-white dark:border-red-500/40 dark:text-red-400"
+                  >
+                    <XCircle size={13} />
+                    <span>Cancel Booked Slot</span>
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDelete}
+                  disabled={isPending}
+                  className="inline-flex items-center gap-1 rounded-xs border border-hairline bg-paper px-3 py-1.5 font-mono text-xs font-semibold text-slate hover:border-red-500/50 hover:text-red-600 dark:border-white/15 dark:bg-[#070c14] dark:text-gray-400 dark:hover:text-red-400"
+                  title="Permanently remove lead"
+                >
+                  <Trash2 size={13} />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Booking Drawer Form */}
+            {bookingOpen && (
+              <div className="rounded-xs border border-gold/40 bg-gold/5 p-4 space-y-3 dark:bg-[#0f172a]">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-navy-deep dark:text-white block">
+                  Assign Slot & Book Fleet
+                </span>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div>
+                    <label className="mb-1 block font-mono text-[11px] font-medium text-navy-deep dark:text-gray-200">
+                      Confirmed Move Date *
+                    </label>
+                    <input
+                      type="date"
+                      value={bookDate}
+                      onChange={(e) => setBookDate(e.target.value)}
+                      className="w-full rounded-xs border border-hairline bg-paper px-3 py-1.5 text-xs dark:border-white/15 dark:bg-[#070c14] dark:text-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="mb-1 block font-mono text-[11px] font-medium text-navy-deep dark:text-gray-200">
+                      Move Route Classification *
+                    </label>
+                    <select
+                      value={moveType}
+                      onChange={(e) => setMoveType(e.target.value as never)}
+                      className="w-full rounded-xs border border-hairline bg-paper px-3 py-1.5 text-xs dark:border-white/15 dark:bg-[#070c14] dark:text-white"
+                    >
+                      <option value="LOCAL">Local (Edmonton Metropolitan Area)</option>
+                      <option value="LONG_DISTANCE_ALBERTA">Long-Distance (Alberta Provincial)</option>
+                      <option value="OUT_OF_PROVINCE">Out of Province (Max 2 slots / month)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <button
+                    onClick={() => setBookingOpen(false)}
+                    className="rounded-xs border border-hairline bg-paper px-3 py-1.5 font-mono text-xs text-slate hover:text-navy-deep dark:border-white/15 dark:bg-[#070c14] dark:text-gray-400"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleBook}
+                    disabled={isPending || !bookDate}
+                    className="flex items-center gap-1.5 rounded-xs bg-navy-deep px-4 py-1.5 font-mono text-xs font-bold text-gold-soft hover:bg-gold hover:text-navy-deep disabled:opacity-50 dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                  >
+                    {isPending ? <Loader2 size={13} className="animate-spin" /> : null}
+                    <span>Lock in Slot</span>
+                  </button>
+                </div>
+                {bookError && (
+                  <p className="w-full font-mono text-xs text-red-600 dark:text-red-400 mt-2">
+                    {bookError}
+                  </p>
+                )}
+              </div>
             )}
           </div>
+        )}
+      </div>
 
-          {bookingOpen && (
-            <div className="mt-3 flex flex-wrap items-end gap-3 rounded-xs border border-gold/40 bg-gold/5 p-4">
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-navy-deep">Date</label>
-                <input
-                  type="date"
-                  value={bookDate}
-                  onChange={(e) => setBookDate(e.target.value)}
-                  className="rounded-xs border border-hairline bg-paper-muted px-3 py-1.5 text-xs"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-navy-deep">Type</label>
-                <select
-                  value={moveType}
-                  onChange={(e) => setMoveType(e.target.value as never)}
-                  className="rounded-xs border border-hairline bg-paper-muted px-3 py-1.5 text-xs"
-                >
-                  <option value="LOCAL">Local (Edmonton area)</option>
-                  <option value="LONG_DISTANCE_ALBERTA">Long-Distance (Alberta)</option>
-                  <option value="OUT_OF_PROVINCE">Out of Province</option>
-                </select>
-              </div>
-              <button
-                onClick={handleBook}
-                disabled={isPending || !bookDate}
-                className="rounded-xs bg-navy-deep px-4 py-1.5 text-xs font-semibold text-paper hover:bg-navy disabled:opacity-50"
-              >
-                Confirm Booking
-              </button>
-              {bookError && <p className="w-full text-xs text-red-600">{bookError}</p>}
-            </div>
-          )}
+      {/* Communication Modal */}
+      <CommunicationModal
+        isOpen={commOpen}
+        onClose={() => setCommOpen(false)}
+        request={request}
+      />
+
+      {/* Photo Lightbox Modal */}
+      {previewPhoto && (
+        <div
+          onClick={() => setPreviewPhoto(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+        >
+          <div className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-card">
+            <button
+              onClick={() => setPreviewPhoto(null)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-black/70 p-2 text-white hover:bg-black"
+            >
+              <X size={18} />
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={previewPhoto}
+              alt="Preview"
+              className="max-h-[85vh] w-auto rounded-card object-contain shadow-2xl"
+            />
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

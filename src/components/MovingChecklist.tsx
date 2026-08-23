@@ -1,110 +1,46 @@
 // src/components/MovingChecklist.tsx
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  Calendar,
   CheckSquare,
   Square,
-  Calendar,
-  Download,
-  RotateCcw,
-  CheckCircle2,
-  Clock,
-  ChevronDown,
-  ChevronUp,
-  Search,
+  Sparkles,
   Plus,
   Trash2,
+  Download,
   Copy,
   Check,
-  Sparkles,
+  RotateCcw,
+  Search,
   Filter,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  CheckCircle2,
 } from "lucide-react";
-import { RELOCATION_CHECKLIST } from "@/lib/constants";
+import { RELOCATION_CHECKLIST, type ChecklistMilestone } from "@/lib/constants";
 
-const STORAGE_KEY = "compass_cartage_checklist_v3_state";
-const CUSTOM_TASKS_KEY = "compass_cartage_custom_tasks_v3";
-
-type CustomTask = {
+type ChecklistTask = {
   id: string;
   milestoneId: string;
   text: string;
   category: string;
 };
 
-const EMPTY_RECORD: Record<string, boolean> = {};
-const EMPTY_CUSTOM: CustomTask[] = [];
-
-// Snapshot caches for referential stability in React 19 useSyncExternalStore
-let cachedTasksRaw = "";
-let cachedTasksParsed: Record<string, boolean> = EMPTY_RECORD;
-
-function getTasksSnapshot(): Record<string, boolean> {
-  if (typeof window === "undefined") return EMPTY_RECORD;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY) || "{}";
-    if (raw !== cachedTasksRaw) {
-      cachedTasksRaw = raw;
-      cachedTasksParsed = JSON.parse(raw);
-    }
-    return cachedTasksParsed;
-  } catch {
-    return EMPTY_RECORD;
-  }
-}
-
-let cachedCustomRaw = "";
-let cachedCustomParsed: CustomTask[] = EMPTY_CUSTOM;
-
-function getCustomSnapshot(): CustomTask[] {
-  if (typeof window === "undefined") return EMPTY_CUSTOM;
-  try {
-    const raw = localStorage.getItem(CUSTOM_TASKS_KEY) || "[]";
-    if (raw !== cachedCustomRaw) {
-      cachedCustomRaw = raw;
-      cachedCustomParsed = JSON.parse(raw);
-    }
-    return cachedCustomParsed;
-  } catch {
-    return EMPTY_CUSTOM;
-  }
-}
-
-const listeners = new Set<() => void>();
-function subscribeStore(callback: () => void) {
-  listeners.add(callback);
-  const onStorage = () => callback();
-  window.addEventListener("storage", onStorage);
-  return () => {
-    listeners.delete(callback);
-    window.removeEventListener("storage", onStorage);
-  };
-}
-
-function notifyStore() {
-  listeners.forEach((l) => l());
-}
+const STORAGE_KEY = "compass_cartage_checklist_state_v2";
 
 export default function MovingChecklist() {
-  const completedTasks = useSyncExternalStore(
-    subscribeStore,
-    getTasksSnapshot,
-    () => EMPTY_RECORD
-  );
-
-  const customTasks = useSyncExternalStore(
-    subscribeStore,
-    getCustomSnapshot,
-    () => EMPTY_CUSTOM
-  );
-
+  const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({});
+  const [customTasks, setCustomTasks] = useState<ChecklistTask[]>([]);
   const [expandedMilestones, setExpandedMilestones] = useState<Record<string, boolean>>({
     "8-weeks": true,
     "4-weeks": true,
     "2-weeks": true,
     "1-week": true,
-    "move-day": true,
+    "moving-day": true,
     "post-move": true,
   });
 
@@ -112,140 +48,159 @@ export default function MovingChecklist() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "completed">("all");
   const [copied, setCopied] = useState(false);
-
-  // New Custom Task input state
-  const [newCustomText, setNewCustomText] = useState("");
-  const [newCustomMilestone, setNewCustomMilestone] = useState("8-weeks");
-  const [newCustomCategory, setNewCustomCategory] = useState("Custom");
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // Storage mutators
-  const updateCompletedTasks = (next: Record<string, boolean>) => {
+  // Custom task form state
+  const [newCustomText, setNewCustomText] = useState("");
+  const [newCustomMilestone, setNewCustomMilestone] = useState("8-weeks");
+  const [newCustomCategory, setNewCustomCategory] = useState("Personal");
+
+  // Load persisted state from localStorage on mount
+  useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {}
-    notifyStore();
-  };
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.completed) setCompletedTasks(parsed.completed);
+        if (parsed.custom) setCustomTasks(parsed.custom);
+      }
+    } catch {
+      // Ignore local storage parse errors
+    }
+  }, []);
 
-  const updateCustomTasks = (next: CustomTask[]) => {
+  // Persist state to localStorage on update
+  useEffect(() => {
     try {
-      localStorage.setItem(CUSTOM_TASKS_KEY, JSON.stringify(next));
-    } catch {}
-    notifyStore();
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          completed: completedTasks,
+          custom: customTasks,
+        })
+      );
+    } catch {
+      // Ignore local storage write errors
+    }
+  }, [completedTasks, customTasks]);
+
+  // Combine default checklist milestones with user custom tasks
+  const combinedMilestones: ChecklistMilestone[] = RELOCATION_CHECKLIST.map((milestone) => {
+    const customForMilestone = customTasks.filter((t) => t.milestoneId === milestone.id);
+    return {
+      ...milestone,
+      tasks: [...milestone.tasks, ...customForMilestone],
+    };
+  });
+
+  // Calculate global progress
+  const allTasks = combinedMilestones.flatMap((m) => m.tasks);
+  const totalCount = allTasks.length;
+  const completedCount = allTasks.filter((t) => completedTasks[t.id]).length;
+  const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+  // Toggle individual task status
+  const toggleTask = (taskId: string) => {
+    setCompletedTasks((prev) => ({
+      ...prev,
+      [taskId]: !prev[taskId],
+    }));
   };
 
-  const toggleTask = (id: string) => {
-    const next = { ...completedTasks, [id]: !completedTasks[id] };
-    updateCompletedTasks(next);
-  };
-
+  // Toggle milestone accordion expansion
   const toggleMilestone = (id: string) => {
-    setExpandedMilestones((prev) => ({ ...prev, [id]: !prev[id] }));
+    setExpandedMilestones((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
-  const markMilestoneAll = (milestoneId: string, value: boolean) => {
+  // Mark all tasks in a specific milestone
+  const markMilestoneAll = (milestoneId: string, markDone: boolean) => {
     const milestone = combinedMilestones.find((m) => m.id === milestoneId);
     if (!milestone) return;
-    const next = { ...completedTasks };
-    milestone.tasks.forEach((t) => {
-      next[t.id] = value;
+
+    setCompletedTasks((prev) => {
+      const next = { ...prev };
+      milestone.tasks.forEach((t) => {
+        next[t.id] = markDone;
+      });
+      return next;
     });
-    updateCompletedTasks(next);
   };
 
+  // Reset all tasks
   const resetAll = () => {
-    if (window.confirm("Are you sure you want to reset all checked checklist items?")) {
-      updateCompletedTasks({});
+    if (window.confirm("Reset all completed tasks and start fresh?")) {
+      setCompletedTasks({});
     }
   };
 
+  // Add custom user task
   const addCustomTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCustomText.trim()) return;
-    const newTask: CustomTask = {
-      id: `custom-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      milestoneId: newCustomMilestone,
+
+    const newTask: ChecklistTask = {
+      id: `custom-${Date.now()}`,
       text: newCustomText.trim(),
       category: newCustomCategory.trim() || "Custom",
+      milestoneId: newCustomMilestone,
     };
-    updateCustomTasks([...customTasks, newTask]);
+
+    setCustomTasks((prev) => [...prev, newTask]);
     setNewCustomText("");
     setShowAddModal(false);
+
+    // Expand destination milestone
+    setExpandedMilestones((prev) => ({ ...prev, [newCustomMilestone]: true }));
   };
 
+  // Remove custom task
   const removeCustomTask = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const nextCustom = customTasks.filter((t) => t.id !== id);
-    updateCustomTasks(nextCustom);
-    const nextCompleted = { ...completedTasks };
-    delete nextCompleted[id];
-    updateCompletedTasks(nextCompleted);
+    setCustomTasks((prev) => prev.filter((t) => t.id !== id));
+    setCompletedTasks((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   };
 
-  // Combine default milestone tasks with custom user tasks
-  const combinedMilestones = RELOCATION_CHECKLIST.map((milestone) => {
-    const customsForMilestone = customTasks.filter((c) => c.milestoneId === milestone.id);
-    return {
-      ...milestone,
-      tasks: [...milestone.tasks, ...customsForMilestone],
-    };
-  });
+  // Extract all categories for filtering
+  const allCategories = ["All", ...Array.from(new Set(allTasks.map((t) => t.category)))];
 
-  // Extract all categories dynamically
-  const allCategories = (() => {
-    const cats = new Set<string>();
-    cats.add("All");
-    combinedMilestones.forEach((m) => {
-      m.tasks.forEach((t) => cats.add(t.category));
-    });
-    return Array.from(cats);
-  })();
-
-  // Total statistics
-  let totalCount = 0;
-  let completedCount = 0;
-  combinedMilestones.forEach((m) => {
-    m.tasks.forEach((t) => {
-      totalCount++;
-      if (completedTasks[t.id]) completedCount++;
-    });
-  });
-  const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
-  // Filtered milestones per search, category, and status
+  // Filter tasks based on search, category, and completion status
   const filteredMilestones = combinedMilestones
     .map((milestone) => {
-      const filteredTasks = milestone.tasks.filter((t) => {
+      const tasks = milestone.tasks.filter((task) => {
         const matchesSearch =
-          searchQuery.trim() === "" ||
-          t.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          t.category.toLowerCase().includes(searchQuery.toLowerCase());
-
-        const matchesCategory = activeCategory === "All" || t.category === activeCategory;
-
-        const isChecked = Boolean(completedTasks[t.id]);
+          task.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          task.category.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = activeCategory === "All" || task.category === activeCategory;
+        const isDone = Boolean(completedTasks[task.id]);
         const matchesStatus =
           statusFilter === "all" ||
-          (statusFilter === "completed" && isChecked) ||
-          (statusFilter === "pending" && !isChecked);
+          (statusFilter === "pending" && !isDone) ||
+          (statusFilter === "completed" && isDone);
 
         return matchesSearch && matchesCategory && matchesStatus;
       });
 
-      return {
-        ...milestone,
-        tasks: filteredTasks,
-      };
+      return { ...milestone, tasks };
     })
     .filter((m) => m.tasks.length > 0 || searchQuery === "");
 
+  // Copy checklist markdown summary
   const handleCopy = () => {
-    let text = `# Compass Cartage Moving Checklist (${progressPercent}% Ready)\n\n`;
+    let text = `# Compass Cartage Moving Checklist\n`;
+    text += `Readiness Progress: ${completedCount}/${totalCount} (${progressPercent}%)\n\n`;
+
     combinedMilestones.forEach((m) => {
       text += `## ${m.timeframe} - ${m.title}\n`;
       m.tasks.forEach((t) => {
-        const status = completedTasks[t.id] ? "[x]" : "[ ]";
-        text += `${status} [${t.category}] ${t.text}\n`;
+        const check = completedTasks[t.id] ? "[x]" : "[ ]";
+        text += `${check} ${t.text} (${t.category})\n`;
       });
       text += "\n";
     });
@@ -260,12 +215,12 @@ export default function MovingChecklist() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
-      {/* Top Header Bar - Permanent Dark Surface */}
-      <div className="bg-navy-deep dark:bg-[#121212] px-6 py-6 text-white md:px-10 border-b border-hairline dark:border-white/10">
+    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden dark:border-white/10 dark:bg-[#0f172a]">
+      {/* Top Header Bar */}
+      <div className="bg-navy-deep px-6 py-6 text-white md:px-10 border-b border-hairline dark:bg-[#070c14] dark:border-white/10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3.5">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-navy/20 text-gold-soft dark:bg-[#00a3e0]/20 dark:text-[#00a3e0]">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xs bg-gold/15 text-gold">
               <Calendar size={24} />
             </div>
             <div>
@@ -273,11 +228,11 @@ export default function MovingChecklist() {
                 <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
                   Interactive Moving Checklist
                 </h2>
-                <span className="hidden rounded-xs bg-gold-soft/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold-soft dark:bg-[#00a3e0]/20 dark:text-[#38bdf8] sm:inline-block">
+                <span className="hidden rounded-xs bg-gold/20 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-gold-soft sm:inline-block">
                   Live Planner
                 </span>
               </div>
-              <p className="text-xs text-white/80 dark:text-gray-300">
+              <p className="text-xs text-white/80 dark:text-gray-300 font-normal">
                 8-week step-by-step relocation countdown with custom tasks and offline memory.
               </p>
             </div>
@@ -286,7 +241,7 @@ export default function MovingChecklist() {
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setShowAddModal(!showAddModal)}
-              className="inline-flex items-center gap-1.5 rounded-sm bg-gold-soft px-3 py-1.5 text-xs font-semibold text-navy-deep transition-all hover:bg-white dark:bg-[#00a3e0] dark:text-[#092634] dark:hover:bg-[#38bdf8]"
+              className="inline-flex items-center gap-1.5 rounded-xs bg-gold px-3.5 py-2 text-xs font-bold text-navy-deep transition-all hover:bg-gold-soft"
             >
               <Plus size={14} />
               <span>Add Custom Task</span>
@@ -294,7 +249,7 @@ export default function MovingChecklist() {
 
             <button
               onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-white/20"
+              className="inline-flex items-center gap-1.5 rounded-xs border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20"
               title="Copy checklist markdown to clipboard"
             >
               {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -303,7 +258,7 @@ export default function MovingChecklist() {
 
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-white/20"
+              className="inline-flex items-center gap-1.5 rounded-xs border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20"
             >
               <Download size={14} />
               <span>Print</span>
@@ -312,7 +267,7 @@ export default function MovingChecklist() {
             {completedCount > 0 && (
               <button
                 onClick={resetAll}
-                className="inline-flex items-center gap-1 text-xs text-white/60 hover:text-gold-soft dark:hover:text-[#38bdf8] transition-colors ml-1"
+                className="inline-flex items-center gap-1 text-xs text-white/60 hover:text-gold-soft transition-colors ml-1"
                 title="Reset completed tasks"
               >
                 <RotateCcw size={13} />
@@ -333,11 +288,11 @@ export default function MovingChecklist() {
                 </span>
               )}
             </div>
-            <span className="font-display font-semibold text-gold">
+            <span className="font-mono font-bold text-gold">
               {completedCount} of {totalCount} Completed ({progressPercent}%)
             </span>
           </div>
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
             <motion.div
               className="h-full bg-gradient-to-r from-gold-soft to-gold"
               initial={{ width: 0 }}
@@ -349,7 +304,7 @@ export default function MovingChecklist() {
       </div>
 
       {/* Interactive Controls & Filters */}
-      <div className="border-b border-hairline bg-paper p-4 md:px-8 space-y-4">
+      <div className="border-b border-hairline bg-paper p-4 md:px-8 space-y-4 dark:border-white/10 dark:bg-[#070c14]">
         {/* Add Custom Task Drawer */}
         <AnimatePresence>
           {showAddModal && (
@@ -358,16 +313,16 @@ export default function MovingChecklist() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               onSubmit={addCustomTask}
-              className="overflow-hidden rounded-sm border border-gold/40 bg-gold/5 p-4 space-y-3"
+              className="overflow-hidden rounded-xs border border-gold/40 bg-gold/5 p-4 space-y-3 dark:bg-[#0f172a]"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-navy-deep uppercase tracking-wider">
+                <span className="font-mono text-xs font-bold text-navy-deep uppercase tracking-wider dark:text-white">
                   Add Personal Moving Task
                 </span>
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="text-xs text-slate hover:text-navy-deep"
+                  className="text-xs text-slate hover:text-navy-deep dark:text-gray-400 dark:hover:text-white"
                 >
                   Cancel
                 </button>
@@ -379,7 +334,7 @@ export default function MovingChecklist() {
                   placeholder="Task description (e.g. Return condo keys)..."
                   value={newCustomText}
                   onChange={(e) => setNewCustomText(e.target.value)}
-                  className="sm:col-span-2 rounded-xs border border-hairline bg-paper px-3 py-2 text-xs text-navy-deep focus:border-gold focus:outline-none"
+                  className="sm:col-span-2 rounded-xs border border-hairline bg-paper px-3 py-2 text-xs text-navy-deep focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#070c14] dark:text-white"
                   autoFocus
                 />
 
@@ -387,7 +342,7 @@ export default function MovingChecklist() {
                   <select
                     value={newCustomMilestone}
                     onChange={(e) => setNewCustomMilestone(e.target.value)}
-                    className="flex-1 rounded-xs border border-hairline bg-paper px-3 py-2 text-xs text-navy-deep focus:border-gold focus:outline-none"
+                    className="flex-1 rounded-xs border border-hairline bg-paper px-3 py-2 text-xs text-navy-deep focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#070c14] dark:text-white"
                   >
                     {RELOCATION_CHECKLIST.map((m) => (
                       <option key={m.id} value={m.id}>
@@ -401,7 +356,7 @@ export default function MovingChecklist() {
                     placeholder="Category"
                     value={newCustomCategory}
                     onChange={(e) => setNewCustomCategory(e.target.value)}
-                    className="w-24 rounded-xs border border-hairline bg-paper px-2 py-2 text-xs text-navy-deep focus:border-gold focus:outline-none"
+                    className="w-24 rounded-xs border border-hairline bg-paper px-2 py-2 text-xs text-navy-deep focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#070c14] dark:text-white"
                   />
                 </div>
               </div>
@@ -409,7 +364,7 @@ export default function MovingChecklist() {
               <div className="flex justify-end gap-2">
                 <button
                   type="submit"
-                  className="rounded-xs bg-gold px-4 py-1.5 text-xs font-semibold text-navy-deep hover:bg-gold-soft"
+                  className="rounded-xs bg-gold px-4 py-1.5 text-xs font-bold text-navy-deep hover:bg-gold-soft"
                 >
                   Save Task
                 </button>
@@ -421,21 +376,23 @@ export default function MovingChecklist() {
         {/* Search and Status Segments */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative flex-1 max-w-md">
-            <Search size={15} className="absolute left-3 top-2.5 text-slate-light" />
+            <Search size={15} className="absolute left-3 top-2.5 text-slate-light dark:text-gray-400" />
             <input
               type="text"
               placeholder="Search checklist tasks or categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-sm border border-hairline bg-paper-muted pl-9 pr-3 py-2 text-xs text-navy-deep placeholder:text-slate-light focus:border-gold focus:bg-paper focus:outline-none"
+              className="w-full rounded-xs border border-hairline bg-paper-muted pl-9 pr-3 py-2 text-xs text-navy-deep placeholder:text-slate-light focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-400"
             />
           </div>
 
-          <div className="flex items-center gap-1.5 rounded-sm border border-hairline bg-paper-muted p-1 text-xs">
+          <div className="flex items-center gap-1.5 rounded-xs border border-hairline bg-paper-muted p-1 text-xs dark:border-white/10 dark:bg-[#0f172a]">
             <button
               onClick={() => setStatusFilter("all")}
               className={`rounded-xs px-2.5 py-1 font-medium transition-colors ${
-                statusFilter === "all" ? "bg-navy-deep text-paper shadow-xs" : "text-slate hover:text-navy-deep"
+                statusFilter === "all"
+                  ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                  : "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-white"
               }`}
             >
               All ({totalCount})
@@ -443,7 +400,9 @@ export default function MovingChecklist() {
             <button
               onClick={() => setStatusFilter("pending")}
               className={`rounded-xs px-2.5 py-1 font-medium transition-colors ${
-                statusFilter === "pending" ? "bg-navy-deep text-paper shadow-xs" : "text-slate hover:text-navy-deep"
+                statusFilter === "pending"
+                  ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                  : "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-white"
               }`}
             >
               Pending ({totalCount - completedCount})
@@ -451,7 +410,9 @@ export default function MovingChecklist() {
             <button
               onClick={() => setStatusFilter("completed")}
               className={`rounded-xs px-2.5 py-1 font-medium transition-colors ${
-                statusFilter === "completed" ? "bg-navy-deep text-paper shadow-xs" : "text-slate hover:text-navy-deep"
+                statusFilter === "completed"
+                  ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                  : "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-white"
               }`}
             >
               Done ({completedCount})
@@ -468,8 +429,8 @@ export default function MovingChecklist() {
               onClick={() => setActiveCategory(cat)}
               className={`shrink-0 rounded-xs px-2.5 py-1 font-medium transition-colors ${
                 activeCategory === cat
-                  ? "bg-gold text-navy-deep font-semibold shadow-xs"
-                  : "bg-paper-muted text-slate hover:bg-paper hover:text-navy-deep border border-hairline"
+                  ? "bg-gold text-navy-deep font-bold shadow-xs"
+                  : "bg-paper-muted text-slate hover:bg-paper hover:text-navy-deep border border-hairline dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-300 dark:hover:bg-[#070c14] dark:hover:text-gold"
               }`}
             >
               {cat}
@@ -481,9 +442,9 @@ export default function MovingChecklist() {
       {/* Main Checklist Body */}
       <div className="p-6 md:p-10 space-y-6">
         {filteredMilestones.length === 0 ? (
-          <div className="rounded-sm border border-hairline bg-paper p-8 text-center">
-            <p className="text-sm font-medium text-navy-deep">No matching tasks found.</p>
-            <p className="mt-1 text-xs text-slate">Try clearing your search query or category filters.</p>
+          <div className="rounded-xs border border-hairline bg-paper p-8 text-center dark:border-white/10 dark:bg-[#070c14]">
+            <p className="text-sm font-medium text-navy-deep dark:text-white">No matching tasks found.</p>
+            <p className="mt-1 text-xs text-slate dark:text-gray-400">Try clearing your search query or category filters.</p>
             <button
               onClick={() => {
                 setSearchQuery("");
@@ -505,34 +466,34 @@ export default function MovingChecklist() {
             return (
               <div
                 key={milestone.id}
-                className="rounded-sm border border-hairline bg-paper/60 overflow-hidden shadow-2xs transition-all"
+                className="rounded-xs border border-hairline bg-paper/60 overflow-hidden shadow-2xs transition-all dark:border-white/10 dark:bg-[#070c14]"
               >
                 {/* Milestone Accordion Header */}
                 <div
                   onClick={() => toggleMilestone(milestone.id)}
-                  className="flex cursor-pointer items-center justify-between bg-paper p-4 md:px-6 transition-colors hover:bg-paper-muted"
+                  className="flex cursor-pointer items-center justify-between bg-paper p-4 md:px-6 transition-colors hover:bg-paper-muted dark:bg-[#070c14] dark:hover:bg-[#0f172a]"
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
                         isAllDone
                           ? "bg-emerald-500 text-white"
-                          : "bg-navy-deep text-gold"
+                          : "bg-navy-deep text-gold dark:bg-gold/20 dark:text-gold"
                       }`}
                     >
                       {isAllDone ? <CheckCircle2 size={16} /> : <Clock size={16} />}
                     </div>
 
                     <div>
-                      <span className="eyebrow text-[10px] text-gold">{milestone.timeframe}</span>
-                      <h3 className="font-display text-base font-semibold text-navy-deep">
+                      <span className="font-mono text-[10px] font-bold text-gold uppercase tracking-wider">{milestone.timeframe}</span>
+                      <h3 className="font-display text-base font-semibold text-navy-deep dark:text-white">
                         {milestone.title}
                       </h3>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-semibold text-slate">
+                    <span className="font-mono text-xs font-semibold text-slate dark:text-gray-300">
                       {milestoneCompleted}/{milestoneTasks.length} Done
                     </span>
 
@@ -550,7 +511,7 @@ export default function MovingChecklist() {
                         <button
                           type="button"
                           onClick={() => markMilestoneAll(milestone.id, false)}
-                          className="text-[11px] font-medium text-slate hover:underline"
+                          className="text-[11px] font-medium text-slate hover:underline dark:text-gray-400"
                         >
                           Uncheck
                         </button>
@@ -558,9 +519,9 @@ export default function MovingChecklist() {
                     </div>
 
                     {isExpanded ? (
-                      <ChevronUp size={18} className="text-slate ml-1" />
+                      <ChevronUp size={18} className="text-slate dark:text-gray-400 ml-1" />
                     ) : (
-                      <ChevronDown size={18} className="text-slate ml-1" />
+                      <ChevronDown size={18} className="text-slate dark:text-gray-400 ml-1" />
                     )}
                   </div>
                 </div>
@@ -573,7 +534,7 @@ export default function MovingChecklist() {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-hairline p-4 md:p-6 space-y-2.5 bg-paper-muted/50"
+                      className="border-t border-hairline p-4 md:p-6 space-y-2.5 bg-paper-muted/50 dark:border-white/10 dark:bg-[#0f172a]/70"
                     >
                       {milestoneTasks.map((task) => {
                         const isChecked = Boolean(completedTasks[task.id]);
@@ -583,17 +544,17 @@ export default function MovingChecklist() {
                           <div
                             key={task.id}
                             onClick={() => toggleTask(task.id)}
-                            className={`group flex cursor-pointer items-start gap-3.5 rounded-sm border p-3 transition-all ${
+                            className={`group flex cursor-pointer items-start gap-3.5 rounded-xs border p-3 transition-all ${
                               isChecked
-                                ? "border-emerald-500/30 bg-emerald-500/5 text-slate-light dark:border-emerald-500/20"
-                                : "border-hairline bg-paper hover:border-gold/60"
+                                ? "border-emerald-500/30 bg-emerald-500/5 text-slate-light dark:border-emerald-500/20 dark:bg-emerald-950/10"
+                                : "border-hairline bg-paper hover:border-gold/60 dark:border-white/10 dark:bg-[#070c14] dark:hover:border-gold/60"
                             }`}
                           >
                             <div className="mt-0.5 shrink-0 transition-transform group-hover:scale-110">
                               {isChecked ? (
                                 <CheckSquare size={18} className="text-emerald-500" />
                               ) : (
-                                <Square size={18} className="text-slate-light group-hover:text-gold" />
+                                <Square size={18} className="text-slate-light group-hover:text-gold dark:text-gray-500" />
                               )}
                             </div>
 
@@ -601,8 +562,8 @@ export default function MovingChecklist() {
                               <p
                                 className={`text-sm transition-all ${
                                   isChecked
-                                    ? "line-through text-slate-light font-normal"
-                                    : "text-navy-deep font-medium"
+                                    ? "line-through text-slate-light font-normal dark:text-gray-500"
+                                    : "text-navy-deep font-medium dark:text-white"
                                 }`}
                               >
                                 {task.text}
@@ -610,7 +571,7 @@ export default function MovingChecklist() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                              <span className="shrink-0 rounded-xs bg-paper-muted px-2 py-0.5 text-[10px] font-semibold text-slate border border-hairline">
+                              <span className="shrink-0 rounded-xs bg-paper-muted px-2 py-0.5 text-[10px] font-semibold text-slate border border-hairline dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-300">
                                 {task.category}
                               </span>
 
@@ -618,7 +579,7 @@ export default function MovingChecklist() {
                                 <button
                                   type="button"
                                   onClick={(e) => removeCustomTask(task.id, e)}
-                                  className="text-slate-light hover:text-red-500 p-0.5 transition-colors"
+                                  className="text-slate-light hover:text-red-500 p-0.5 transition-colors dark:hover:text-red-400"
                                   title="Delete custom task"
                                 >
                                   <Trash2 size={13} />

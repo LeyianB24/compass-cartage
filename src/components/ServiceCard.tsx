@@ -41,7 +41,7 @@ export default function ServiceCard({
         viewport={{ once: true, margin: "-60px" }}
         transition={{ delay: (index % 3) * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         whileHover={{ y: -4 }}
-        className="group relative isolate h-full overflow-hidden rounded-card border border-hairline bg-paper-muted p-7 shadow-xs transition-all duration-300 hover:border-navy hover:shadow-xl dark:border-white/10 dark:bg-[#1e1e1e] dark:hover:border-[#00a3e0]"
+        className="group relative isolate h-full overflow-hidden rounded-card border border-hairline bg-paper-muted p-7 shadow-xs transition-all duration-300 hover:border-gold hover:shadow-xl dark:border-white/10 dark:bg-[#0f172a] dark:hover:border-gold"
       >
         {/* Hover-reveal photograph */}
         <div className="pointer-events-none absolute inset-0 -z-[1] overflow-hidden">
@@ -52,27 +52,27 @@ export default function ServiceCard({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover opacity-0 transition-all duration-500 ease-out group-hover:scale-105 group-hover:opacity-100"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#071f36]/90 via-[#071f36]/75 to-[#071f36]/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-[#121212]/95 dark:via-[#121212]/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#070c14]/95 via-[#070c14]/85 to-[#070c14]/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         </div>
 
         <div className="relative flex h-full flex-col justify-between transition-colors duration-300 group-hover:text-white">
           <div>
-            <span className="font-display text-sm font-bold text-navy group-hover:text-gold-soft dark:text-[#00a3e0]">
+            <span className="font-mono text-sm font-bold text-gold group-hover:text-gold-soft">
               {String(index + 1).padStart(2, "0")}
             </span>
             <h3 className="mt-3 font-display text-xl font-semibold text-navy-deep transition-colors duration-300 group-hover:text-white dark:text-white">
               {title}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-slate transition-colors duration-300 group-hover:text-white/85 dark:text-slate">
+            <p className="mt-3 text-sm leading-relaxed text-slate transition-colors duration-300 group-hover:text-white/85 dark:text-gray-300">
               {description}
             </p>
           </div>
 
           <div className="mt-6 flex items-center justify-between border-t border-hairline/60 pt-4 dark:border-white/10 group-hover:border-white/20">
-            <span className="text-xs font-semibold text-navy group-hover:text-gold-soft dark:text-[#38bdf8]">
+            <span className="text-xs font-semibold text-gold group-hover:text-gold-soft">
               View Details & Rates
             </span>
-            <ArrowRight size={14} className="text-navy transition-transform group-hover:translate-x-1 group-hover:text-gold-soft dark:text-[#38bdf8]" />
+            <ArrowRight size={14} className="text-gold transition-transform group-hover:translate-x-1 group-hover:text-gold-soft" />
           </div>
         </div>
       </motion.div>

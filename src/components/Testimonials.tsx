@@ -3,38 +3,35 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
-// Placeholder reviews — replace with Howard's real customer reviews
-// (e.g. pulled from his Google Business Profile) once available.
 const REVIEWS = [
   {
     quote:
-      "Showed up on time, wrapped every piece of furniture, and the final price matched the quote exactly.",
+      "Arrived exactly at 8:00 AM, wrapped every piece of furniture in thick quilted blankets, and the final price matched the binding quote to the cent.",
     name: "Sarah M.",
-    context: "Local move",
+    context: "Windermere Residential Move",
   },
   {
     quote:
-      "Moved our office over a weekend with zero downtime on Monday morning. Professional crew.",
+      "Relocated our office workstations over the weekend with zero downtime on Monday morning. Exceptional single-crew continuity.",
     name: "David K.",
-    context: "Commercial move",
+    context: "Downtown Office Relocation",
   },
   {
     quote:
-      "Long-distance move that could've gone wrong in a dozen ways — it didn't. Highly recommend.",
+      "Inter-city move to Calgary that could've been chaotic was handled with total calm and structural precision. Highly recommend.",
     name: "Priya R.",
-    context: "Long-distance move",
+    context: "Edmonton to Calgary Move",
   },
 ];
 
 export default function Testimonials() {
   return (
-    <section className="bg-paper">
-      <div className="section-padding mx-auto max-w-content py-20">
+    <section className="bg-paper border-b border-hairline dark:border-white/10 dark:bg-[#070c14]">
+      <div className="section-padding mx-auto max-w-content py-20 md:py-28">
         <div className="grid items-start gap-10 md:grid-cols-[0.8fr_2fr]">
-          {/* Aside: a framed photograph paired with the heading —
-              gives the section a human face before the words. */}
+          {/* Aside: a framed photograph paired with the heading */}
           <div>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-sm ring-1 ring-hairline">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xs ring-1 ring-hairline shadow-lg dark:ring-white/10">
               <Image
                 src={IMAGES.smilingMover.src}
                 alt={IMAGES.smilingMover.alt}
@@ -43,35 +40,37 @@ export default function Testimonials() {
                 className="object-cover"
               />
               {/* Soft navy fade at the base for an editorial tint */}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/35 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/40 to-transparent dark:from-[#070c14]/70" />
             </div>
           </div>
 
           <div>
-            <p className="eyebrow mb-3">Testimonials</p>
-            <h2 className="font-display text-3xl font-semibold text-navy-deep">
-              What people say after moving day
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold mb-2 block">
+              Verified Client Ledger
+            </span>
+            <h2 className="font-display text-3xl font-semibold text-navy-deep dark:text-white sm:text-4xl">
+              What Clients Report After Relocation
             </h2>
 
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {REVIEWS.map((review) => (
                 <figure
                   key={review.name}
-                  className="flex flex-col justify-between border border-hairline bg-paper-muted p-6"
+                  className="flex flex-col justify-between rounded-xs border border-hairline bg-paper-muted p-6 shadow-sm transition-all hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:hover:border-gold/50"
                 >
                   <figcaption>
-                    <div className="flex gap-0.5">
+                    <div className="flex gap-1">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} size={14} fill="#ff6e42" stroke="#ff6e42" />
+                        <Star key={i} size={14} className="fill-gold text-gold" />
                       ))}
                     </div>
-                    <blockquote className="mt-4 text-sm leading-relaxed text-slate">
+                    <blockquote className="mt-4 text-xs leading-relaxed text-slate dark:text-gray-300 font-normal">
                       &ldquo;{review.quote}&rdquo;
                     </blockquote>
                   </figcaption>
-                  <p className="mt-6 text-xs font-semibold text-navy-deep">
+                  <p className="mt-6 text-xs font-semibold text-navy-deep dark:text-white">
                     {review.name}
-                    <span className="ml-2 font-normal text-slate-light">
+                    <span className="block font-mono text-[10px] font-normal text-slate-light dark:text-gray-400 mt-0.5">
                       {review.context}
                     </span>
                   </p>

@@ -5,50 +5,54 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* --------------------------------------------------------------------------
-   Tailwind v4 Theme Configuration — Compass Cartage Design System
-   Light: Dark Teal (#004B87), Deep Navy (#071F36), Light Beige (#C2B280), Soft Salmon (#EABB81), Light Gray (#F8F9FA)
-   Dark: Very Dark Gray (#121212), Dark Charcoal (#1E1E1E), Electric Sky Blue (#00A3E0)
+   Tailwind v4 Theme Configuration — Compass Cartage Master Design System
+   "Obsidian & Brushed Brass" Architecture:
+   Light: Obsidian Navy (#0A131F), Deep Obsidian (#070C14), Brushed Brass (#C5A880), Luminous Gold (#D4B896), Chalk White (#F8F9FA)
+   Dark: Deep Obsidian (#070C14), Architectural Slate (#0F172A), Brushed Brass (#C5A880), Sky Titanium (#38BDF8)
    -------------------------------------------------------------------------- */
 @theme {
-  --color-navy: #004b87;        /* Dark Teal Blue — Primary brand color */
-  --color-navy-deep: #071f36;   /* Deep Teal Navy — Dark containers & brand accents */
-  --color-gold: #004b87;        /* Primary CTA color in light mode */
-  --color-gold-soft: #c2b280;   /* Light Beige / Tan — warm regional accent */
-  --color-salmon: #eabb81;      /* Soft Salmon accent */
-  --color-paper: #f8f9fa;       /* Very Light Gray page backdrop */
-  --color-paper-muted: #ffffff; /* Crisp white card surfaces in light mode */
-  --color-slate: #4a5568;       /* Body copy neutral */
-  --color-slate-light: #8792a2; /* Secondary text */
-  --color-hairline: #e2e8f0;    /* Clean neutral borders */
+  --color-navy: #0a131f;        /* Obsidian Navy — Uncompromising authority */
+  --color-navy-deep: #070c14;   /* Deep Obsidian Bedrock — Dark containers & brand accents */
+  --color-gold: #c5a880;        /* Brushed Brass — Nautical Compass precision */
+  --color-gold-soft: #d4b896;   /* Luminous Gold / Warm regional metallic accent */
+  --color-salmon: #b48c5e;      /* Deep Brass warm tone */
+  --color-paper: #f8f9fa;       /* Chalk Paper gallery backdrop */
+  --color-paper-muted: #ffffff; /* Crisp architectural card surfaces */
+  --color-slate: #334155;       /* Graphite Steel body copy */
+  --color-slate-light: #64748b; /* Muted Titanium secondary text */
+  --color-hairline: #e2e8f0;    /* 1px Architectural drafting borders */
 
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-fraunces), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-default: 6px;
-  --radius-card: 12px;
+  --radius-card: 10px;
 
   --max-width-content: 1280px;
 
-  /* Easing curves for deliberate UI transitions */
+  /* Weighted easing curves for industrial UI micro-interactions */
   --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* --------------------------------------------------------------------------
-   Dark mode token overrides — Sophisticated Dark Mode with Electric Sky Blue
+   Dark mode token overrides — Obsidian & Brushed Brass Command Architecture
    -------------------------------------------------------------------------- */
 .dark {
-  --color-paper: #121212;
-  --color-paper-muted: #1e1e1e;
-  --color-navy: #00a3e0;        /* Electric Sky Blue */
-  --color-gold: #00a3e0;        /* Bright Sky Blue CTA in dark mode */
-  --color-gold-soft: #38bdf8;   /* Lighter glowing sky blue */
-  --color-salmon: #ffb74d;      /* Warm amber glow */
-  --color-slate: #94a3b8;
-  --color-slate-light: #64748b;
-  --color-hairline: rgba(0, 163, 224, 0.22);
+  --color-paper: #070c14;       /* Deep Obsidian Canvas */
+  --color-paper-muted: #0f172a; /* Architectural Slate Surface */
+  --color-navy: #d4b896;        /* Luminous Gold Accent */
+  --color-navy-deep: #ffffff;   /* Crisp White Text / High Contrast */
+  --color-gold: #c5a880;        /* Brushed Brass */
+  --color-gold-soft: #d4b896;   /* Luminous Gold */
+  --color-salmon: #e0c097;      /* Soft Brass */
+  --color-slate: #94a3b8;       /* High-contrast cool body text */
+  --color-slate-light: #64748b; /* Titanium secondary */
+  --color-hairline: rgba(197, 168, 128, 0.2); /* 1px Brushed Brass gridline */
 }
 
 .dark {
@@ -88,10 +92,14 @@
     overflow-x: hidden;
   }
 
+  .dark body {
+    color: #f8f9fa;
+  }
+
   /* Custom Selection Highlight */
   ::selection {
     background-color: var(--color-gold);
-    color: var(--color-navy-deep);
+    color: #070c14;
   }
 
   /* Universal Custom Focus-Visible Indicator (Accessibility Focus Ring) */
@@ -107,6 +115,10 @@
     color: var(--color-navy-deep);
     letter-spacing: -0.015em;
     text-wrap: balance;
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #ffffff;
   }
 
   p {

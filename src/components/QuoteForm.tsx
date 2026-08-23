@@ -159,12 +159,12 @@ function QuoteFormContent() {
   }
 
   return (
-    <div className="rounded-card border border-hairline bg-paper-muted p-6 shadow-xl dark:border-white/10 dark:bg-[#1e1e1e] sm:p-8">
+    <div className="rounded-card border border-hairline bg-paper-muted p-6 shadow-xl dark:border-white/10 dark:bg-[#0f172a] sm:p-8">
       {/* Stepper Navigation Header */}
       <div className="mb-8 border-b border-hairline pb-5 dark:border-white/10">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-navy dark:text-[#00a3e0]">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
               Step {step} of 3
             </span>
             <h3 className="font-display text-xl font-semibold text-navy-deep dark:text-white">
@@ -180,12 +180,12 @@ function QuoteFormContent() {
                 key={s}
                 type="button"
                 onClick={() => setStep(s)}
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-all ${
+                className={`flex h-7 w-7 items-center justify-center rounded-xs font-mono text-xs font-bold transition-all ${
                   step === s
-                    ? "bg-navy text-white dark:bg-[#00a3e0] dark:text-[#092634]"
+                    ? "bg-navy-deep text-gold-soft font-bold dark:bg-gold dark:text-navy-deep"
                     : step > s
                     ? "bg-emerald-600/20 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400"
-                    : "bg-paper text-slate-light dark:bg-[#121212] dark:text-gray-500"
+                    : "bg-paper text-slate-light dark:bg-[#070c14] dark:text-gray-500"
                 }`}
               >
                 {s}
@@ -195,9 +195,9 @@ function QuoteFormContent() {
         </div>
 
         {/* Progress bar */}
-        <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-paper dark:bg-[#121212]">
+        <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-paper dark:bg-[#070c14]">
           <motion.div
-            className="h-full bg-navy dark:bg-[#00a3e0]"
+            className="h-full bg-gold"
             initial={{ width: "33%" }}
             animate={{ width: `${(step / 3) * 100}%` }}
             transition={{ duration: 0.3 }}
@@ -225,9 +225,9 @@ function QuoteFormContent() {
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-navy focus:ring-2 focus:ring-navy/20 dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
                   />
-                  <User size={15} className="absolute right-3 top-3 text-slate-light" />
+                  <User size={15} className="absolute right-3 top-3 text-slate-light dark:text-gray-500" />
                 </div>
               </div>
 
@@ -241,7 +241,7 @@ function QuoteFormContent() {
                   placeholder="(780) 555-0199"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="mt-1 w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-navy focus:ring-2 focus:ring-navy/20 dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                  className="mt-1 w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
                 />
               </div>
 
@@ -255,7 +255,7 @@ function QuoteFormContent() {
                   placeholder="john@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="mt-1 w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-navy focus:ring-2 focus:ring-navy/20 dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                  className="mt-1 w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
                 />
               </div>
 
@@ -267,7 +267,7 @@ function QuoteFormContent() {
                   type="date"
                   value={formData.moveDate}
                   onChange={(e) => setFormData({ ...formData, moveDate: e.target.value })}
-                  className="mt-1 w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all focus:border-navy focus:ring-2 focus:ring-navy/20 dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                  className="mt-1 w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
                 />
               </div>
             </div>
@@ -277,7 +277,7 @@ function QuoteFormContent() {
                 type="button"
                 onClick={() => setStep(2)}
                 disabled={!formData.name || !formData.phone || !formData.email}
-                className="flex items-center gap-2 rounded-sm bg-navy px-6 py-3 text-xs font-bold text-white transition-all hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-50 dark:bg-[#00a3e0] dark:text-[#092634] dark:hover:bg-[#38bdf8]"
+                className="flex items-center gap-2 rounded-xs bg-navy-deep px-6 py-3 text-xs font-bold text-gold-soft transition-all hover:bg-gold hover:text-navy-deep disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
                 <span>Continue to Locations</span>
                 <ArrowRight size={14} />
@@ -305,9 +305,9 @@ function QuoteFormContent() {
                     placeholder="e.g. 104 St NW, Edmonton, AB"
                     value={formData.pickupAddress}
                     onChange={(e) => setFormData({ ...formData, pickupAddress: e.target.value })}
-                    className="w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-navy dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
                   />
-                  <MapPin size={15} className="absolute right-3 top-3 text-slate-light" />
+                  <MapPin size={15} className="absolute right-3 top-3 text-slate-light dark:text-gray-500" />
                 </div>
               </div>
 
@@ -322,15 +322,15 @@ function QuoteFormContent() {
                     placeholder="e.g. St. Albert / Calgary / Red Deer"
                     value={formData.dropoffAddress}
                     onChange={(e) => setFormData({ ...formData, dropoffAddress: e.target.value })}
-                    className="w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-navy dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
                   />
-                  <MapPin size={15} className="absolute right-3 top-3 text-slate-light" />
+                  <MapPin size={15} className="absolute right-3 top-3 text-slate-light dark:text-gray-500" />
                 </div>
               </div>
             </div>
 
             {/* Access tags */}
-            <div className="rounded-card border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#121212]">
+            <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
               <p className="text-xs font-semibold text-navy-deep dark:text-gray-200">
                 Property Access Conditions (Select all that apply)
               </p>
@@ -338,10 +338,10 @@ function QuoteFormContent() {
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, hasStairs: !formData.hasStairs })}
-                  className={`rounded-sm border px-3 py-1.5 text-xs font-medium transition-all ${
+                  className={`rounded-xs border px-3 py-1.5 text-xs font-medium transition-all ${
                     formData.hasStairs
-                      ? "border-navy bg-navy/10 text-navy font-bold dark:border-[#00a3e0] dark:bg-[#00a3e0]/20 dark:text-[#00a3e0]"
-                      : "border-hairline bg-paper-muted text-slate dark:border-white/10 dark:bg-[#1e1e1e] dark:text-gray-400"
+                      ? "border-gold bg-gold/15 text-gold font-bold dark:border-gold dark:bg-gold/20 dark:text-gold"
+                      : "border-hairline bg-paper-muted text-slate dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-400"
                   }`}
                 >
                   {formData.hasStairs ? "✓ Stairs Involved" : "+ Has Stairs"}
@@ -350,10 +350,10 @@ function QuoteFormContent() {
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, hasElevator: !formData.hasElevator })}
-                  className={`rounded-sm border px-3 py-1.5 text-xs font-medium transition-all ${
+                  className={`rounded-xs border px-3 py-1.5 text-xs font-medium transition-all ${
                     formData.hasElevator
-                      ? "border-navy bg-navy/10 text-navy font-bold dark:border-[#00a3e0] dark:bg-[#00a3e0]/20 dark:text-[#00a3e0]"
-                      : "border-hairline bg-paper-muted text-slate dark:border-white/10 dark:bg-[#1e1e1e] dark:text-gray-400"
+                      ? "border-gold bg-gold/15 text-gold font-bold dark:border-gold dark:bg-gold/20 dark:text-gold"
+                      : "border-hairline bg-paper-muted text-slate dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-400"
                   }`}
                 >
                   {formData.hasElevator ? "✓ Elevator Access" : "+ Elevator Available"}
@@ -374,7 +374,7 @@ function QuoteFormContent() {
               <button
                 type="button"
                 onClick={() => setStep(3)}
-                className="flex items-center gap-2 rounded-sm bg-navy px-6 py-3 text-xs font-bold text-white transition-all hover:bg-navy-deep dark:bg-[#00a3e0] dark:text-[#092634] dark:hover:bg-[#38bdf8]"
+                className="flex items-center gap-2 rounded-xs bg-navy-deep px-6 py-3 text-xs font-bold text-gold-soft transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
                 <span>Continue to Scope</span>
                 <ArrowRight size={14} />
@@ -397,7 +397,7 @@ function QuoteFormContent() {
               <select
                 value={formData.moveSize}
                 onChange={(e) => setFormData({ ...formData, moveSize: e.target.value })}
-                className="mt-1 w-full rounded-sm border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all focus:border-navy dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                className="mt-1 w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-xs text-navy-deep outline-none transition-all focus:border-gold dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
               >
                 {MOVE_SIZES.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -419,17 +419,17 @@ function QuoteFormContent() {
                     <div
                       key={addon.id}
                       onClick={() => toggleAddon(addon.label)}
-                      className={`flex cursor-pointer items-start gap-2.5 rounded-sm border p-3 text-xs transition-all ${
+                      className={`flex cursor-pointer items-start gap-2.5 rounded-xs border p-3 text-xs transition-all ${
                         isChecked
-                          ? "border-navy bg-navy/5 text-navy-deep font-semibold dark:border-[#00a3e0] dark:bg-[#00a3e0]/15 dark:text-white"
-                          : "border-hairline bg-paper text-slate dark:border-white/10 dark:bg-[#121212] dark:text-gray-400"
+                          ? "border-gold bg-gold/10 text-navy-deep font-semibold dark:border-gold dark:bg-gold/15 dark:text-white"
+                          : "border-hairline bg-paper text-slate dark:border-white/10 dark:bg-[#070c14] dark:text-gray-400"
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={isChecked}
                         onChange={() => {}}
-                        className="mt-0.5 rounded text-navy focus:ring-navy"
+                        className="mt-0.5 rounded-xs accent-gold cursor-pointer"
                       />
                       <div>
                         <p className="font-semibold text-navy-deep dark:text-white">{addon.label}</p>
@@ -470,7 +470,7 @@ function QuoteFormContent() {
                 ))}
 
                 {photos.length < MAX_PHOTOS && (
-                  <label className="flex h-16 w-16 cursor-pointer flex-col items-center justify-center gap-1 rounded-xs border border-dashed border-hairline bg-paper text-slate-light transition-all hover:border-navy hover:text-navy dark:border-white/20 dark:bg-[#121212] dark:hover:border-[#00a3e0] dark:hover:text-[#00a3e0]">
+                  <label className="flex h-16 w-16 cursor-pointer flex-col items-center justify-center gap-1 rounded-xs border border-dashed border-hairline bg-paper text-slate-light transition-all hover:border-gold hover:text-gold dark:border-white/20 dark:bg-[#070c14] dark:hover:border-gold dark:hover:text-gold">
                     <ImagePlus size={16} />
                     <span className="text-[9px]">Add Photo</span>
                     <input
@@ -497,7 +497,7 @@ function QuoteFormContent() {
                 placeholder="List fragile items, piano, safe, specific preferred times, or storage instructions..."
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                className="mt-1 w-full rounded-sm border border-hairline bg-paper px-4 py-2 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-navy dark:border-white/15 dark:bg-[#121212] dark:text-white dark:focus:border-[#00a3e0]"
+                className="mt-1 w-full rounded-xs border border-hairline bg-paper px-4 py-2 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:focus:border-gold"
               />
             </div>
 
@@ -507,7 +507,7 @@ function QuoteFormContent() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center gap-2 rounded-xs border border-red-200 bg-red-50 p-3 text-xs text-red-700"
+                  className="flex items-center gap-2 rounded-xs border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400"
                 >
                   <AlertCircle size={15} className="shrink-0 text-red-500" />
                   <span>{errorMsg}</span>
@@ -528,7 +528,7 @@ function QuoteFormContent() {
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="flex items-center gap-2 rounded-sm bg-navy px-8 py-3.5 text-xs font-bold text-white shadow-lg transition-all hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[#00a3e0] dark:text-[#092634] dark:shadow-[0_0_20px_rgba(0,163,224,0.4)] dark:hover:bg-[#38bdf8]"
+                className="flex items-center gap-2 rounded-xs bg-navy-deep px-8 py-3.5 text-xs font-bold text-gold-soft shadow-lg transition-all hover:bg-gold hover:text-navy-deep disabled:cursor-not-allowed disabled:opacity-60 dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
                 {status === "submitting" ? (
                   <>

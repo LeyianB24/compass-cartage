@@ -8,10 +8,11 @@ import { X, ZoomIn } from "lucide-react";
 import { IMAGES, type ImageAsset } from "@/lib/images";
 
 type GalleryCategory = "All" | "Local Crew" | "Packing & Prep" | "Trucks & Transport" | "Specialty Items";
+type GalleryImage = ImageAsset & { category: GalleryCategory };
 
 export default function FilterableGallery() {
   const [activeTab, setActiveTab] = useState<GalleryCategory>("All");
-  const [selectedImage, setSelectedImage] = useState<ImageAsset | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   // Map gallery images to category tags for filtering
   const categorizedImages: Array<ImageAsset & { category: GalleryCategory }> = [
@@ -42,10 +43,10 @@ export default function FilterableGallery() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`rounded-sm px-5 py-2.5 text-xs font-semibold transition-all ${
+              className={`rounded-xs px-5 py-2.5 text-xs font-semibold transition-all ${
                 activeTab === tab
-                  ? "bg-gold text-navy-deep shadow-xs"
-                  : "border border-hairline bg-paper-muted text-slate hover:border-gold/50 hover:text-navy-deep"
+                  ? "bg-gold text-navy-deep font-bold shadow-xs"
+                  : "border border-hairline bg-paper-muted text-slate hover:border-gold hover:text-navy-deep dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-300 dark:hover:text-white dark:hover:border-gold"
               }`}
             >
               {tab}
@@ -66,7 +67,7 @@ export default function FilterableGallery() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, delay: idx * 0.04 }}
               onClick={() => setSelectedImage(img)}
-              className="group relative isolate aspect-[4/3] cursor-pointer overflow-hidden rounded-card border border-hairline bg-paper-muted shadow-2xs"
+              className="group relative isolate aspect-[4/3] cursor-pointer overflow-hidden rounded-card border border-hairline bg-paper-muted shadow-2xs dark:border-white/10 dark:bg-[#0f172a]"
             >
               <Image
                 src={img.src}
@@ -77,12 +78,12 @@ export default function FilterableGallery() {
               />
 
               {/* Legibility wash & zoom icon reveal on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 via-navy-deep/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col justify-between p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 via-navy-deep/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col justify-between p-6">
                 <div className="self-end rounded-full bg-white/20 p-2 text-white backdrop-blur">
                   <ZoomIn size={18} />
                 </div>
                 <div>
-                  <span className="eyebrow text-[10px] text-gold-soft dark:text-[#38bdf8]">{img.category}</span>
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">{img.category}</span>
                   <p className="mt-1 text-xs font-medium text-white line-clamp-2">{img.alt}</p>
                 </div>
               </div>
@@ -99,35 +100,37 @@ export default function FilterableGallery() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full overflow-hidden rounded-card bg-[#071f36] border border-white/20 shadow-2xl dark:bg-[#181818]"
+              className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-card border border-white/20 bg-navy-deep shadow-2xl"
             >
               <button
+                type="button"
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 rounded-full bg-black/60 p-2 text-white hover:bg-[#00a3e0] hover:text-navy-deep transition-colors"
+                className="absolute right-4 top-4 z-10 rounded-full bg-black/60 p-2 text-white transition-colors hover:bg-black/80"
                 aria-label="Close modal"
               >
                 <X size={20} />
               </button>
 
-              <div className="relative aspect-[16/10] w-full">
+              <div className="relative aspect-[16/10] w-full min-w-[320px] sm:min-w-[600px] md:min-w-[800px]">
                 <Image
                   src={selectedImage.src}
                   alt={selectedImage.alt}
                   fill
-                  sizes="90vw"
+                  sizes="(max-width: 1024px) 95vw, 1000px"
                   className="object-contain"
                 />
               </div>
 
-              <div className="p-6 bg-[#071f36] text-white border-t border-white/10 dark:bg-[#181818]">
-                <p className="text-sm text-white/85 font-medium">{selectedImage.alt}</p>
+              <div className="border-t border-white/10 bg-navy-deep/95 p-4 text-white">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">{selectedImage.category}</span>
+                <p className="mt-1 text-sm font-semibold">{selectedImage.alt}</p>
               </div>
             </motion.div>
           </motion.div>

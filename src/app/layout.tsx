@@ -1,6 +1,6 @@
 // src/app/layout.tsx
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,7 +8,7 @@ import StickyMobileNav from "@/components/StickyMobileNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { IMAGES } from "@/lib/images";
 
-// Optimize fonts using standard Next.js configuration
+// Optimize fonts for structural stability and high-end editorial clarity
 const fraunces = Fraunces({
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
@@ -16,16 +16,23 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const inter = Inter({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
   display: "swap",
 });
 
 // Configure responsive viewport behavior
 export const viewport: Viewport = {
-  themeColor: "#0A192F", // Adjust to match your primary brand color (e.g., navy-deep)
+  themeColor: "#0A131F", // Matches obsidian navy bedrock
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -108,9 +115,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${inter.variable} scroll-smooth`}
+      className={`${fraunces.variable} ${plusJakarta.variable} ${spaceMono.variable} scroll-smooth`}
     >
-      <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased selection:bg-gold selection:text-navy-deep">
+      <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased selection:bg-gold-soft selection:text-navy-deep">
         <ThemeProvider>
           {/* Accessibility Skip Link */}
           <a

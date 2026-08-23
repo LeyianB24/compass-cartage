@@ -5,7 +5,7 @@ import type { ServiceImageKey } from "./images";
 
 export const BUSINESS = {
   name: "Compass Cartage",
-  tagline: "Fast • Reliable • Affordable",
+  tagline: "Precision Relocation • White-Glove Care • Binding Estimates",
   owner: "Howard Langat",
   phone: "(587) 501-7519", // TEMPORARY — will change once office line is set up
   phoneHref: "tel:+15875017519",
@@ -212,14 +212,14 @@ export const SERVICES: Service[] = [
   },
 ];
 
-// Brand colors — matches website design tokens.
+// Brand colors — matches Obsidian & Brushed Brass design system.
 export const BRAND_COLORS = {
-  navy: "#004b87",
-  navyDeep: "#071f36",
-  gold: "#004b87",
-  goldSoft: "#c2b280",
-  skyBlue: "#00a3e0",
-  salmon: "#eabb81",
+  navy: "#0a131f",
+  navyDeep: "#070c14",
+  gold: "#c5a880",
+  goldSoft: "#d4b896",
+  skyBlue: "#38bdf8",
+  salmon: "#b48c5e",
 };
 
 // -----------------------------------------------------------------------------

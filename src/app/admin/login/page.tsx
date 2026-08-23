@@ -3,7 +3,7 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Lock } from "lucide-react";
+import { Lock, Loader2, Shield } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -27,42 +27,70 @@ export default function AdminLoginPage() {
       router.refresh();
     } else {
       const body = await res.json().catch(() => null);
-      setError(body?.error || "Login failed");
+      setError(body?.error || "Invalid authorization credentials");
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center bg-paper px-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm border border-hairline bg-paper-muted p-8 shadow-xs rounded-card">
+    <div className="flex min-h-[75vh] items-center justify-center bg-paper px-6 py-12 dark:bg-[#070c14]">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm rounded-card border border-hairline bg-paper-muted p-8 shadow-xl dark:border-white/10 dark:bg-[#0f172a]"
+      >
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-deep/5">
-            <Lock size={20} className="text-navy-deep" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-gold/15 text-gold mb-2">
+            <Lock size={22} />
           </div>
-          <h1 className="mt-4 font-display text-xl font-semibold text-navy-deep">Admin Access</h1>
-          <p className="mt-1 text-sm text-slate">Compass Cartage dashboard</p>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">
+            Dispatch Terminal
+          </span>
+          <h1 className="mt-1 font-display text-2xl font-bold text-navy-deep dark:text-white">
+            Admin Authentication
+          </h1>
+          <p className="mt-1 text-xs text-slate dark:text-gray-400">
+            Enter master key to access the dispatch ledger
+          </p>
         </div>
 
-        <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-navy-deep">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep focus:border-gold focus:bg-paper-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-        />
+        <div>
+          <label htmlFor="password" className="mb-1.5 block text-xs font-semibold text-navy-deep dark:text-gray-200">
+            Authorization Key
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoFocus
+            placeholder="••••••••••••"
+            className="w-full rounded-xs border border-hairline bg-paper px-4 py-2.5 text-sm text-navy-deep focus:border-gold focus:outline-none dark:border-white/15 dark:bg-[#070c14] dark:text-white"
+          />
+        </div>
 
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        {error && (
+          <div className="mt-3 rounded-xs border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-600 dark:text-red-400">
+            {error}
+          </div>
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full rounded-sm bg-navy-deep px-5 py-3 text-sm font-semibold text-paper transition-colors hover:bg-navy disabled:opacity-60"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xs bg-navy-deep px-5 py-3 text-xs font-bold text-gold-soft shadow-md transition-all hover:bg-gold hover:text-navy-deep disabled:opacity-60 dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
         >
-          {loading ? "Checking..." : "Log In"}
+          {loading ? (
+            <>
+              <Loader2 size={14} className="animate-spin" />
+              <span>Verifying Key...</span>
+            </>
+          ) : (
+            <>
+              <Shield size={14} />
+              <span>Authenticate Session</span>
+            </>
+          )}
         </button>
       </form>
     </div>

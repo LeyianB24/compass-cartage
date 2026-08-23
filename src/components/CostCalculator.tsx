@@ -59,19 +59,19 @@ export default function CostCalculator() {
   }).toString();
 
   return (
-    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden">
+    <div className="mx-auto max-w-5xl rounded-card border border-hairline bg-paper-muted shadow-lg overflow-hidden dark:border-white/10 dark:bg-[#0f172a]">
       {/* Header bar */}
-      <div className="bg-navy-deep dark:bg-[#121212] px-6 py-6 text-white md:px-10 border-b border-hairline dark:border-white/10">
+      <div className="bg-navy-deep px-6 py-6 text-white md:px-10 border-b border-hairline dark:bg-[#070c14] dark:border-white/10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-navy/20 text-gold-soft dark:bg-[#00a3e0]/20 dark:text-[#00a3e0]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xs bg-gold/15 text-gold">
               <Calculator size={22} />
             </div>
             <div>
               <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
                 Instant Move Cost Estimator
               </h2>
-              <p className="text-xs text-white/80 dark:text-gray-300">
+              <p className="text-xs text-white/80 dark:text-gray-300 font-normal">
                 Transparent, itemized labor & logistics calculations with zero hidden fees
               </p>
             </div>
@@ -85,7 +85,7 @@ export default function CostCalculator() {
                 onClick={() => setStep(s)}
                 className={`flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-all ${
                   step === s
-                    ? "bg-gold-soft text-navy-deep font-bold dark:bg-[#00a3e0] dark:text-[#092634]"
+                    ? "bg-gold text-navy-deep font-bold shadow-md"
                     : "bg-white/10 text-white/80 hover:bg-white/20 dark:bg-white/5 dark:text-gray-300"
                 }`}
               >
@@ -110,10 +110,10 @@ export default function CostCalculator() {
                 className="space-y-6"
               >
                 <div>
-                  <h3 className="font-display text-lg font-semibold text-navy-deep">
+                  <h3 className="font-display text-lg font-semibold text-navy-deep dark:text-white">
                     1. Select your home or move size
                   </h3>
-                  <p className="text-xs text-slate">
+                  <p className="text-xs text-slate dark:text-slate">
                     Choose the option that best matches your space to set the baseline labor & truck size.
                   </p>
                 </div>
@@ -126,22 +126,22 @@ export default function CostCalculator() {
                         key={option.id}
                         type="button"
                         onClick={() => setSelectedSize(option)}
-                        className={`flex flex-col justify-between rounded-sm border p-4 text-left transition-all ${
+                        className={`flex flex-col justify-between rounded-xs border p-4 text-left transition-all ${
                           isSelected
-                            ? "border-gold bg-gold/5 shadow-xs ring-1 ring-gold"
-                            : "border-hairline bg-paper/50 hover:border-slate-light hover:bg-paper"
+                            ? "border-gold bg-gold/10 shadow-xs ring-1 ring-gold dark:bg-gold/10 dark:border-gold"
+                            : "border-hairline bg-paper/50 hover:border-gold/50 hover:bg-paper dark:border-white/10 dark:bg-[#070c14] dark:hover:border-gold/50"
                         }`}
                       >
                         <div className="flex items-start justify-between">
-                          <span className="font-display text-base font-semibold text-navy-deep">
+                          <span className="font-display text-base font-semibold text-navy-deep dark:text-white">
                             {option.label}
                           </span>
                           {isSelected && <CheckCircle size={18} className="text-gold" />}
                         </div>
-                        <p className="mt-1 text-xs text-slate">{option.sublabel}</p>
-                        <div className="mt-3 flex items-center justify-between border-t border-hairline/60 pt-2 text-[11px] font-medium text-navy-deep/80">
-                          <span>Est. {option.estVolumeCuFt} cu ft</span>
-                          <span className="font-semibold text-gold">${option.basePrice}+</span>
+                        <p className="mt-1 text-xs text-slate dark:text-slate">{option.sublabel}</p>
+                        <div className="mt-3 flex items-center justify-between border-t border-hairline/60 pt-2 text-[11px] font-medium text-navy-deep/80 dark:border-white/10 dark:text-gray-300">
+                          <span className="font-mono">Est. {option.estVolumeCuFt} cu ft</span>
+                          <span className="font-mono font-bold text-gold">${option.basePrice}+</span>
                         </div>
                       </button>
                     );
@@ -152,7 +152,7 @@ export default function CostCalculator() {
                   <button
                     type="button"
                     onClick={() => setStep(2)}
-                    className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-2.5 text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy"
+                    className="inline-flex items-center gap-2 rounded-xs bg-navy-deep px-6 py-2.5 text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
                   >
                     <span>Next: Access & Distance</span>
                     <ChevronRight size={16} />
@@ -171,21 +171,21 @@ export default function CostCalculator() {
                 className="space-y-6"
               >
                 <div>
-                  <h3 className="font-display text-lg font-semibold text-navy-deep">
+                  <h3 className="font-display text-lg font-semibold text-navy-deep dark:text-white">
                     2. Location distance & stairs access
                   </h3>
-                  <p className="text-xs text-slate">
+                  <p className="text-xs text-slate dark:text-slate">
                     Help us accurately calculate transit time and crew labor requirement.
                   </p>
                 </div>
 
                 {/* Distance Slider */}
-                <div className="rounded-sm border border-hairline bg-paper/30 p-5">
+                <div className="rounded-xs border border-hairline bg-paper/50 p-5 dark:border-white/10 dark:bg-[#070c14]">
                   <div className="flex items-center justify-between">
-                    <label htmlFor="distance-slider" className="text-sm font-medium text-navy-deep">
+                    <label htmlFor="distance-slider" className="text-sm font-medium text-navy-deep dark:text-white">
                       Estimated Distance Between Locations
                     </label>
-                    <span className="font-display text-base font-semibold text-gold">
+                    <span className="font-mono text-base font-bold text-gold">
                       {distanceKm} km {distanceKm > 100 ? "(Long Distance)" : "(Local)"}
                     </span>
                   </div>
@@ -199,7 +199,7 @@ export default function CostCalculator() {
                     onChange={(e) => setDistanceKm(Number(e.target.value))}
                     className="mt-3 w-full accent-gold cursor-pointer"
                   />
-                  <div className="mt-1 flex justify-between text-[11px] text-slate-light">
+                  <div className="mt-1 flex justify-between font-mono text-[10px] text-slate-light dark:text-gray-400">
                     <span>5 km (Local)</span>
                     <span>150 km (Regional)</span>
                     <span>300+ km (Inter-city)</span>
@@ -208,8 +208,8 @@ export default function CostCalculator() {
 
                 {/* Stairs counter */}
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-sm border border-hairline bg-paper/30 p-5">
-                    <label className="text-sm font-medium text-navy-deep">
+                  <div className="rounded-xs border border-hairline bg-paper/50 p-5 dark:border-white/10 dark:bg-[#070c14]">
+                    <label className="text-sm font-medium text-navy-deep dark:text-white">
                       Pickup Flight of Stairs
                     </label>
                     <div className="mt-3 flex items-center gap-3">
@@ -218,10 +218,10 @@ export default function CostCalculator() {
                           key={num}
                           type="button"
                           onClick={() => setPickupStairs(num)}
-                          className={`h-9 w-9 rounded-sm border text-xs font-semibold transition-all ${
+                          className={`h-9 w-9 rounded-xs border text-xs font-semibold transition-all ${
                             pickupStairs === num
-                              ? "border-gold bg-navy-deep text-gold"
-                              : "border-hairline bg-paper-muted text-navy-deep hover:border-gold/50"
+                              ? "border-gold bg-navy-deep text-gold font-bold dark:bg-gold dark:text-navy-deep"
+                              : "border-hairline bg-paper-muted text-navy-deep hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-200 dark:hover:border-gold/50"
                           }`}
                         >
                           {num === 0 ? "Elev/Gnd" : `${num}`}
@@ -230,8 +230,8 @@ export default function CostCalculator() {
                     </div>
                   </div>
 
-                  <div className="rounded-sm border border-hairline bg-paper/30 p-5">
-                    <label className="text-sm font-medium text-navy-deep">
+                  <div className="rounded-xs border border-hairline bg-paper/50 p-5 dark:border-white/10 dark:bg-[#070c14]">
+                    <label className="text-sm font-medium text-navy-deep dark:text-white">
                       Drop-off Flight of Stairs
                     </label>
                     <div className="mt-3 flex items-center gap-3">
@@ -240,10 +240,10 @@ export default function CostCalculator() {
                           key={num}
                           type="button"
                           onClick={() => setDropoffStairs(num)}
-                          className={`h-9 w-9 rounded-sm border text-xs font-semibold transition-all ${
+                          className={`h-9 w-9 rounded-xs border text-xs font-semibold transition-all ${
                             dropoffStairs === num
-                              ? "border-gold bg-navy-deep text-gold"
-                              : "border-hairline bg-paper-muted text-navy-deep hover:border-gold/50"
+                              ? "border-gold bg-navy-deep text-gold font-bold dark:bg-gold dark:text-navy-deep"
+                              : "border-hairline bg-paper-muted text-navy-deep hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-200 dark:hover:border-gold/50"
                           }`}
                         >
                           {num === 0 ? "Elev/Gnd" : `${num}`}
@@ -254,10 +254,10 @@ export default function CostCalculator() {
                 </div>
 
                 {/* Elevator Toggle */}
-                <div className="flex items-center justify-between rounded-sm border border-hairline bg-paper/30 p-4">
+                <div className="flex items-center justify-between rounded-xs border border-hairline bg-paper/50 p-4 dark:border-white/10 dark:bg-[#070c14]">
                   <div className="flex items-center gap-2">
                     <HelpCircle size={16} className="text-gold" />
-                    <span className="text-sm font-medium text-navy-deep">
+                    <span className="text-sm font-medium text-navy-deep dark:text-white">
                       Elevator Access Available at Locations?
                     </span>
                   </div>
@@ -265,11 +265,11 @@ export default function CostCalculator() {
                     type="button"
                     onClick={() => setHasElevator(!hasElevator)}
                     className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                      hasElevator ? "bg-gold" : "bg-slate-light/40"
+                      hasElevator ? "bg-gold" : "bg-slate-light/40 dark:bg-gray-700"
                     }`}
                   >
                     <span
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-paper-muted shadow ring-0 transition duration-200 ease-in-out ${
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                         hasElevator ? "translate-x-5" : "translate-x-0"
                       }`}
                     />
@@ -280,14 +280,14 @@ export default function CostCalculator() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate hover:text-navy-deep"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate hover:text-navy-deep dark:text-gray-400 dark:hover:text-gold"
                   >
                     Back to Move Size
                   </button>
                   <button
                     type="button"
                     onClick={() => setStep(3)}
-                    className="inline-flex items-center gap-2 rounded-sm bg-navy-deep px-6 py-2.5 text-sm font-semibold text-paper shadow-xs transition-colors hover:bg-navy"
+                    className="inline-flex items-center gap-2 rounded-xs bg-navy-deep px-6 py-2.5 text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
                   >
                     <span>Next: Add-ons & Review</span>
                     <ChevronRight size={16} />
@@ -306,10 +306,10 @@ export default function CostCalculator() {
                 className="space-y-6"
               >
                 <div>
-                  <h3 className="font-display text-lg font-semibold text-navy-deep">
+                  <h3 className="font-display text-lg font-semibold text-navy-deep dark:text-white">
                     3. Specialty add-ons & services
                   </h3>
-                  <p className="text-xs text-slate">
+                  <p className="text-xs text-slate dark:text-slate">
                     Select optional equipment or packing services to complete your tailored estimate.
                   </p>
                 </div>
@@ -321,10 +321,10 @@ export default function CostCalculator() {
                       <div
                         key={addon.id}
                         onClick={() => toggleAddon(addon.id)}
-                        className={`flex cursor-pointer items-center justify-between rounded-sm border p-4 transition-all ${
+                        className={`flex cursor-pointer items-center justify-between rounded-xs border p-4 transition-all ${
                           isChecked
-                            ? "border-gold bg-gold/5 shadow-xs"
-                            : "border-hairline bg-paper/20 hover:border-slate-light"
+                            ? "border-gold bg-gold/10 shadow-xs dark:border-gold dark:bg-gold/10"
+                            : "border-hairline bg-paper/50 hover:border-gold/50 dark:border-white/10 dark:bg-[#070c14] dark:hover:border-gold/50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -332,14 +332,14 @@ export default function CostCalculator() {
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => {}}
-                            className="h-4 w-4 rounded accent-gold cursor-pointer"
+                            className="h-4 w-4 rounded-xs accent-gold cursor-pointer"
                           />
                           <div>
-                            <p className="text-sm font-semibold text-navy-deep">{addon.label}</p>
-                            <p className="text-xs text-slate">{addon.description}</p>
+                            <p className="text-sm font-semibold text-navy-deep dark:text-white">{addon.label}</p>
+                            <p className="text-xs text-slate dark:text-slate">{addon.description}</p>
                           </div>
                         </div>
-                        <span className="font-display text-sm font-semibold text-gold">
+                        <span className="font-mono text-sm font-bold text-gold">
                           +${addon.cost}
                         </span>
                       </div>
@@ -351,7 +351,7 @@ export default function CostCalculator() {
                   <button
                     type="button"
                     onClick={() => setStep(2)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate hover:text-navy-deep"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate hover:text-navy-deep dark:text-gray-400 dark:hover:text-gold"
                   >
                     Back to Access
                   </button>
@@ -365,7 +365,7 @@ export default function CostCalculator() {
                       setSelectedAddons([]);
                       setStep(1);
                     }}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate hover:text-red-600"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
                   >
                     <RotateCcw size={12} />
                     Reset Calculator
@@ -377,80 +377,86 @@ export default function CostCalculator() {
         </div>
 
         {/* Live Estimate Summary Sidebar */}
-        <div className="flex flex-col justify-between rounded-card border border-hairline bg-paper p-6 shadow-xs">
+        <div className="flex flex-col justify-between rounded-card border border-hairline bg-paper p-6 shadow-xs dark:border-white/10 dark:bg-[#070c14]">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gold">
+            <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-gold">
               <Sparkles size={14} />
               <span>Live Estimate Calculation</span>
             </div>
 
-            <div className="mt-4 border-b border-hairline pb-4">
-              <p className="text-xs text-slate">Estimated Range</p>
+            <div className="mt-4 border-b border-hairline pb-4 dark:border-white/10">
+              <p className="text-xs text-slate dark:text-slate">Estimated Range</p>
               <div className="mt-1 flex items-baseline gap-1">
-                <span className="font-display text-3xl font-bold text-navy-deep">
+                <span className="font-display text-3xl font-bold text-navy-deep dark:text-white">
                   ${estimatedMin}
                 </span>
-                <span className="text-sm font-medium text-slate"> - ${estimatedMax}</span>
+                <span className="text-sm font-medium text-slate dark:text-gray-400"> - ${estimatedMax}</span>
               </div>
-              <p className="mt-1 text-[11px] text-slate-light">
+              <p className="mt-1 font-mono text-[10px] text-slate-light dark:text-gray-400">
                 Binding guaranteed range based on provided details
               </p>
             </div>
 
             <div className="mt-5 space-y-3.5 text-xs">
-              <div className="flex items-center justify-between text-navy-deep">
+              <div className="flex items-center justify-between text-navy-deep dark:text-white">
                 <div className="flex items-center gap-2">
                   <Users size={15} className="text-gold" />
                   <span>Recommended Crew</span>
                 </div>
-                <span className="font-semibold">{selectedSize.recommendedCrew} Professional Movers</span>
+                <span className="font-mono font-semibold text-navy-deep dark:text-gold-soft">
+                  {selectedSize.recommendedCrew} Movers
+                </span>
               </div>
 
-              <div className="flex items-center justify-between text-navy-deep">
+              <div className="flex items-center justify-between text-navy-deep dark:text-white">
                 <div className="flex items-center gap-2">
                   <Truck size={15} className="text-gold" />
                   <span>Truck Capacity</span>
                 </div>
-                <span className="font-semibold">{selectedSize.truckSize}</span>
+                <span className="font-mono font-semibold text-navy-deep dark:text-gold-soft">
+                  {selectedSize.truckSize}
+                </span>
               </div>
 
-              <div className="flex items-center justify-between text-navy-deep">
+              <div className="flex items-center justify-between text-navy-deep dark:text-white">
                 <div className="flex items-center gap-2">
                   <Clock size={15} className="text-gold" />
                   <span>Est. Labor Hours</span>
                 </div>
-                <span className="font-semibold">~{totalLaborHours} Hours</span>
+                <span className="font-mono font-semibold text-navy-deep dark:text-gold-soft">
+                  ~{totalLaborHours} Hours
+                </span>
               </div>
             </div>
 
             {/* Itemized list */}
-            <div className="mt-6 rounded-xs bg-paper-muted p-3 border border-hairline text-[11px] space-y-1.5">
-              <div className="flex justify-between text-slate">
+            <div className="mt-6 rounded-xs bg-paper-muted p-3 border border-hairline text-[11px] space-y-1.5 dark:border-white/10 dark:bg-[#0f172a]">
+              <div className="flex justify-between text-slate dark:text-gray-300">
                 <span>Base ({selectedSize.label})</span>
-                <span>${selectedSize.basePrice}</span>
+                <span className="font-mono">${selectedSize.basePrice}</span>
               </div>
               {distanceFee > 0 && (
-                <div className="flex justify-between text-slate">
+                <div className="flex justify-between text-slate dark:text-gray-300">
                   <span>Distance ({distanceKm} km)</span>
-                  <span>+${distanceFee}</span>
+                  <span className="font-mono">+${distanceFee}</span>
                 </div>
               )}
               {stairsCost > 0 && (
-                <div className="flex justify-between text-slate">
-                  <span>Stairs Surcharge ({pickupStairs + dropoffStairs} flights)</span>
-                  <span>+${stairsCost}</span>
+                <div className="flex justify-between text-slate dark:text-gray-300">
+                  <span>Stairs ({pickupStairs + dropoffStairs} flights)</span>
+                  <span className="font-mono">+${stairsCost}</span>
                 </div>
               )}
               {addonTotal > 0 && (
-                <div className="flex justify-between text-slate">
+                <div className="flex justify-between text-slate dark:text-gray-300">
                   <span>Selected Add-ons ({selectedAddons.length})</span>
-                  <span>+${addonTotal}</span>
+                  <span className="font-mono">+${addonTotal}</span>
                 </div>
               )}
             </div>
 
-            <div className="mt-4 flex items-center gap-2 text-[11px] text-slate">
-              <ShieldCheck size={14} className="shrink-0 text-emerald-600" />
+            <div className="mt-4 flex items-center gap-2 text-[11px] text-slate dark:text-gray-300">
+              <ShieldCheck size={14} className="shrink-0 text-emerald-600 dark:text-emerald-400" />
               <span>Includes full commercial cargo insurance</span>
             </div>
           </div>
@@ -458,12 +464,12 @@ export default function CostCalculator() {
           <div className="mt-8">
             <Link
               href={`/quote?${queryParams}`}
-              className="group flex w-full items-center justify-center gap-2 rounded-sm bg-gold py-3 px-4 text-sm font-semibold text-navy-deep transition-colors hover:bg-gold-soft"
+              className="group flex w-full items-center justify-center gap-2 rounded-xs bg-navy-deep py-3 px-4 text-xs font-bold text-gold-soft shadow-md transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
             >
               <span>Lock In Quote With Details</span>
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
             </Link>
-            <p className="mt-2 text-center text-[10px] text-slate-light">
+            <p className="mt-2 text-center font-mono text-[10px] text-slate-light dark:text-gray-400">
               No obligation • Instant dispatch lock
             </p>
           </div>

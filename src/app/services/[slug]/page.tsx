@@ -82,11 +82,13 @@ export default async function ServiceDetailPage({ params }: Props) {
         />
 
         {/* Section 1: Overview & What's Included */}
-        <section className="border-b border-hairline bg-paper py-16 md:py-24 dark:bg-[#121212]">
+        <section className="border-b border-hairline bg-paper py-16 md:py-24 dark:border-white/10 dark:bg-[#070c14]">
           <div className="section-padding mx-auto max-w-content">
             <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <div>
-                <span className="eyebrow text-navy dark:text-[#00a3e0]">Service Overview</span>
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
+                  Service Overview
+                </span>
                 <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-navy-deep dark:text-white sm:text-4xl">
                   {service.subtitle}
                 </h2>
@@ -97,7 +99,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <div className="mt-8 flex flex-wrap items-center gap-4">
                   <Link
                     href={`/quote?moveSize=${service.slug}`}
-                    className="flex items-center gap-2 rounded-sm bg-navy px-6 py-3.5 text-xs font-bold text-white shadow-md transition-all hover:bg-navy-deep dark:bg-[#00a3e0] dark:text-[#092634] dark:hover:bg-[#38bdf8]"
+                    className="flex items-center gap-2 rounded-xs bg-navy-deep px-6 py-3.5 text-xs font-bold text-gold-soft shadow-md transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
                   >
                     <span>Get a Free {service.eyebrow} Quote</span>
                     <ArrowRight size={15} />
@@ -105,7 +107,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
                   <Link
                     href="/calculator"
-                    className="flex items-center gap-2 rounded-sm border border-hairline bg-paper-muted px-5 py-3.5 text-xs font-bold text-navy-deep transition-all hover:border-navy dark:border-white/15 dark:bg-[#1e1e1e] dark:text-white dark:hover:border-[#00a3e0]"
+                    className="flex items-center gap-2 rounded-xs border border-hairline bg-paper-muted px-5 py-3.5 text-xs font-bold text-navy-deep transition-all hover:border-gold dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:hover:border-gold"
                   >
                     <span>Estimate Moving Cost</span>
                   </Link>
@@ -113,9 +115,9 @@ export default async function ServiceDetailPage({ params }: Props) {
               </div>
 
               {/* Inclusions Card */}
-              <div className="rounded-card border border-hairline bg-paper-muted p-6 shadow-xl dark:border-white/10 dark:bg-[#1e1e1e] sm:p-8">
+              <div className="rounded-card border border-hairline bg-paper-muted p-6 shadow-xl dark:border-white/10 dark:bg-[#0f172a] sm:p-8">
                 <div className="flex items-center gap-2.5 border-b border-hairline pb-4 dark:border-white/10">
-                  <ShieldCheck size={20} className="text-navy dark:text-[#00a3e0]" />
+                  <ShieldCheck size={20} className="text-gold" />
                   <h3 className="font-display text-lg font-semibold text-navy-deep dark:text-white">
                     What&rsquo;s Included Every Move
                   </h3>
@@ -124,7 +126,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <ul className="mt-5 space-y-3.5">
                   {service.inclusions.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3 text-xs leading-relaxed text-navy-deep dark:text-gray-200">
-                      <CheckCircle2 size={16} className="shrink-0 text-emerald-600 dark:text-[#00a3e0]" />
+                      <CheckCircle2 size={16} className="shrink-0 text-emerald-600 dark:text-emerald-400" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -135,10 +137,12 @@ export default async function ServiceDetailPage({ params }: Props) {
         </section>
 
         {/* Section 2: Transparent Pricing Guide */}
-        <section className="border-b border-hairline bg-paper-muted py-16 md:py-24 dark:bg-[#181818]">
+        <section className="border-b border-hairline bg-paper-muted py-16 md:py-24 dark:border-white/10 dark:bg-[#0c121d]">
           <div className="section-padding mx-auto max-w-content">
             <div className="text-center">
-              <span className="eyebrow text-navy dark:text-[#00a3e0]">Transparent Pricing</span>
+              <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
+                Transparent Pricing
+              </span>
               <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-navy-deep dark:text-white sm:text-4xl">
                 Clear Rates with Zero Hidden Fees
               </h2>
@@ -151,21 +155,21 @@ export default async function ServiceDetailPage({ params }: Props) {
               {service.pricingGuide.map((pkg, idx) => (
                 <div
                   key={idx}
-                  className="flex flex-col justify-between rounded-card border border-hairline bg-paper p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#121212]"
+                  className="flex flex-col justify-between rounded-card border border-hairline bg-paper p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-[#070c14]"
                 >
                   <div>
                     {pkg.badge && (
-                      <span className="mb-3 inline-block rounded-full bg-navy/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-navy dark:bg-[#00a3e0]/20 dark:text-[#38bdf8]">
+                      <span className="mb-3 inline-block rounded-xs bg-gold/15 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-gold">
                         {pkg.badge}
                       </span>
                     )}
                     <h3 className="font-display text-xl font-semibold text-navy-deep dark:text-white">
                       {pkg.title}
                     </h3>
-                    <p className="font-display mt-3 text-2xl font-bold text-navy dark:text-[#00a3e0]">
+                    <p className="font-mono mt-3 text-2xl font-bold text-gold">
                       {pkg.rate}
                     </p>
-                    <p className="mt-2 text-xs leading-relaxed text-slate dark:text-gray-400">
+                    <p className="mt-2 text-xs leading-relaxed text-slate dark:text-gray-300">
                       {pkg.description}
                     </p>
                   </div>
@@ -173,7 +177,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                   <div className="mt-6 pt-4 border-t border-hairline dark:border-white/10">
                     <Link
                       href={`/quote?moveSize=${service.slug}`}
-                      className="flex w-full items-center justify-center gap-1.5 rounded-sm bg-navy py-2.5 text-xs font-bold text-white transition-all hover:bg-navy-deep dark:bg-[#00a3e0] dark:text-[#092634] dark:hover:bg-[#38bdf8]"
+                      className="flex w-full items-center justify-center gap-1.5 rounded-xs bg-navy-deep py-2.5 text-xs font-bold text-gold-soft transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
                     >
                       <span>Select Option</span>
                       <ArrowRight size={13} />
@@ -186,10 +190,10 @@ export default async function ServiceDetailPage({ params }: Props) {
         </section>
 
         {/* Section 3: Process Workflow */}
-        <section className="border-b border-hairline bg-navy-deep py-16 text-white dark:bg-[#0c0c0c] md:py-24">
+        <section className="border-b border-hairline bg-navy-deep py-16 text-white dark:border-white/10 dark:bg-[#070c14] md:py-24">
           <div className="section-padding mx-auto max-w-content">
             <div className="text-center">
-              <span className="eyebrow text-gold-soft dark:text-[#00a3e0]">Execution Plan</span>
+              <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold">Execution Plan</span>
               <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 How We Execute Your Move
               </h2>
@@ -199,15 +203,15 @@ export default async function ServiceDetailPage({ params }: Props) {
               {service.process.map((step, idx) => (
                 <div
                   key={idx}
-                  className="rounded-card border border-white/10 bg-white/5 p-6 backdrop-blur dark:border-white/5 dark:bg-[#141414]"
+                  className="rounded-card border border-white/10 bg-white/5 p-6 backdrop-blur dark:border-white/10 dark:bg-[#0f172a]"
                 >
-                  <span className="font-display text-2xl font-bold text-gold-soft dark:text-[#00a3e0]">
+                  <span className="font-mono text-2xl font-bold text-gold">
                     {step.step}
                   </span>
                   <h3 className="font-display mt-4 text-base font-semibold text-white">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-white/75 dark:text-gray-400">
+                  <p className="mt-2 text-xs leading-relaxed text-white/75 dark:text-gray-300">
                     {step.desc}
                   </p>
                 </div>
@@ -218,11 +222,11 @@ export default async function ServiceDetailPage({ params }: Props) {
 
         {/* Section 4: Service Specific FAQs */}
         {service.faqs && service.faqs.length > 0 && (
-          <section className="border-b border-hairline bg-paper py-16 md:py-20 dark:bg-[#121212]">
+          <section className="border-b border-hairline bg-paper py-16 md:py-20 dark:border-white/10 dark:bg-[#070c14]">
             <div className="section-padding mx-auto max-w-3xl">
-              <div className="flex items-center gap-2.5 text-navy dark:text-[#00a3e0]">
+              <div className="flex items-center gap-2.5 text-gold">
                 <HelpCircle size={20} />
-                <span className="eyebrow">Frequently Asked Questions</span>
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider">Frequently Asked Questions</span>
               </div>
               <h2 className="font-display mt-2 text-2xl font-semibold text-navy-deep dark:text-white sm:text-3xl">
                 Common Questions About {service.eyebrow}
@@ -232,7 +236,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 {service.faqs.map((faq, idx) => (
                   <div
                     key={idx}
-                    className="rounded-card border border-hairline bg-paper-muted p-5 shadow-xs dark:border-white/10 dark:bg-[#1e1e1e]"
+                    className="rounded-card border border-hairline bg-paper-muted p-5 shadow-xs dark:border-white/10 dark:bg-[#0f172a]"
                   >
                     <h3 className="text-sm font-semibold text-navy-deep dark:text-white">
                       {faq.question}
