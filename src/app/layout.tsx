@@ -102,10 +102,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/logos/logo Compass Cartage.png" },
-      { url: "/favicon.png" },
+      { url: "/favicon.png", sizes: "64x64", type: "image/png" },
+      { url: "/icon.png", sizes: "96x96", type: "image/png" },
     ],
-    shortcut: "/logos/logo Compass Cartage.png",
+    shortcut: "/favicon.png",
     apple: "/apple-touch-icon.png",
   },
 };
@@ -120,7 +120,7 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${plusJakarta.variable} ${spaceMono.variable} scroll-smooth`}
     >
-      <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased selection:bg-gold-soft selection:text-navy-deep">
+      <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased overflow-x-clip selection:bg-gold-soft selection:text-navy-deep">
         <ThemeProvider>
           {/* Accessibility Skip Link */}
           <a
