@@ -9,8 +9,6 @@ import {
   Truck,
   MapPin,
   Phone,
-  User,
-  Clock,
   AlertTriangle,
   CheckCircle,
 } from "lucide-react";
@@ -81,17 +79,19 @@ export default function AdminCalendarView({ requests }: Props) {
 
   // Out of province monthly quota count for currently viewed month
   const outOfProvinceCount = useMemo(() => {
+    const targetYear = currentDate.getFullYear();
+    const targetMonth = currentDate.getMonth();
     let count = 0;
     requests.forEach((req) => {
       if (req.bookedSlot && req.bookedSlot.moveType === "OUT_OF_PROVINCE") {
         const d = new Date(req.bookedSlot.date);
-        if (d.getFullYear() === year && d.getMonth() === month) {
+        if (d.getFullYear() === targetYear && d.getMonth() === targetMonth) {
           count++;
         }
       }
     });
     return count;
-  }, [requests, year, month]);
+  }, [requests, currentDate]);
 
   // Month name
   const monthName = currentDate.toLocaleString("en-CA", { month: "long", year: "numeric" });

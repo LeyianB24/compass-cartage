@@ -61,8 +61,12 @@ export default function MovingChecklist() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.completed) setCompletedTasks(parsed.completed);
-        if (parsed.custom) setCustomTasks(parsed.custom);
+        if (parsed.completed) {
+          queueMicrotask(() => setCompletedTasks(parsed.completed));
+        }
+        if (parsed.custom) {
+          queueMicrotask(() => setCustomTasks(parsed.custom));
+        }
       }
     } catch {
       // Ignore local storage parse errors
