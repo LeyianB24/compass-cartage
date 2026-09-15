@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import CallToAction from "@/components/CallToAction";
-import { SERVICE_DETAILS, ServiceDetail } from "@/lib/serviceDetails";
+import { SERVICE_DETAILS } from "@/lib/serviceDetails";
 import { IMAGES } from "@/lib/images";
 import { CheckCircle2, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
 

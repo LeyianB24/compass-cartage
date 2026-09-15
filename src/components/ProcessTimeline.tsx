@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calculator, PackageCheck, Truck, Sparkles, ArrowRight, Shield, CheckCircle2, Lock } from "lucide-react";
+import { Calculator, PackageCheck, Truck, Sparkles, ArrowRight, Shield, Lock } from "lucide-react";
 import Link from "next/link";
 
 const STEPS = [

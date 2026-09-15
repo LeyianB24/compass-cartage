@@ -15,7 +15,6 @@ import {
   HelpCircle,
   Images,
   ArrowLeft,
-  ShieldAlert,
 } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 import ThemeToggle from "@/components/ThemeToggle";

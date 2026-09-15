@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { X, PhoneCall, Plus, Loader2, Calendar, MapPin, User, Mail, Box, FileText } from "lucide-react";
+import { X, PhoneCall, Plus, Loader2, Calendar, MapPin, User, Mail } from "lucide-react";
 import { createManualQuoteRequest } from "@/lib/actions";
 import { MOVE_SIZES } from "@/lib/constants";
 
