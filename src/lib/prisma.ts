@@ -77,13 +77,13 @@ export interface PricingTierModel {
     order: number;
   } | null>;
   create(args: { data: Record<string, unknown> }): Promise<Record<string, unknown>>;
-  update(args: { where: { id: string }; data: Record<string, unknown> }): Promise<Record<string, unknown>>;
+  update(args: { where: { id?: string; slug?: string }; data: Record<string, unknown> }): Promise<Record<string, unknown>>;
   upsert(args: {
     where: { slug: string };
     update: Record<string, unknown>;
     create: Record<string, unknown>;
   }): Promise<Record<string, unknown>>;
-  delete(args: { where: { id: string } }): Promise<Record<string, unknown>>;
+  delete(args: { where: { id?: string; slug?: string } }): Promise<Record<string, unknown>>;
 }
 
 export type ExtendedPrismaClient = BasePrismaClient & {
