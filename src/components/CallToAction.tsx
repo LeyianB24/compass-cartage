@@ -73,7 +73,7 @@ export default function CallToAction({
         >
           <Link
             href="/quote"
-            className="group flex shrink-0 items-center gap-2 rounded-xs bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-all hover:bg-gold-soft hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+            className="btn-shimmer group flex shrink-0 items-center gap-2 rounded-xs bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-all hover:bg-gold-soft hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
           >
             <span>Get a Free Quote</span>
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

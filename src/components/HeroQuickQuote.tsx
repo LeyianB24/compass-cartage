@@ -36,7 +36,7 @@ export default function HeroQuickQuote() {
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full max-w-md overflow-hidden rounded-card border border-white/20 bg-paper-muted/95 p-6 shadow-2xl backdrop-blur-2xl transition-all duration-300 dark:border-gold/30 dark:bg-[#0f172a]/95 dark:shadow-[0_0_40px_rgba(0,0,0,0.5)] sm:p-7"
+      className="relative w-full max-w-md xl:max-w-lg overflow-hidden rounded-card border border-white/20 bg-paper-muted/95 p-6 shadow-2xl backdrop-blur-2xl transition-all duration-300 dark:border-gold/30 dark:bg-[#0f172a]/95 dark:shadow-[0_0_40px_rgba(0,0,0,0.5)] sm:p-7"
     >
       {/* Subtle ambient lighting accent */}
       <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-gold/10 blur-3xl dark:bg-gold/15" />

@@ -1,7 +1,7 @@
 // src/components/InteractiveMoveMap.tsx
 "use client";
 
-import { useState, useId } from "react";
+import { useState, useId, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -111,6 +111,33 @@ function calculateRouteMetrics(originStr: string, destStr: string) {
   };
 }
 
+function AnimatedKm({ target }: { target: number }) {
+  const [displayVal, setDisplayVal] = useState(target);
+
+  useEffect(() => {
+    const start = displayVal;
+    const end = target;
+    if (start === end) return;
+    let startTime: number | null = null;
+    const duration = 500;
+    let reqId: number;
+    function step(timestamp: number) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      setDisplayVal(Math.round(start + (end - start) * ease));
+      if (progress < 1) {
+        reqId = requestAnimationFrame(step);
+      }
+    }
+    reqId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(reqId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target]);
+
+  return <span>~{displayVal} km</span>;
+}
+
 interface InteractiveMoveMapProps {
   initialOrigin?: string;
   initialDestination?: string;
@@ -187,29 +214,44 @@ export default function InteractiveMoveMap({
           </div>
         </div>
 
-        {/* Map Mode Toggle */}
-        <div className="flex items-center gap-1.5 rounded-xs border border-hairline bg-paper-muted p-1 dark:border-white/10 dark:bg-[#070c14]">
+        {/* Map Mode Toggle with Animated Sliding Pill */}
+        <div className="relative flex items-center gap-1.5 rounded-xs border border-hairline bg-paper-muted p-1 dark:border-white/10 dark:bg-[#070c14]">
           <button
             type="button"
             onClick={() => setMapMode("googleLive")}
-            className={`flex items-center gap-1.5 rounded-2xs px-3 py-1.5 text-xs font-semibold transition-all ${
+            className={`relative z-10 flex items-center gap-1.5 rounded-2xs px-3 py-1.5 text-xs font-semibold transition-colors ${
               mapMode === "googleLive"
-                ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                ? "text-gold-soft font-bold dark:text-navy-deep"
                 : "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-white"
             }`}
           >
+            {mapMode === "googleLive" && (
+              <motion.span
+                layoutId="mapTogglePill"
+                className="absolute inset-0 -z-10 rounded-2xs bg-navy-deep dark:bg-gold shadow-xs"
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              />
+            )}
             <Navigation size={13} />
             <span>Google Maps View</span>
           </button>
+
           <button
             type="button"
             onClick={() => setMapMode("compassRadar")}
-            className={`flex items-center gap-1.5 rounded-2xs px-3 py-1.5 text-xs font-semibold transition-all ${
+            className={`relative z-10 flex items-center gap-1.5 rounded-2xs px-3 py-1.5 text-xs font-semibold transition-colors ${
               mapMode === "compassRadar"
-                ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                ? "text-gold-soft font-bold dark:text-navy-deep"
                 : "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-white"
             }`}
           >
+            {mapMode === "compassRadar" && (
+              <motion.span
+                layoutId="mapTogglePill"
+                className="absolute inset-0 -z-10 rounded-2xs bg-navy-deep dark:bg-gold shadow-xs"
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              />
+            )}
             <Route size={13} />
             <span>Route Radar</span>
           </button>
@@ -341,7 +383,7 @@ export default function InteractiveMoveMap({
                   <span className="font-mono text-[10px] uppercase">Route Distance</span>
                 </div>
                 <p className="mt-1 font-mono text-lg font-bold text-navy-deep dark:text-white">
-                  ~{metrics.distanceKm} km
+                  <AnimatedKm target={metrics.distanceKm} />
                 </p>
                 <span className="text-[10px] text-slate-light dark:text-gray-400">
                   ({metrics.distanceMiles} miles)
@@ -389,7 +431,7 @@ export default function InteractiveMoveMap({
               <button
                 type="button"
                 onClick={handleProceedToQuote}
-                className="group flex flex-1 items-center justify-center gap-2 rounded-xs bg-gold px-6 py-3.5 text-xs font-bold text-navy-deep shadow-md transition-all hover:bg-gold-soft hover:shadow-xl dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                className="btn-shimmer group flex flex-1 items-center justify-center gap-2 rounded-xs bg-gold px-6 py-3.5 text-xs font-bold text-navy-deep shadow-md transition-all hover:bg-gold-soft hover:shadow-xl dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
                 <span>Get Instant Quote for This Route</span>
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
@@ -480,8 +522,9 @@ export default function InteractiveMoveMap({
                   <div className="relative w-full max-w-sm rounded-card border border-white/15 bg-white/5 p-6 backdrop-blur">
                     {/* Origin Pin */}
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold bg-gold/20 text-gold font-bold">
-                        A
+                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold bg-gold/25 text-gold font-bold shadow-lg">
+                        <span className="radar-ring absolute inset-0 rounded-full border border-gold/60" />
+                        <span className="relative z-10 text-xs">A</span>
                       </div>
                       <div>
                         <span className="font-mono text-[10px] uppercase text-white/60">Origin / Pickup</span>
@@ -489,18 +532,26 @@ export default function InteractiveMoveMap({
                       </div>
                     </div>
 
-                    {/* Connecting Highway Line */}
-                    <div className="my-2 ml-4 flex h-14 flex-col justify-center border-l-2 border-dashed border-gold/60 pl-6">
-                      <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 font-mono text-[10px] font-bold text-gold">
+                    {/* Connecting Highway Line with animated moving truck */}
+                    <div className="relative my-3 ml-5 flex h-20 flex-col justify-center border-l-2 border-dashed border-gold/60 pl-6">
+                      <motion.div
+                        animate={{ y: [-20, 24, -20] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute -left-[14px] flex h-7 w-7 items-center justify-center rounded-full bg-gold text-navy-deep shadow-lg"
+                      >
+                        <Truck size={13} />
+                      </motion.div>
+                      <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 font-mono text-[10px] font-bold text-gold backdrop-blur">
                         <Route size={11} />
-                        <span>Highway 2 / Transit Line: ~{metrics.distanceKm} km</span>
+                        <span>Transit Line: ~{metrics.distanceKm} km</span>
                       </div>
                     </div>
 
                     {/* Destination Pin */}
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-emerald-400 bg-emerald-500/20 text-emerald-400 font-bold">
-                        B
+                      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-emerald-400 bg-emerald-500/25 text-emerald-300 font-bold shadow-lg">
+                        <span className="radar-ring absolute inset-0 rounded-full border border-emerald-400/60" />
+                        <span className="relative z-10 text-xs">B</span>
                       </div>
                       <div>
                         <span className="font-mono text-[10px] uppercase text-white/60">Destination / Dropoff</span>

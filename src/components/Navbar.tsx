@@ -144,7 +144,7 @@ export default function Navbar() {
 
               <Link
                 href="/quote"
-                className="rounded-xs bg-navy-deep px-4 py-2 text-xs lg:text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                className="btn-shimmer rounded-xs bg-navy-deep px-4 py-2 text-xs lg:text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
                 Get a Free Quote
               </Link>

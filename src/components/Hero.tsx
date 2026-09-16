@@ -84,7 +84,7 @@ export default function Hero() {
       {/* Main Grid Hero Content */}
       <div className="section-padding mx-auto grid max-w-content gap-12 py-16 lg:grid-cols-[1.18fr_0.82fr] lg:items-center lg:py-24">
         {/* Left Column: Core Value Proposition */}
-        <div className="max-w-2xl text-left">
+        <div className="w-full max-w-3xl xl:max-w-4xl text-left">
           {/* Top Authority Pill */}
           <motion.div
             custom={0}
@@ -131,7 +131,7 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg dark:text-gray-300 font-normal"
+            className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg dark:text-gray-300 font-normal"
           >
             Professional residential and commercial moving across Edmonton and Alberta. One dedicated crew from pickup to delivery, transparent upfront quotes, and zero surprise fees.
           </motion.p>
@@ -168,7 +168,7 @@ export default function Hero() {
           >
             <Link
               href="/quote"
-              className="group flex items-center gap-2.5 rounded-sm bg-gold px-7 py-3.5 text-xs font-bold text-navy-deep shadow-xl transition-all hover:bg-gold-soft hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="btn-shimmer group flex items-center gap-2.5 rounded-sm bg-gold px-7 py-3.5 text-xs font-bold text-navy-deep shadow-xl transition-all hover:bg-gold-soft hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
               <span>Get a Free Quote</span>
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />

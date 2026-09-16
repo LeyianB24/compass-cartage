@@ -166,7 +166,7 @@ export default function FleetShowcase() {
       <div className="section-padding mx-auto max-w-content">
         {/* Section Header */}
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
               <Truck size={14} />
               <span>Our Dedicated Equipment & Fleet</span>
@@ -181,14 +181,14 @@ export default function FleetShowcase() {
 
           <Link
             href="/quote"
-            className="group inline-flex items-center gap-2 rounded-xs bg-gold px-6 py-3 text-xs font-bold text-navy-deep shadow-sm transition-all hover:bg-gold-soft dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+            className="btn-shimmer group inline-flex items-center gap-2 rounded-xs bg-gold px-6 py-3 text-xs font-bold text-navy-deep shadow-sm transition-all hover:bg-gold-soft hover:scale-[1.02] active:scale-[0.98] dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
           >
             <span>Book Your Move</span>
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        {/* Fleet Category Filter Tabs */}
+        {/* Fleet Category Filter Tabs with Sliding Pill */}
         <div className="mt-8 flex flex-wrap items-center gap-2 border-b border-hairline pb-4 dark:border-white/10">
           {(
             [
@@ -202,19 +202,28 @@ export default function FleetShowcase() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`rounded-xs px-4 py-2 font-mono text-xs font-semibold transition-all ${
+              className={`relative rounded-xs px-4 py-2 font-mono text-xs font-semibold transition-colors ${
                 activeTab === tab
-                  ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                  ? "text-gold-soft font-bold dark:text-navy-deep"
                   : "border border-hairline bg-paper text-slate hover:border-gold hover:text-navy-deep dark:border-white/10 dark:bg-[#070c14] dark:text-gray-300 dark:hover:border-gold dark:hover:text-white"
               }`}
             >
-              {tab === "All" ? `All Fleet (${FLEET_VEHICLES.length})` : tab}
+              {activeTab === tab && (
+                <motion.span
+                  layoutId="fleetCategoryPill"
+                  className="absolute inset-0 rounded-xs bg-navy-deep dark:bg-gold shadow-xs"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">
+                {tab === "All" ? `All Fleet (${FLEET_VEHICLES.length})` : tab}
+              </span>
             </button>
           ))}
         </div>
 
         {/* Responsive Multi-Card Grid */}
-        <motion.div layout className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div layout className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <AnimatePresence>
             {filteredVehicles.map((item, index) => (
               <motion.div

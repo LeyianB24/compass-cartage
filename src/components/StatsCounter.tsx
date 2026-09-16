@@ -30,7 +30,9 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
   return (
     <span className="font-display text-3xl font-semibold text-white md:text-4xl">
-      <span ref={ref}>{value}</span>
+      <span ref={ref} suppressHydrationWarning>
+        0
+      </span>
       <span className="text-gold-soft dark:text-gold">{suffix}</span>
     </span>
   );

@@ -42,7 +42,7 @@ export default function QuotePage() {
 
       <section className="bg-paper dark:bg-[#070c14] border-b border-hairline dark:border-white/10">
         <div className="section-padding mx-auto max-w-content py-16 md:py-20">
-          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-12">
+          <div className="grid gap-10 md:grid-cols-[0.7fr_1.3fr] lg:grid-cols-[0.6fr_1.4fr] md:gap-12">
             {/* Aside: a framed photo + reassurance copy beside the form,
                 so the left column stays useful instead of empty. */}
             <aside className="md:pt-2">

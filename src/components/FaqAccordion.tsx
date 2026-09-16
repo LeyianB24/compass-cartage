@@ -27,7 +27,7 @@ export default function FaqAccordion() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
+    <div className="mx-auto w-full max-w-6xl space-y-8">
       {/* Search & Category Filter Header */}
       <div className="rounded-card border border-hairline bg-paper-muted p-6 shadow-sm space-y-6 dark:border-white/10 dark:bg-[#0f172a]">
         <div className="relative">

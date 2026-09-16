@@ -27,7 +27,7 @@ export default function CoverageChecker() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl rounded-card border border-hairline bg-paper-muted p-6 shadow-md md:p-8 dark:border-white/10 dark:bg-[#0f172a]">
+    <div className="mx-auto w-full max-w-6xl rounded-card border border-hairline bg-paper-muted p-6 shadow-md md:p-8 dark:border-white/10 dark:bg-[#0f172a]">
       <div className="text-center max-w-xl mx-auto">
         <div className="inline-flex h-10 w-10 items-center justify-center rounded-xs bg-gold/15 text-gold mb-3">
           <MapPin size={22} />

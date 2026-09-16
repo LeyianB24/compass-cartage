@@ -63,7 +63,7 @@ export default function ServicesPage() {
           className="bg-paper flex-1 py-16 md:py-20"
         >
           <div className="section-padding mx-auto max-w-content">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {SERVICES.map((service, i) => (
               <ServiceCard
                 key={service.title}

@@ -32,7 +32,7 @@
   --radius-default: 6px;
   --radius-card: 10px;
 
-  --max-width-content: 1280px;
+  --max-width-content: 100%;
 
   /* Weighted easing curves for industrial UI micro-interactions */
   --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
@@ -130,10 +130,10 @@
    Reusable Layout & Component Utility Layer
    -------------------------------------------------------------------------- */
 @layer utilities {
-  /* Section Layout Spacing */
+  /* Section Layout Spacing - Fluid fit across mobile, tablet, laptop, and ultra-wide */
   .section-padding {
-    padding-left: clamp(1.25rem, 5vw, 6rem);
-    padding-right: clamp(1.25rem, 5vw, 6rem);
+    padding-left: clamp(1rem, 3.5vw, 4rem);
+    padding-right: clamp(1rem, 3.5vw, 4rem);
   }
 
   /* Typography Eyebrow Tag */
@@ -161,6 +161,45 @@
   .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 24px -10px rgba(7, 20, 38, 0.08);
+  }
+
+  /* Shimmer Beam Animation on Primary CTAs */
+  @keyframes shimmer-sweep {
+    0% { transform: translateX(-150%) skewX(-20deg); }
+    100% { transform: translateX(250%) skewX(-20deg); }
+  }
+
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    transform: translateX(-150%) skewX(-20deg);
+    pointer-events: none;
+  }
+  .btn-shimmer:hover::after {
+    animation: shimmer-sweep 1.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+
+  /* Radar Pulse Ring */
+  @keyframes radar-ripple {
+    0% { transform: scale(0.8); opacity: 0.9; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+  .radar-ring {
+    animation: radar-ripple 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
 }
 

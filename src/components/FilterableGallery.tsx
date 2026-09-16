@@ -47,27 +47,34 @@ export default function FilterableGallery() {
 
   return (
     <div className="space-y-8">
-      {/* Category Tabs */}
+      {/* Category Tabs with Sliding Pill */}
       <div className="flex flex-wrap items-center justify-center gap-2">
         {(["All", "Local Crew", "Packing & Prep", "Trucks & Transport", "Specialty Items"] as GalleryCategory[]).map(
           (tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`rounded-xs px-5 py-2.5 text-xs font-semibold transition-all ${
+              className={`relative rounded-xs px-5 py-2.5 text-xs font-semibold transition-colors ${
                 activeTab === tab
-                  ? "bg-gold text-navy-deep font-bold shadow-xs"
+                  ? "text-navy-deep font-bold"
                   : "border border-hairline bg-paper-muted text-slate hover:border-gold hover:text-navy-deep dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-300 dark:hover:text-white dark:hover:border-gold"
               }`}
             >
-              {tab}
+              {activeTab === tab && (
+                <motion.span
+                  layoutId="galleryCategoryPill"
+                  className="absolute inset-0 rounded-xs bg-gold shadow-xs"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{tab}</span>
             </button>
           )
         )}
       </div>
 
       {/* Image Grid */}
-      <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <AnimatePresence>
           {filtered.map((img, idx) => (
             <motion.div
