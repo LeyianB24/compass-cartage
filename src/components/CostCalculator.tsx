@@ -179,6 +179,38 @@ export default function CostCalculator() {
                   </p>
                 </div>
 
+                {/* Quick Route Selector */}
+                <div className="rounded-xs border border-hairline bg-paper/50 p-4 dark:border-white/10 dark:bg-[#070c14]">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-light dark:text-gray-400">
+                    Select Route (Where you are → Where you go):
+                  </span>
+                  <div className="mt-2.5 flex flex-wrap gap-1.5">
+                    {[
+                      { label: "Edmonton Local (15 km)", km: 15 },
+                      { label: "Edmonton → St. Albert (18 km)", km: 18 },
+                      { label: "Edmonton → Sherwood Park (16 km)", km: 16 },
+                      { label: "Edmonton → Spruce Grove (32 km)", km: 32 },
+                      { label: "Edmonton → Leduc (35 km)", km: 35 },
+                      { label: "Edmonton → Red Deer (150 km)", km: 150 },
+                      { label: "Edmonton → Calgary (298 km)", km: 298 },
+                      { label: "Edmonton → Canmore / Banff (390 km)", km: 390 },
+                    ].map((r) => (
+                      <button
+                        key={r.label}
+                        type="button"
+                        onClick={() => setDistanceKm(r.km)}
+                        className={`rounded-xs px-2.5 py-1 font-mono text-[10px] font-semibold transition-all ${
+                          distanceKm === r.km
+                            ? "border border-gold bg-gold text-navy-deep font-bold"
+                            : "border border-hairline bg-paper text-slate hover:border-gold dark:border-white/10 dark:bg-[#0f172a] dark:text-gray-300"
+                        }`}
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Distance Slider */}
                 <div className="rounded-xs border border-hairline bg-paper/50 p-5 dark:border-white/10 dark:bg-[#070c14]">
                   <div className="flex items-center justify-between">

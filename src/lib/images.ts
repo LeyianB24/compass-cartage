@@ -18,7 +18,62 @@ export type ImageAsset = {
  * never hard-code a path elsewhere.
  */
 export const IMAGES = {
-  // Hero headline photographs — newly provided high-resolution moving fleet & crew imagery
+  // --- REAL COMPASS CARTAGE MOVING FLEET ---
+  // 1. 26ft Commercial Freight Box Truck (Lorry)
+  lorry1: {
+    src: "/images/lorry1.jpeg",
+    alt: "Compass Cartage 26ft commercial freight moving truck with hydraulic lift gate",
+  },
+  lorry2: {
+    src: "/images/lorry2.jpeg",
+    alt: "Compass Cartage heavy freight moving truck loading bay and chassis",
+  },
+  lorry3: {
+    src: "/images/lorry3.jpeg",
+    alt: "Compass Cartage moving fleet depot and transport truck stationed in Edmonton",
+  },
+
+  // 2. High-Roof Custom Transit Van (Charcoal Grey)
+  transitVanGrey: {
+    src: "/images/hero 2.jpg",
+    alt: "Compass Cartage high-roof Ford Transit moving van for apartment and express moves",
+  },
+  transitVanGreyWheel: {
+    src: "/images/hero 4.jpg",
+    alt: "Compass Cartage Ford Transit commercial all-terrain clearance for Alberta moves",
+  },
+
+  // 3. Heavy-Duty Tri-Axle Enclosed Moving Trailer (65TRL01)
+  enclosedTrailerBlue: {
+    src: "/images/hero 3.jpg",
+    alt: "Compass Cartage heavy-duty tri-axle enclosed moving trailer (Unit 65TRL01)",
+  },
+  enclosedTrailerFacility: {
+    src: "/images/hero 8.jpg",
+    alt: "Compass Cartage tri-axle commercial moving trailer stationed at maintenance facility",
+  },
+  enclosedTrailerProfile: {
+    src: "/images/hero 5.jpg",
+    alt: "Compass Cartage weather-sealed tri-axle cargo transport trailer for intercity moves",
+  },
+
+  // 4. High-Roof Residential Delivery Van (White)
+  residentialDeliveryVan: {
+    src: "/images/hero 6.jpg",
+    alt: "Compass Cartage residential moving van loaded with furniture and boxes at customer driveway",
+  },
+  residentialDeliveryVanAlt: {
+    src: "/images/hero 7.jpg",
+    alt: "Compass Cartage residential relocation van open for secure unloading",
+  },
+
+  // 5. Interior Van Cargo & Furniture Protection
+  cargoInteriorLoading: {
+    src: "/images/hero 1.jpg",
+    alt: "Compass Cartage interior van cargo bay with padded mattresses and organized boxes",
+  },
+
+  // Legacy mappings for backwards compatibility
   heroMovers: {
     src: "/images/hero 1.jpg",
     alt: "Compass Cartage moving crew and fleet handling relocation",
@@ -126,10 +181,10 @@ export const IMAGES = {
     alt: "Movers unloading a truck for a short-notice move",
   },
 
-  // "Hire Moving Services" webp — relocation / destination-themed.
+  // Dedicated haul relocation asset
   hireMovingServices: {
-    src: "/images/Hire-Moving-Services-in-Hawaii.webp",
-    alt: "Family arriving at a new home after a long-distance relocation",
+    src: "/images/lorry1.jpeg",
+    alt: "Compass Cartage moving truck on route for long-distance relocation",
   },
 
   // Packers and movers service — general crew-at-work shot.
@@ -179,9 +234,17 @@ export const IMAGES = {
  * Reorder or swap entries here only.
  */
 export const GALLERY: ReadonlyArray<ImageAsset> = [
-  IMAGES.heroMovers,
+  // Compass Cartage Real Fleets
+  IMAGES.lorry1,
+  IMAGES.lorry3,
+  IMAGES.lorry2,
+  IMAGES.transitVanGrey,
+  IMAGES.enclosedTrailerBlue,
+  IMAGES.residentialDeliveryVan,
+  IMAGES.cargoInteriorLoading,
+  IMAGES.enclosedTrailerFacility,
+  IMAGES.transitVanGreyWheel,
   IMAGES.couplePacking,
-  IMAGES.truckSunnyDay,
   IMAGES.fridgeAppliance,
   IMAGES.moversNeededToday,
   IMAGES.packersAndMovers,
@@ -189,10 +252,6 @@ export const GALLERY: ReadonlyArray<ImageAsset> = [
   IMAGES.moversWorkingAlt,
   IMAGES.storageWarehouse,
   IMAGES.smilingMover,
-  IMAGES.scene02,
-  IMAGES.scene11,
-  IMAGES.scene14,
-  IMAGES.scene16,
 ] as const;
 
 /**
@@ -201,11 +260,11 @@ export const GALLERY: ReadonlyArray<ImageAsset> = [
  * given service everywhere it appears.
  */
 export const SERVICE_IMAGES = {
-  "Local Moves": "indoorsWithTools",
-  "Long-Distance Moves": "hireMovingServices",
+  "Local Moves": "lorry2",
+  "Long-Distance Moves": "lorry1",
   "Packing & Unpacking": "couplePacking",
   "Storage Solutions": "storageWarehouse",
-  "Commercial & Office Moves": "officeMove",
+  "Commercial & Office Moves": "lorry3",
   "Appliance & Heavy Items": "fridgeAppliance",
   "Short-Notice Moves": "moversNeededToday",
 } as const;

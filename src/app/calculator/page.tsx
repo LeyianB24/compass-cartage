@@ -8,7 +8,7 @@ import { IMAGES } from "@/lib/images";
 export const metadata: Metadata = {
   title: "Instant Moving Cost Calculator",
   description:
-    "Calculate instant moving cost estimates, crew requirements, and truck sizing for local and long-distance moves in Calgary and Alberta.",
+    "Calculate instant moving cost estimates, crew requirements, and truck sizing for local and long-distance moves in Edmonton and Alberta.",
   openGraph: {
     title: "Instant Moving Cost Calculator | Compass Cartage",
     description: "Get real-time binding estimates with zero hidden fees.",

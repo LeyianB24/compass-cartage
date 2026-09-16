@@ -11,10 +11,10 @@ import { IMAGES } from "@/lib/images";
 import HeroQuickQuote from "@/components/HeroQuickQuote";
 
 const HERO_SCENES = [
-  { id: "hero2", label: "Fleet Ready", img: IMAGES.hero2 },
+  { id: "lorry1", label: "Moving Fleet", img: IMAGES.lorry1 },
+  { id: "lorry3", label: "Our Trucks", img: IMAGES.lorry3 },
+  { id: "lorry2", label: "Transit Ready", img: IMAGES.lorry2 },
   { id: "hero1", label: "Expert Crew", img: IMAGES.hero1 },
-  { id: "hero3", label: "Careful Loading", img: IMAGES.hero3 },
-  { id: "hero4", label: "Home Delivery", img: IMAGES.hero4 },
 ];
 
 const fadeUp = {
@@ -60,11 +60,11 @@ export default function Hero() {
         </AnimatePresence>
       </motion.div>
 
-      {/* Multi-layered architectural gradient wash for pristine legibility */}
+      {/* Multi-layered architectural gradient wash for pristine legibility while letting the fleet shine */}
       <motion.div
         aria-hidden="true"
         style={{ y: overlayY }}
-        className="absolute inset-0 -z-[2] bg-gradient-to-r from-[#070c14]/98 via-[#0a131f]/90 to-[#070c14]/75 dark:from-[#070c14]/98 dark:via-[#0a131f]/92 dark:to-[#070c14]/80"
+        className="absolute inset-0 -z-[2] bg-gradient-to-r from-[#070c14]/98 via-[#0a131f]/85 to-[#070c14]/50 dark:from-[#070c14]/98 dark:via-[#0a131f]/85 dark:to-[#070c14]/55"
       />
       <div
         aria-hidden="true"
@@ -83,8 +83,8 @@ export default function Hero() {
 
       {/* Main Grid Hero Content */}
       <div className="section-padding mx-auto grid max-w-content gap-12 py-16 lg:grid-cols-[1.18fr_0.82fr] lg:items-center lg:py-24">
-        {/* Left Column: Institutional Value Proposition */}
-        <div>
+        {/* Left Column: Core Value Proposition */}
+        <div className="max-w-2xl text-left">
           {/* Top Authority Pill */}
           <motion.div
             custom={0}
@@ -121,11 +121,11 @@ export default function Hero() {
               animate="show"
               className="block bg-gradient-to-r from-gold-soft via-white to-gold bg-clip-text text-transparent"
             >
-              Single-Crew Continuity.
+              One Trusted Crew.
             </motion.span>
           </h1>
 
-          {/* Subtitle / Institutional Positioning */}
+          {/* Subtitle / Plain English Value Proposition */}
           <motion.p
             custom={3}
             variants={fadeUp}
@@ -133,10 +133,10 @@ export default function Hero() {
             animate="show"
             className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg dark:text-gray-300 font-normal"
           >
-            Dedicated white-glove residential & commercial relocations across Edmonton & Alberta. One vetted crew from pickup to final room assembly, backed by binding actuarial quotes and zero surprise fees.
+            Professional residential and commercial moving across Edmonton and Alberta. One dedicated crew from pickup to delivery, transparent upfront quotes, and zero surprise fees.
           </motion.p>
 
-          {/* Key Architectural Protocol Badges */}
+          {/* Key Care & Protection Badges */}
           <motion.div
             custom={4}
             variants={fadeUp}
@@ -146,15 +146,15 @@ export default function Hero() {
           >
             <div className="flex items-center gap-1.5">
               <CheckCircle2 size={15} className="text-gold-soft" />
-              <span>0% Cargo Claim Rate</span>
+              <span>Careful & Insured Handling</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Lock size={14} className="text-gold-soft" />
-              <span>Binding Price Guarantee</span>
+              <span>Upfront Price Guarantee</span>
             </div>
             <div className="flex items-center gap-1.5">
               <ShieldCheck size={15} className="text-gold-soft" />
-              <span>Full Neoprene Jamb Shielding</span>
+              <span>Floor & Doorway Protection</span>
             </div>
           </motion.div>
 
@@ -170,7 +170,7 @@ export default function Hero() {
               href="/quote"
               className="group flex items-center gap-2.5 rounded-sm bg-gold px-7 py-3.5 text-xs font-bold text-navy-deep shadow-xl transition-all hover:bg-gold-soft hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
-              <span>Scope Your Move Online</span>
+              <span>Get a Free Quote</span>
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
             </Link>
 
@@ -179,11 +179,11 @@ export default function Hero() {
               className="flex items-center gap-2 rounded-sm border border-white/20 bg-white/5 px-6 py-3.5 text-xs font-semibold text-white backdrop-blur transition-all hover:bg-white/15 dark:border-white/15 dark:hover:border-gold/50"
             >
               <Phone size={15} className="text-gold-soft" />
-              <span>Direct Dispatch: {BUSINESS.phone}</span>
+              <span>Call Us: {BUSINESS.phone}</span>
             </a>
           </motion.div>
 
-          {/* Institutional Trust Badges */}
+          {/* Trust Badges */}
           <motion.div
             custom={6}
             variants={fadeUp}
@@ -193,11 +193,11 @@ export default function Hero() {
           >
             <div className="flex items-center gap-1.5">
               <ShieldCheck size={16} className="text-gold-soft" />
-              <span>WCB Alberta Certified (#0109-88)</span>
+              <span>Fully Licensed & Insured Crew</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Clock size={16} className="text-gold-soft" />
-              <span>Guaranteed Arrival Windows</span>
+              <span>Reliable Arrival Windows</span>
             </div>
           </motion.div>
 
@@ -210,7 +210,7 @@ export default function Hero() {
             className="mt-8 flex items-center gap-2.5"
           >
             <span className="font-mono text-[10px] uppercase tracking-wider text-white/60 dark:text-gray-400">
-              Active Manifest:
+              Moving Day Fleet:
             </span>
             <div className="flex items-center gap-1.5">
               {HERO_SCENES.map((scene, idx) => (
@@ -230,7 +230,7 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right Column: Volumetric Quick-Scope Deck */}
+        {/* Right Column: Quick Move Estimate Deck */}
         <div className="flex justify-center lg:justify-end">
           <HeroQuickQuote />
         </div>

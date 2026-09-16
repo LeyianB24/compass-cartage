@@ -82,7 +82,7 @@ export default function Footer() {
               relocation services across Edmonton and Alberta.
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-gold-soft dark:text-[#38bdf8]">
+            <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-gold-soft dark:text-gold">
               <span className="rounded-xs border border-gold/30 bg-gold/10 px-2 py-0.5">
                 100% Insured
               </span>
@@ -90,20 +90,20 @@ export default function Footer() {
                 Upfront Pricing
               </span>
               <span className="rounded-xs border border-gold/30 bg-gold/10 px-2 py-0.5">
-                WCB Alberta Certified
+                Licensed & Insured
               </span>
             </div>
           </div>
 
           {/* Quick Links Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft dark:text-[#38bdf8]">Navigation</p>
+            <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Navigation</p>
             <ul className="space-y-2.5 text-xs lg:text-sm text-white/80">
               {QUICK_LINKS.slice(0, 5).map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-block transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="inline-block transition-colors duration-200 hover:text-white dark:hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {link.label}
                   </Link>
@@ -114,13 +114,13 @@ export default function Footer() {
 
           {/* Tools & Planning Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft dark:text-[#38bdf8]">Tools & Hubs</p>
+            <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Tools & Hubs</p>
             <ul className="space-y-2.5 text-xs lg:text-sm text-white/80">
               {QUICK_LINKS.slice(5).map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-block transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="inline-block transition-colors duration-200 hover:text-white dark:hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {link.label}
                   </Link>
@@ -131,14 +131,14 @@ export default function Footer() {
 
           {/* Contact Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft dark:text-[#38bdf8]">Contact Us</p>
+            <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Contact Us</p>
             <ul className="space-y-3 text-xs lg:text-sm text-white/80">
               {BUSINESS?.phone && (
                 <li className="flex items-center gap-2.5">
-                  <Phone size={15} className="shrink-0 text-gold-soft dark:text-[#00a3e0]" aria-hidden="true" />
+                  <Phone size={15} className="shrink-0 text-gold-soft dark:text-gold" aria-hidden="true" />
                   <a
                     href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
-                    className="transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="transition-colors duration-200 hover:text-white dark:hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {BUSINESS.phone}
                   </a>
@@ -146,10 +146,10 @@ export default function Footer() {
               )}
               {BUSINESS?.email && (
                 <li className="flex items-center gap-2.5">
-                  <Mail size={15} className="shrink-0 text-gold-soft dark:text-[#00a3e0]" aria-hidden="true" />
+                  <Mail size={15} className="shrink-0 text-gold-soft dark:text-gold" aria-hidden="true" />
                   <a
                     href={`mailto:${BUSINESS.email}`}
-                    className="transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                    className="transition-colors duration-200 hover:text-white dark:hover:text-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
                   >
                     {BUSINESS.email}
                   </a>
@@ -157,7 +157,7 @@ export default function Footer() {
               )}
               {BUSINESS?.serviceAreaShort && (
                 <li className="flex items-start gap-2.5">
-                  <MapPin size={15} className="mt-0.5 shrink-0 text-gold-soft dark:text-[#00a3e0]" aria-hidden="true" />
+                  <MapPin size={15} className="mt-0.5 shrink-0 text-gold-soft dark:text-gold" aria-hidden="true" />
                   <span>{BUSINESS.serviceAreaShort}</span>
                 </li>
               )}
@@ -176,7 +176,7 @@ export default function Footer() {
               href="https://www.bezalel.website/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-gold-soft transition-colors duration-200 hover:text-white dark:hover:text-[#38bdf8] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold rounded-xs"
+              className="font-medium text-gold-soft transition-colors duration-200 hover:text-white dark:hover:text-gold-soft focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold rounded-xs"
             >
               Bezalel Technologies
             </a>

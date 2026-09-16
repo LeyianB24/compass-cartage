@@ -17,10 +17,19 @@ type ServiceCardProps = {
 const TITLE_TO_SLUG: Record<string, string> = {
   "Local Moves": "residential",
   "Long-Distance Moves": "long-distance",
-  "Packing & Unpacking": "residential",
+  "Storage Moves": "storage",
+  "Furniture Storage": "storage",
   "Storage Solutions": "storage",
   "Commercial & Office Moves": "commercial",
-  "Appliance & Heavy Items": "residential",
+  "Commercial Logistics": "commercial",
+  "Corporate & Office Logistics": "commercial",
+  "Couch & Appliance Delivery": "residential",
+  "Single-Item Moves": "residential",
+  "Moving-Related Packing": "residential",
+  "Packing & Unpacking": "residential",
+  "Loading & Unloading": "residential",
+  "Junk Removal": "residential",
+  "Last-Minute & Same-Day Moves": "residential",
   "Short-Notice Moves": "residential",
 };
 

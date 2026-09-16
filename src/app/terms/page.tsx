@@ -8,15 +8,15 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <section className="bg-paper">
+    <section className="bg-paper dark:bg-[#070c14] border-b border-hairline dark:border-white/10">
       <div className="section-padding mx-auto max-w-3xl py-16">
-        <p className="eyebrow mb-3">Legal</p>
-        <h1 className="font-display text-4xl font-semibold text-navy-deep">Terms of Service</h1>
-        <p className="mt-2 text-sm text-slate">Last updated: {new Date().toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}</p>
+        <p className="eyebrow mb-3 text-gold-soft dark:text-gold">Legal</p>
+        <h1 className="font-display text-4xl font-semibold text-navy-deep dark:text-white">Terms of Service</h1>
+        <p className="mt-2 text-sm text-slate dark:text-gray-400">Last updated: {new Date().toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}</p>
 
-        <div className="mt-10 space-y-8 text-sm leading-relaxed text-slate">
+        <div className="mt-10 space-y-8 text-sm leading-relaxed text-slate dark:text-gray-300">
           <div>
-            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep">Quotes & Pricing</h2>
+            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep dark:text-white">Quotes & Pricing</h2>
             <p>
               All quotes provided by {BUSINESS.name} are estimates based on the information provided at the time of
               request. Final pricing is confirmed once move details are verified. Everything is quote-based — there
@@ -25,7 +25,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep">Scheduling</h2>
+            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep dark:text-white">Scheduling</h2>
             <p>
               Local and long-distance-within-Alberta moves are scheduled based on availability. Moves outside
               Alberta have no maximum distance but are limited to twice a month (every two weeks) due to logistics.
@@ -34,7 +34,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep">Cancellations</h2>
+            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep dark:text-white">Cancellations</h2>
             <p>
               We understand plans change. Please notify us as early as possible if you need to reschedule or cancel
               a booked move so we can adjust our schedule accordingly.
@@ -42,7 +42,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep">Liability</h2>
+            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep dark:text-white">Liability</h2>
             <p>
               {BUSINESS.name} takes care in handling all items during a move. Specific liability terms and coverage
               details will be confirmed in writing as part of your move agreement.
@@ -50,7 +50,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep">Prohibited Items</h2>
+            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep dark:text-white">Prohibited Items</h2>
             <p>
               For safety reasons, we cannot transport hazardous materials (gasoline, propane, fireworks, paint
               thinners), perishable unsealed food, or live animals. Please keep personal documents and valuables
@@ -59,7 +59,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep">Contact</h2>
+            <h2 className="mb-2 font-display text-lg font-semibold text-navy-deep dark:text-white">Contact</h2>
             <p>
               Questions about these terms can be directed to {BUSINESS.name} at {BUSINESS.email} or {BUSINESS.phone}.
             </p>

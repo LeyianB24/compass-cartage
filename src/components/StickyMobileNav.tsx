@@ -23,7 +23,7 @@ export default function StickyMobileNav() {
           className="flex flex-1 items-center justify-center gap-2 rounded-xs border border-hairline bg-paper py-2.5 text-xs font-bold text-navy-deep transition-all hover:bg-gold/10 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:hover:border-gold"
         >
           <Phone size={14} className="text-gold" />
-          <span>Call Dispatch</span>
+          <span>Call Us</span>
         </a>
 
         {/* Instant Quote Action */}
@@ -32,7 +32,7 @@ export default function StickyMobileNav() {
           className="flex flex-1 items-center justify-center gap-2 rounded-xs bg-navy-deep py-2.5 text-xs font-bold text-gold-soft shadow-md transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
         >
           <Calculator size={14} />
-          <span>Scope Move</span>
+          <span>Get a Quote</span>
         </Link>
       </div>
     </div>

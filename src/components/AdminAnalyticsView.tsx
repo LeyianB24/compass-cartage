@@ -252,7 +252,7 @@ export default function AdminAnalyticsView({ requests }: Props) {
             <p className="font-semibold text-navy-deep dark:text-white mb-1">
               Dispatch Operational Standard:
             </p>
-            All residential and commercial moves maintain single-crew vehicle continuity with full WCB Alberta certification (#0109-88).
+            All residential and commercial moves maintain single-crew vehicle continuity with full licensed and insured coverage.
           </div>
         </div>
       </div>

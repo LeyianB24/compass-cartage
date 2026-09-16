@@ -9,39 +9,39 @@ import Link from "next/link";
 const STEPS = [
   {
     number: "01",
-    title: "Volumetric Scoping",
-    tagline: "Actuarial Binding Price Lock",
+    title: "Free Upfront Estimate",
+    tagline: "Clear Pricing With No Surprises",
     description:
-      "Exact cubic footage, doorway geometry, and transit mileage are calculated in advance. Your rate is frozen into a binding agreement with zero surprise fees.",
+      "We review your rooms, inventory, and move dates in advance. Your rate is quoted clearly before move day with zero hidden fees.",
     icon: Calculator,
-    protocol: "ISO-Standard Asset Log",
+    protocol: "Itemized Move Plan",
   },
   {
     number: "02",
-    title: "Architectural Shielding",
-    tagline: "High-Density Protection",
+    title: "Home & Furniture Prep",
+    tagline: "Careful Protection",
     description:
-      "Our full-time crew applies neoprene door jamb guards, non-slip hardwood floor runners, and thick quilted microfiber wrap to every asset before transit.",
+      "Our experienced crew pads furniture with thick quilted blankets and protects doorways and floors before moving a single item.",
     icon: PackageCheck,
-    protocol: "Surface & Property Shielding",
+    protocol: "Complete Surface Protection",
   },
   {
     number: "03",
-    title: "Dedicated Direct Transit",
-    tagline: "Single-Crew Custody",
+    title: "Direct Transit",
+    tagline: "One Dedicated Crew",
     description:
-      "The exact crew that loaded your property drives our dedicated air-ride fleet directly to your destination. Zero trans-loading, zero brokered handoffs.",
+      "The same crew that carefully loaded your home drives directly to your destination. Zero transfers, zero broker handoffs.",
     icon: Truck,
-    protocol: "GPS-Monitored Air-Ride Haul",
+    protocol: "Dedicated Moving Truck",
   },
   {
     number: "04",
-    title: "White-Glove Placement",
-    tagline: "Room-by-Room Reassembly",
+    title: "Unloading & Room Placement",
+    tagline: "Room-by-Room Setup",
     description:
-      "Every piece of furniture is reassembled and situated precisely to your floorplan. We conduct a final sign-off inspection and remove all packing materials.",
+      "We place every piece of furniture and box into its designated room and reassemble beds and tables so you can settle right in.",
     icon: Sparkles,
-    protocol: "Final Client Sign-Off",
+    protocol: "Final Walkthrough & Sign-Off",
   },
 ];
 
@@ -61,13 +61,13 @@ export default function ProcessTimeline() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3.5 py-1 text-[11px] font-mono font-bold uppercase tracking-wider text-gold-soft">
             <Lock size={12} />
-            <span>Institutional Relocation Standard</span>
+            <span>Our Moving Standard</span>
           </div>
           <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            The Chain of Custody Protocol
+            How Your Move Works
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/80 dark:text-gray-300 font-normal">
-            A disciplined 4-stage relocation lifecycle engineered for zero asset damage, strict timeline adherence, and unbroken chain of custody.
+            A straightforward 4-step moving process designed for complete care, clear communication, and a stress-free moving day.
           </p>
         </div>
 
@@ -141,10 +141,10 @@ export default function ProcessTimeline() {
             </div>
             <div>
               <p className="text-sm font-semibold text-white">
-                Guaranteed Single-Crew Accountability
+                Guaranteed One-Crew Accountability
               </p>
               <p className="text-xs text-white/75 dark:text-gray-300">
-                100% WCB Alberta compliance, $2M liability protection, and zero broker handoffs.
+                Comprehensive cargo insurance, full liability protection, and zero broker handoffs.
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function ProcessTimeline() {
             href="/quote"
             className="flex shrink-0 items-center gap-2 rounded-xs bg-gold px-6 py-3 text-xs font-bold text-navy-deep transition-all hover:bg-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
-            <span>Lock In Your Moving Scope</span>
+            <span>Get a Free Quote</span>
             <ArrowRight size={14} />
           </Link>
         </div>

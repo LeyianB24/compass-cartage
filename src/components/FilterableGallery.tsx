@@ -16,9 +16,20 @@ export default function FilterableGallery() {
 
   // Map gallery images to category tags for filtering
   const categorizedImages: Array<ImageAsset & { category: GalleryCategory }> = [
-    { ...IMAGES.heroMovers, category: "Local Crew" },
+    // Real Compass Cartage Fleet
+    { ...IMAGES.lorry1, category: "Trucks & Transport" },
+    { ...IMAGES.lorry3, category: "Trucks & Transport" },
+    { ...IMAGES.lorry2, category: "Trucks & Transport" },
+    { ...IMAGES.transitVanGrey, category: "Trucks & Transport" },
+    { ...IMAGES.enclosedTrailerBlue, category: "Trucks & Transport" },
+    { ...IMAGES.residentialDeliveryVan, category: "Trucks & Transport" },
+    { ...IMAGES.cargoInteriorLoading, category: "Trucks & Transport" },
+    { ...IMAGES.enclosedTrailerFacility, category: "Trucks & Transport" },
+    { ...IMAGES.transitVanGreyWheel, category: "Trucks & Transport" },
+    { ...IMAGES.residentialDeliveryVanAlt, category: "Trucks & Transport" },
+
+    // Packing, Crew, and Services
     { ...IMAGES.couplePacking, category: "Packing & Prep" },
-    { ...IMAGES.truckSunnyDay, category: "Trucks & Transport" },
     { ...IMAGES.fridgeAppliance, category: "Specialty Items" },
     { ...IMAGES.moversNeededToday, category: "Trucks & Transport" },
     { ...IMAGES.packersAndMovers, category: "Packing & Prep" },

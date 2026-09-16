@@ -8,46 +8,46 @@ import { Home, Building2, Warehouse, ArrowRight, CheckCircle2, Lock } from "luci
 const FEATURED_SERVICES = [
   {
     id: "residential",
-    title: "Residential Relocation",
-    subtitle: "High-Rise, Condominium & Estate Moves",
+    title: "Residential Moving",
+    subtitle: "Apartments, Condos, Townhomes & Houses",
     description:
-      "Full-service residential logistics. We shield doorways and flooring, dismantle/reassemble complex furniture, and position assets directly to floorplans.",
+      "Full-service home moving across Edmonton and Alberta. We protect doorways and floors, carefully disassemble and reassemble furniture, and place everything right where you want it.",
     icon: Home,
-    tag: "Single-Crew Custody",
+    tag: "One Dedicated Crew",
     features: [
-      "Microfiber quilted blanket shielding",
-      "Pneumatic floor runners & jamb guards",
+      "Thick quilted furniture moving blankets",
+      "Floor runners & doorway padding",
       "Full furniture disassembly & setup",
     ],
     href: "/services/residential",
   },
   {
     id: "commercial",
-    title: "Corporate & Office Logistics",
-    subtitle: "Zero-Downtime Weekend Relocations",
+    title: "Commercial & Office Moves",
+    subtitle: "Minimize Downtime for Your Business",
     description:
-      "Engineered office relocations to eliminate workday interruption. Specialized containment for workstations, servers, conference suites, and confidential archives.",
+      "Efficient office relocations scheduled around your working hours to eliminate downtime. Safe transport for desks, computers, equipment, and files.",
     icon: Building2,
-    tag: "Commercial Continuity",
+    tag: "Flexible Scheduling",
     features: [
-      "After-hours & weekend transition schedules",
-      "Heavy-duty crate dollies & secure strapping",
-      "Certificate of Insurance (COI) issuing",
+      "Weekend & after-hours moving options",
+      "Careful equipment handling & transport",
+      "Certificate of Insurance (COI) available",
     ],
     href: "/services/commercial",
   },
   {
     id: "storage",
-    title: "Climate-Monitored Vault Storage",
-    subtitle: "Short & Long-Term Sealed Security",
+    title: "Secure Storage Solutions",
+    subtitle: "Short & Long-Term Furniture Storage",
     description:
-      "Secure, temperature-regulated vault storage for furniture, fine art, and commercial inventory between moves, renovations, or corporate restructuring.",
+      "Clean, temperature-regulated storage for furniture and belongings between moves, during renovations, or while downsizing.",
     icon: Warehouse,
-    tag: "24/7 Monitored Vaults",
+    tag: "Safe & Monitored",
     features: [
-      "Continuous climate & humidity monitoring",
-      "Sealed wooden palletized containers",
-      "Door-to-vault direct inventory logistics",
+      "Climate-controlled, secure facilities",
+      "Direct home pickup & delivery",
+      "Flexible month-to-month terms",
     ],
     href: "/services/storage",
   },
@@ -62,13 +62,13 @@ export default function FeaturedServicesMatrix() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
               <Lock size={12} />
-              <span>Core Operational Capabilities</span>
+              <span>Our Moving Services</span>
             </div>
             <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-navy-deep dark:text-white sm:text-4xl lg:text-5xl">
-              Architectural Precision for Every Relocation
+              Careful, Reliable Moving for Every Home & Business
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-slate dark:text-slate">
-              Itemized actuarial estimates with dedicated single-crew accountability across Edmonton, Calgary, and all Alberta municipalities.
+              Transparent upfront quotes with a dedicated, experienced crew serving Edmonton, surrounding communities, and all Alberta destinations.
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function FeaturedServicesMatrix() {
             href="/services"
             className="group inline-flex items-center gap-2 rounded-xs border border-hairline bg-paper-muted px-5 py-2.5 text-xs font-bold text-navy-deep transition-all hover:border-gold hover:text-gold dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:hover:border-gold dark:hover:text-gold-soft"
           >
-            <span>View All Operational Services</span>
+            <span>View All Services</span>
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
@@ -130,7 +130,7 @@ export default function FeaturedServicesMatrix() {
                     href={service.href}
                     className="flex w-full items-center justify-center gap-2 rounded-xs border border-hairline bg-paper py-3 text-xs font-bold text-navy-deep transition-all hover:bg-navy-deep hover:text-white dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:hover:bg-gold dark:hover:text-navy-deep"
                   >
-                    <span>Scope {service.title}</span>
+                    <span>View Details</span>
                     <ArrowRight size={13} />
                   </Link>
                 </div>

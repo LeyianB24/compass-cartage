@@ -137,7 +137,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         </section>
 
         {/* Section 2: Transparent Pricing Guide */}
-        <section className="border-b border-hairline bg-paper-muted py-16 md:py-24 dark:border-white/10 dark:bg-[#0c121d]">
+        <section className="border-b border-hairline bg-paper-muted py-16 md:py-24 dark:border-white/10 dark:bg-[#0f172a]">
           <div className="section-padding mx-auto max-w-content">
             <div className="text-center">
               <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
@@ -254,7 +254,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         {/* Dynamic Contextual Call-To-Action */}
         <CallToAction
           heading={`Ready to schedule your ${service.eyebrow.toLowerCase()}?`}
-          subtext="Lock in your preferred move date with a binding, itemized quote today."
+          subtext="Request your free, itemized moving quote today with zero hidden fees."
         />
       </main>
     </>

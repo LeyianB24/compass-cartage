@@ -40,13 +40,13 @@ export default function QuotePage() {
         </div>
       </PageHero>
 
-      <section className="bg-paper">
+      <section className="bg-paper dark:bg-[#070c14] border-b border-hairline dark:border-white/10">
         <div className="section-padding mx-auto max-w-content py-16 md:py-20">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-12">
             {/* Aside: a framed photo + reassurance copy beside the form,
                 so the left column stays useful instead of empty. */}
             <aside className="md:pt-2">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-sm ring-1 ring-hairline">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-sm ring-1 ring-hairline dark:ring-white/10">
                 <Image
                   src={IMAGES.detailTexture.src}
                   alt=""
@@ -55,10 +55,10 @@ export default function QuotePage() {
                   className="-scale-x-100 object-cover opacity-40"
                 />
               </div>
-              <h2 className="mt-6 font-display text-xl font-semibold text-navy-deep">
+              <h2 className="mt-6 font-display text-xl font-semibold text-navy-deep dark:text-white">
                 No surprise fees. Ever.
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate">
+              <p className="mt-2 text-sm leading-relaxed text-slate dark:text-gray-300">
                 The quote you receive is the price you pay. We&apos;ll walk
                 through access, stairs, and any oversized items up front so
                 there are no surprises on moving day.

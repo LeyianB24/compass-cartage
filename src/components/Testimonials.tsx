@@ -1,26 +1,28 @@
-// src/components/Testimonials.tsx
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { ShieldCheck, Clock, Award } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
-const REVIEWS = [
+const COMMITMENTS = [
   {
+    icon: Award,
+    title: "Upfront, Honest Pricing",
     quote:
-      "Arrived exactly at 8:00 AM, wrapped every piece of furniture in thick quilted blankets, and the final price matched the binding quote to the cent.",
-    name: "Sarah M.",
-    context: "Windermere Residential Move",
+      "The price we quote is the price you pay. We walk through stairs, access, and room inventories in advance so there are never surprise fees on moving day.",
+    context: "Transparent Estimates",
   },
   {
+    icon: ShieldCheck,
+    title: "Careful Property Protection",
     quote:
-      "Relocated our office workstations over the weekend with zero downtime on Monday morning. Exceptional single-crew continuity.",
-    name: "David K.",
-    context: "Downtown Office Relocation",
+      "Every piece of furniture is wrapped in clean, quilted moving blankets, and doorways and floors are padded to keep both your old and new home in pristine condition.",
+    context: "Furniture & Home Care",
   },
   {
+    icon: Clock,
+    title: "One Dedicated Crew",
     quote:
-      "Inter-city move to Calgary that could've been chaotic was handled with total calm and structural precision. Highly recommend.",
-    name: "Priya R.",
-    context: "Edmonton to Calgary Move",
+      "The exact same trusted team loads your truck, drives directly to your destination, and places every item in your assigned room. Zero third-party handoffs.",
+    context: "Dedicated Moving Crew",
   },
 ];
 
@@ -46,36 +48,37 @@ export default function Testimonials() {
 
           <div>
             <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold mb-2 block">
-              Verified Client Ledger
+              The Compass Cartage Standard
             </span>
             <h2 className="font-display text-3xl font-semibold text-navy-deep dark:text-white sm:text-4xl">
-              What Clients Report After Relocation
+              What You Can Count On Every Move
             </h2>
 
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {REVIEWS.map((review) => (
-                <figure
-                  key={review.name}
-                  className="flex flex-col justify-between rounded-xs border border-hairline bg-paper-muted p-6 shadow-sm transition-all hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:hover:border-gold/50"
-                >
-                  <figcaption>
-                    <div className="flex gap-1">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} size={14} className="fill-gold text-gold" />
-                      ))}
+              {COMMITMENTS.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.title}
+                    className="flex flex-col justify-between rounded-xs border border-hairline bg-paper-muted p-6 shadow-sm transition-all hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:hover:border-gold/50"
+                  >
+                    <div>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xs bg-gold/15 text-gold-soft dark:text-gold">
+                        <Icon size={20} />
+                      </div>
+                      <h3 className="mt-4 font-display text-base font-semibold text-navy-deep dark:text-white">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 text-xs leading-relaxed text-slate dark:text-gray-300 font-normal">
+                        &ldquo;{item.quote}&rdquo;
+                      </p>
                     </div>
-                    <blockquote className="mt-4 text-xs leading-relaxed text-slate dark:text-gray-300 font-normal">
-                      &ldquo;{review.quote}&rdquo;
-                    </blockquote>
-                  </figcaption>
-                  <p className="mt-6 text-xs font-semibold text-navy-deep dark:text-white">
-                    {review.name}
-                    <span className="block font-mono text-[10px] font-normal text-slate-light dark:text-gray-400 mt-0.5">
-                      {review.context}
-                    </span>
-                  </p>
-                </figure>
-              ))}
+                    <p className="mt-6 font-mono text-[10px] font-semibold text-gold-soft dark:text-gold">
+                      {item.context}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

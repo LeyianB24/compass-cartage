@@ -72,7 +72,7 @@ export default function Navbar() {
               </span>
               {isAdminRoute && (
                 <span className="mt-0.5 block font-mono text-[10px] font-bold uppercase tracking-wider text-gold">
-                  Dispatch Ledger Terminal
+                  Admin Dashboard
                 </span>
               )}
             </div>
@@ -146,7 +146,7 @@ export default function Navbar() {
                 href="/quote"
                 className="rounded-xs bg-navy-deep px-4 py-2 text-xs lg:text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
-                Scope Your Move
+                Get a Free Quote
               </Link>
             </div>
 
@@ -215,7 +215,7 @@ export default function Navbar() {
                 className="mt-3 rounded-xs bg-navy-deep px-5 py-3 text-center text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep"
                 onClick={() => setOpen(false)}
               >
-                Scope Your Move Online
+                Get a Free Quote
               </Link>
             </nav>
           </motion.div>

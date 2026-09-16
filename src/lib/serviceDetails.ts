@@ -42,27 +42,27 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       "Whether you're moving from a 1-bedroom high-rise downtown or a 5-bedroom family home in St. Albert or Sherwood Park, our experienced, full-time crew handles all heavy lifting, wrapping, disassembly, and careful placement in your new home.",
     inclusions: [
       "Thick quilted furniture moving blankets & stretch wrap",
-      "Floor protection runners & neoprene doorway jamb protectors",
+      "Floor protection runners & doorway padding",
       "Disassembly & reassembly of bed frames, tables & desks",
-      "Full cargo transit insurance & WCB Alberta coverage",
-      "No hidden stair, elevator, or fuel surcharges in Metro Edmonton",
+      "Comprehensive cargo insurance & licensed crew coverage",
+      "Transparent upfront pricing with zero hidden surcharges",
     ],
     pricingGuide: [
       {
         title: "1-2 Bedroom Apartment",
-        rate: "From $129/hr",
-        description: "2 professional movers + 20ft fully equipped moving truck.",
+        rate: "Custom Hourly Estimate",
+        description: "2 professional movers + fully equipped moving truck.",
         badge: "Most Popular",
       },
       {
         title: "3-4 Bedroom House",
-        rate: "From $179/hr",
-        description: "3 professional movers + 26ft heavy-duty moving truck.",
+        rate: "Custom Hourly Estimate",
+        description: "3 professional movers + heavy-duty moving truck.",
       },
       {
         title: "Large Estate / 5+ Bed",
         rate: "Custom Flat Quote",
-        description: "4+ movers, multiple trucks, dedicated moving coordinator.",
+        description: "4+ movers, multiple trucks, dedicated moving coordination.",
       },
     ],
     process: [
@@ -79,7 +79,7 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       {
         step: "03",
         title: "Smooth Direct Transit",
-        desc: "Everything is strapped and locked securely in our air-ride trucks for a safe journey.",
+        desc: "Everything is strapped and locked securely in our moving trucks for a safe journey.",
       },
       {
         step: "04",
@@ -90,11 +90,11 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     faqs: [
       {
         question: "Do you charge extra for stairs or elevator moves?",
-        answer: "No. Unlike many movers, we do not add surprise per-flight stair fees or elevator delays. Everything is clearly factored into your upfront hourly or flat-rate estimate.",
+        answer: "All access factors (stairs, elevators, long walks) are clearly reviewed upfront during your estimate so there are no surprise fees added on moving day.",
       },
       {
         question: "Are my belongings insured during the move?",
-        answer: "Yes, 100%. We provide standard cargo transit protection, and our business is fully licensed and covered by WCB Alberta.",
+        answer: "Yes, 100%. We carry full cargo transit protection and commercial liability coverage. Your belongings are protected throughout the move.",
       },
       {
         question: "Can you disassemble and reassemble our beds?",
@@ -106,26 +106,26 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
   commercial: {
     slug: "commercial",
     title: "Commercial & Office Relocations",
-    subtitle: "Offices, Retail, Clinics & Corporate Facilities",
+    subtitle: "Offices, Retail, Clinics & Facilities",
     metaTitle: "Commercial & Office Movers Edmonton | Compass Cartage",
-    metaDescription: "Minimize downtime with weekend & evening office relocations across Edmonton. IT workstations, filing systems & furniture.",
+    metaDescription: "Minimize downtime with weekend & evening office relocations across Edmonton. Workstations, filing systems & furniture.",
     imageKey: "officeMove",
-    eyebrow: "Commercial Logistics",
-    tagline: "Seamless office transitions engineered to keep your business operating.",
+    eyebrow: "Commercial Relocation",
+    tagline: "Organized office transitions planned to keep your business operating.",
     overview:
-      "We understand that business downtime costs money. Compass Cartage specializes in scheduled evening and weekend office relocations, computer workstation transfers, file vault transport, and executive furniture relocation.",
+      "We understand that business downtime costs money. Compass Cartage specializes in scheduled evening and weekend office relocations, workstation transfers, file transport, and corporate furniture setup.",
     inclusions: [
-      "Weekend & after-hours moving slots to prevent revenue loss",
-      "Anti-static monitor bags & computer rolling carts",
+      "Weekend & after-hours moving slots to minimize operational downtime",
+      "Padded equipment dollies & protective IT wrapping",
       "Modular workstation teardown & conference room setup",
-      "Full Certificate of Insurance (COI) for commercial property managers",
-      "Disposal & eco-friendly recycling of old office furniture on request",
+      "Certificate of Insurance (COI) provided for commercial property managers",
+      "Furniture disposal & eco-friendly recycling coordination on request",
     ],
     pricingGuide: [
       {
         title: "Small Office (1-5 Workstations)",
-        rate: "From $149/hr",
-        description: "2-3 movers + commercial ramp truck + computer carts.",
+        rate: "Custom Hourly Estimate",
+        description: "2-3 movers + commercial ramp truck + moving equipment.",
       },
       {
         title: "Medium Corporate (6-20 Desks)",
@@ -135,8 +135,8 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       },
       {
         title: "Large Floor / Facility",
-        rate: "Detailed RFP Scope",
-        description: "Multi-truck fleet, IT disconnect/reconnect coordination.",
+        rate: "Comprehensive Scope Quote",
+        description: "Multi-truck fleet, phased logistics, dedicated coordination.",
       },
     ],
     process: [
@@ -147,8 +147,8 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       },
       {
         step: "02",
-        title: "Color-Coded Crate Labeling",
-        desc: "Every desk, monitor, and file box receives color-coded tags mapped to the new floorplan.",
+        title: "Organized Labeling & Prep",
+        desc: "Desks, monitors, and file boxes receive clear tags mapped to your new floorplan.",
       },
       {
         step: "03",
@@ -164,49 +164,49 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
     faqs: [
       {
         question: "Can you provide a Certificate of Insurance (COI) for our building manager?",
-        answer: "Yes, we issue building-compliant COIs naming your property manager as additional insured at zero cost.",
+        answer: "Yes, we issue building-compliant COIs naming your property manager as additional insured upon request.",
       },
       {
         question: "Do you move after hours and on weekends?",
-        answer: "Yes, most of our corporate relocations take place on Friday evenings and Saturdays to ensure zero operational downtime.",
+        answer: "Yes, our commercial relocations can be scheduled for Friday evenings and weekends to prevent business interruption.",
       },
     ],
   },
 
   storage: {
     slug: "storage",
-    title: "Secure Vault Storage Solutions",
-    subtitle: "Climate-Controlled Short & Long-Term Facilities",
+    title: "Secure Storage Solutions",
+    subtitle: "Clean, Climate-Controlled Short & Long-Term Storage",
     metaTitle: "Secure Storage Edmonton | Compass Cartage",
-    metaDescription: "Clean, temperature-regulated furniture storage vaults in Edmonton. Direct pickup from your home and flexible monthly terms.",
+    metaDescription: "Clean, temperature-regulated furniture storage solutions in Edmonton. Direct pickup from your home and flexible monthly terms.",
     imageKey: "storageWarehouse",
     eyebrow: "Secure Storage",
     tagline: "Safe, climate-controlled temporary homes for your furniture and valuables.",
     overview:
-      "Need a place to keep your furniture while renovating, waiting on possession dates, or downsizing? Our climate-controlled Edmonton storage vaults offer 24/7 digital monitoring, clean sealed vaults, and direct pickup and delivery.",
+      "Need a place to keep your furniture while renovating, waiting on possession dates, or downsizing? Our climate-controlled storage solutions offer clean, secure space with direct pickup and delivery.",
     inclusions: [
-      "24/7 Security cameras, gated access & fire suppression",
+      "Monitored, secure facilities with controlled access",
       "Full climate regulation (heated in winter, cooled in summer)",
-      "Direct loading into sealed wooden storage vaults",
-      "Itemized digital inventory tracking for every vault",
+      "Protective furniture wrapping and organized storage placement",
+      "Itemized inventory tracking for all stored items",
       "No long-term lease commitments — flexible month-to-month billing",
     ],
     pricingGuide: [
       {
-        title: "Single Vault (1 Room)",
-        rate: "$149 / month",
-        description: "Standard 250 cu ft wooden storage vault.",
+        title: "Partial Household (1-2 Rooms)",
+        rate: "Flexible Monthly Rate",
+        description: "Ideal for staging, downsizing, or temporary renovation storage.",
       },
       {
-        title: "2-3 Vaults (Apartment)",
-        rate: "$289 / month",
-        description: "500-750 cu ft climate-regulated storage.",
+        title: "Apartment / Condo (2-3 Rooms)",
+        rate: "Flexible Monthly Rate",
+        description: "Full apartment storage with direct pickup and delivery.",
         badge: "Popular Choice",
       },
       {
         title: "Full House Storage",
-        rate: "From $499 / month",
-        description: "Multi-vault commercial bay with direct access.",
+        rate: "Custom Storage Quote",
+        description: "Multi-room household storage tailored to your timeline.",
       },
     ],
     process: [

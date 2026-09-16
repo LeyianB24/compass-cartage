@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowRight, Calculator, ShieldCheck, Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, Calculator, ShieldCheck, Sparkles, MapPin, Navigation } from "lucide-react";
 import { MOVE_SIZES } from "@/lib/constants";
 
 export default function HeroQuickQuote() {
@@ -14,6 +14,7 @@ export default function HeroQuickQuote() {
     phone: "",
     moveSize: "1-bedroom",
     pickupArea: "",
+    dropoffArea: "",
   });
 
   const selectedSizeObj = MOVE_SIZES.find((s) => s.id === formData.moveSize) || MOVE_SIZES[1];
@@ -25,6 +26,7 @@ export default function HeroQuickQuote() {
       phone: formData.phone,
       moveSize: formData.moveSize,
       pickupAddress: formData.pickupArea || "Edmonton Metro",
+      dropoffAddress: formData.dropoffArea || "Edmonton Metro",
     });
     router.push(`/quote?${params.toString()}`);
   };
@@ -47,10 +49,10 @@ export default function HeroQuickQuote() {
           </div>
           <div>
             <h3 className="font-display text-lg font-semibold tracking-tight text-navy-deep dark:text-white">
-              Volumetric Quick-Scope
+              Quick Move Estimate
             </h3>
             <p className="font-mono text-[10px] uppercase tracking-wider text-slate-light dark:text-slate">
-              Actuarial Edmonton Move Estimates
+              Fast, Free Edmonton Moving Quotes
             </p>
           </div>
         </div>
@@ -94,7 +96,7 @@ export default function HeroQuickQuote() {
         {/* Move Size Selector */}
         <div>
           <label className="block text-xs font-semibold text-navy-deep dark:text-gray-200">
-            Inventory Scope / Property Tier
+            Home or Move Size
           </label>
           <div className="relative mt-1">
             <select
@@ -111,7 +113,7 @@ export default function HeroQuickQuote() {
           </div>
         </div>
 
-        {/* Live Actuarial Manifest Specs Preview */}
+        {/* Live Manifest Specs Preview */}
         <div className="grid grid-cols-3 gap-2 rounded-xs border border-hairline bg-paper/60 p-2.5 dark:border-white/10 dark:bg-[#070c14]/80">
           <div className="text-center">
             <span className="block font-mono text-[9px] uppercase tracking-wider text-slate-light dark:text-gray-400">
@@ -134,25 +136,43 @@ export default function HeroQuickQuote() {
               Truck Class
             </span>
             <span className="truncate font-mono text-[11px] font-bold text-navy-deep dark:text-white">
-              {selectedSizeObj.truckSize.split(" ")[0]} Box
+              {selectedSizeObj.truckSize.split(" ")[0]} Truck
             </span>
           </div>
         </div>
 
-        {/* Pickup Area */}
-        <div>
-          <label className="block text-xs font-semibold text-navy-deep dark:text-gray-200">
-            Pickup City / Neighborhood
-          </label>
-          <div className="relative mt-1">
-            <input
-              type="text"
-              placeholder="e.g. Downtown Edmonton / Windermere / St. Albert"
-              value={formData.pickupArea}
-              onChange={(e) => setFormData({ ...formData, pickupArea: e.target.value })}
-              className="w-full rounded-xs border border-hairline bg-paper px-3.5 py-2.5 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold dark:focus:ring-gold/30"
-            />
-            <MapPin size={14} className="absolute right-3 top-3 text-slate-light dark:text-gray-500" />
+        {/* Pickup & Destination Locations */}
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          <div>
+            <label className="block text-[11px] font-semibold text-navy-deep dark:text-gray-200">
+              Where you are (Pickup)
+            </label>
+            <div className="relative mt-1">
+              <input
+                type="text"
+                placeholder="e.g. Edmonton Core"
+                value={formData.pickupArea}
+                onChange={(e) => setFormData({ ...formData, pickupArea: e.target.value })}
+                className="w-full rounded-xs border border-hairline bg-paper px-3 py-2 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-1 focus:ring-gold dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500"
+              />
+              <MapPin size={13} className="absolute right-2.5 top-2.5 text-gold" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-semibold text-navy-deep dark:text-gray-200">
+              Where you go (Destination)
+            </label>
+            <div className="relative mt-1">
+              <input
+                type="text"
+                placeholder="e.g. St. Albert / Calgary"
+                value={formData.dropoffArea}
+                onChange={(e) => setFormData({ ...formData, dropoffArea: e.target.value })}
+                className="w-full rounded-xs border border-hairline bg-paper px-3 py-2 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500"
+              />
+              <Navigation size={13} className="absolute right-2.5 top-2.5 text-emerald-500" />
+            </div>
           </div>
         </div>
 
@@ -161,7 +181,7 @@ export default function HeroQuickQuote() {
           type="submit"
           className="group mt-3 flex w-full items-center justify-center gap-2 rounded-xs bg-navy-deep py-3.5 text-xs font-bold text-gold-soft shadow-lg transition-all hover:bg-gold hover:text-navy-deep hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
         >
-          <span>Generate Binding Scope & Quote</span>
+          <span>Get Your Free Estimate</span>
           <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
         </button>
 
@@ -169,10 +189,10 @@ export default function HeroQuickQuote() {
         <div className="flex items-center justify-center gap-3 pt-1 font-mono text-[10px] text-slate-light dark:text-slate">
           <span className="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
             <ShieldCheck size={12} />
-            WCB Alberta & Cargo Insured
+            Licensed & Cargo Insured
           </span>
           <span>•</span>
-          <span>Zero Obligation Lock</span>
+          <span>Free, No-Obligation Quotes</span>
         </div>
       </form>
     </motion.div>

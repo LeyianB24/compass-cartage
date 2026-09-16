@@ -7,9 +7,9 @@ import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import { IMAGES } from "@/lib/images";
 
 const STATS = [
-  { value: 500, suffix: "+", label: "Moves Completed" },
-  { value: 100, suffix: "%", label: "Insured & Covered" },
-  { value: 24, suffix: "hr", label: "Average Quote Turnaround" },
+  { value: 100, suffix: "%", label: "Insured & Licensed Cargo Protection" },
+  { value: 1, suffix: "", label: "Dedicated Moving Crew Per Job" },
+  { value: 0, suffix: "", label: "Surprise Fees On Moving Day" },
 ];
 
 function Counter({ value, suffix }: { value: number; suffix: string }) {
@@ -30,15 +30,15 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
   return (
     <span className="font-display text-3xl font-semibold text-white md:text-4xl">
-      <span ref={ref}>0</span>
-      <span className="text-gold-soft dark:text-[#38bdf8]">{suffix}</span>
+      <span ref={ref}>{value}</span>
+      <span className="text-gold-soft dark:text-gold">{suffix}</span>
     </span>
   );
 }
 
 export default function StatsCounter() {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-deep dark:bg-[#121212] text-white">
+    <section className="relative isolate overflow-hidden bg-navy-deep dark:bg-[#070c14] text-white">
       {/* Backdrop photograph */}
       <Image
         src={IMAGES.packingScene.src}
@@ -50,7 +50,7 @@ export default function StatsCounter() {
       {/* Heavy navy wash so numbers stay crisp and readable */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[1] bg-[#002d52]/90 dark:bg-[#121212]/95"
+        className="absolute inset-0 -z-[1] bg-navy-deep/90 dark:bg-[#070c14]/95"
       />
 
       <div className="section-padding mx-auto grid max-w-content gap-10 py-16 sm:grid-cols-3">

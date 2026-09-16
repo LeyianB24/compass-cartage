@@ -20,7 +20,7 @@ export default function CallToAction({
   image = IMAGES.truckSunnyDay,
 }: CallToActionProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-deep dark:bg-[#121212] text-white">
+    <section className="relative isolate overflow-hidden bg-navy-deep dark:bg-[#070c14] text-white">
       {/* Full-bleed backdrop photograph with a slow Ken-Burns zoom */}
       <motion.div
         initial={{ scale: 1.08 }}
@@ -41,7 +41,7 @@ export default function CallToAction({
       {/* Navy wash for legibility */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[1] bg-gradient-to-r from-[#002d52]/95 via-[#004b87]/85 to-[#002d52]/70 dark:from-[#121212]/98 dark:via-[#121212]/90 dark:to-[#071f36]/80"
+        className="absolute inset-0 -z-[1] bg-gradient-to-r from-navy-deep/95 via-navy/85 to-navy-deep/70 dark:from-[#070c14]/98 dark:via-[#070c14]/90 dark:to-[#0a131f]/80"
       />
 
       <div className="section-padding mx-auto flex max-w-content flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center">
@@ -60,7 +60,7 @@ export default function CallToAction({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-2 text-sm text-white/85"
+            className="mt-2 text-sm text-white/85 dark:text-gray-300"
           >
             {subtext}
           </motion.p>
@@ -73,7 +73,7 @@ export default function CallToAction({
         >
           <Link
             href="/quote"
-            className="group flex shrink-0 items-center gap-2 rounded-sm bg-gold-soft px-7 py-3.5 text-sm font-semibold text-navy-deep transition-all hover:bg-white dark:bg-[#00a3e0] dark:text-[#092634] dark:hover:bg-[#38bdf8]"
+            className="group flex shrink-0 items-center gap-2 rounded-xs bg-gold px-7 py-3.5 text-sm font-bold text-navy-deep transition-all hover:bg-gold-soft hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
           >
             <span>Get a Free Quote</span>
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

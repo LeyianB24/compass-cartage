@@ -40,10 +40,10 @@ export default function ServiceAreaPage() {
       <div className="flex flex-col min-h-full">
         {/* Page Hero Header */}
         <PageHero
-          image={IMAGES.truckSunnyDay}
+          image={IMAGES.lorry1}
           eyebrow="Coverage Map"
           title={BUSINESS.serviceAreaShort || "Proudly serving our local community"}
-          lead="Based in Metro Calgary and relocating families and businesses across Alberta. Enter your city or postal code below to check instant coverage."
+          lead="Based in Edmonton and relocating families and businesses across Alberta. Enter your city or postal code below to check instant coverage."
         />
 
         {/* Coverage Checker Widget Section */}

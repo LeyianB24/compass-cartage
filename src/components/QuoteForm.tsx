@@ -16,6 +16,7 @@ import {
   User,
   MapPin,
   ShieldCheck,
+  Navigation,
 } from "lucide-react";
 import { MOVE_SIZES, SPECIALTY_ADDONS } from "@/lib/constants";
 
@@ -34,8 +35,8 @@ function QuoteFormContent() {
     name: searchParams.get("name") || "",
     phone: searchParams.get("phone") || "",
     email: searchParams.get("email") || "",
-    pickupAddress: "",
-    dropoffAddress: "",
+    pickupAddress: searchParams.get("pickupAddress") || "",
+    dropoffAddress: searchParams.get("dropoffAddress") || "",
     moveDate: "",
     moveSize: searchParams.get("moveSize") || "1-bedroom",
     hasStairs: false,
@@ -328,6 +329,41 @@ function QuoteFormContent() {
                 </div>
               </div>
             </div>
+
+            {/* Live Google Maps Route Preview */}
+            {formData.pickupAddress && formData.dropoffAddress && (
+              <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-mono text-[11px] font-semibold text-gold">
+                    <Navigation size={13} />
+                    <span>Google Maps Route Directions</span>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+                      `${formData.pickupAddress}, Alberta`
+                    )}&destination=${encodeURIComponent(`${formData.dropoffAddress}, Alberta`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] font-semibold text-gold hover:underline"
+                  >
+                    Open in Full Google Maps ↗
+                  </a>
+                </div>
+
+                <div className="mt-3 aspect-[16/7] w-full overflow-hidden rounded-xs border border-hairline bg-navy-deep dark:border-white/10">
+                  <iframe
+                    title="Google Maps Moving Route Preview"
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(
+                      `${formData.pickupAddress}, Alberta to ${formData.dropoffAddress}, Alberta`
+                    )}&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Access tags */}
             <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">

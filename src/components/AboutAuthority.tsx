@@ -23,13 +23,17 @@ export default function AboutAuthority() {
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-xs border border-hairline shadow-xl dark:border-white/10">
               <Image
-                src={IMAGES.indoorsWithTools.src}
-                alt={IMAGES.indoorsWithTools.alt}
+                src={IMAGES.lorry3.src}
+                alt={IMAGES.lorry3.alt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/70 via-transparent to-transparent dark:from-[#070c14]/80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/60 via-transparent to-transparent dark:from-[#070c14]/70" />
+              <div className="absolute bottom-4 left-4 z-10 rounded-xs border border-white/20 bg-navy-deep/85 px-3 py-1.5 backdrop-blur shadow-md">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">Compass Cartage Fleet</p>
+                <p className="text-[11px] font-medium text-white/95">Edmonton Dispatch Facility</p>
+              </div>
             </div>
 
             {/* Floating Experience Badge */}
@@ -39,11 +43,11 @@ export default function AboutAuthority() {
                   <Award size={24} />
                 </div>
                 <div>
-                  <p className="font-display text-2xl font-bold text-navy-deep dark:text-white">
-                    12+ Years
+                  <p className="font-display text-lg font-bold text-navy-deep dark:text-white">
+                    Trusted Movers
                   </p>
-                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-light dark:text-slate">
-                    Continuous Alberta Operation
+                  <p className="font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-light dark:text-slate">
+                    Edmonton & Across Alberta
                   </p>
                 </div>
               </div>
@@ -59,14 +63,14 @@ export default function AboutAuthority() {
           >
             <div className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
               <Lock size={12} />
-              <span>Institutional Relocation Firm</span>
+              <span>Dedicated Local Movers</span>
             </div>
             <h2 className="font-display mt-2 text-3xl font-semibold tracking-tight text-navy-deep dark:text-white sm:text-4xl lg:text-5xl">
-              Edmonton&rsquo;s Standard for Chain-of-Custody Moving
+              Edmonton&rsquo;s Standard for Careful, Reliable Moving
             </h2>
 
             <p className="mt-4 text-sm leading-relaxed text-slate dark:text-slate">
-              Founded on the principle of actuarial precision and unbroken chain-of-custody, {BUSINESS.name} has eliminated the common failures of broker-driven moving. We deploy dedicated full-time relocation technicians, air-ride transit vehicles, and standardized architectural floor and doorway shielding.
+              At {BUSINESS.name}, we believe moving day should be straightforward, organized, and stress-free. We eliminate the frustration of brokers and day labor by providing one experienced, dedicated crew from the moment we arrive at your door until your last box is carefully placed in your new home.
             </p>
 
             {/* Local Trust Badges Grid */}
@@ -80,10 +84,10 @@ export default function AboutAuthority() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-navy-deep group-hover:text-gold dark:text-white dark:group-hover:text-gold-soft">
-                    Permanent Full-Time Crew
+                    One Dedicated Crew
                   </h4>
                   <p className="mt-1 text-[11px] leading-relaxed text-slate dark:text-slate">
-                    Vetted relocation specialists. Never day labor or sub-brokered teams.
+                    Experienced, vetted movers. Never day labor or sub-brokered teams.
                   </p>
                 </div>
               </Link>
@@ -97,10 +101,10 @@ export default function AboutAuthority() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-navy-deep group-hover:text-gold dark:text-white dark:group-hover:text-gold-soft">
-                    Capital Region Dispatch
+                    Capital Region Service
                   </h4>
                   <p className="mt-1 text-[11px] leading-relaxed text-slate dark:text-slate">
-                    Daily routes across Edmonton, St. Albert, Sherwood Park, Leduc & Red Deer.
+                    Regular routes across Edmonton, St. Albert, Sherwood Park, Leduc & Red Deer.
                   </p>
                 </div>
               </Link>
@@ -110,8 +114,8 @@ export default function AboutAuthority() {
             <div className="mt-6 flex items-center gap-3 rounded-xs border border-hairline bg-paper-muted p-4 dark:border-white/10 dark:bg-[#0f172a]">
               <Quote size={20} className="shrink-0 text-gold" />
               <p className="text-xs italic text-slate dark:text-gray-300">
-                &ldquo;Arrived precisely at 8:00 AM, sealed every doorway jamb, and the final invoice matched the binding quote to the cent.&rdquo;
-                <span className="ml-1.5 not-italic font-semibold text-navy-deep dark:text-white">— Sarah M., Windermere Edmonton</span>
+                &ldquo;We treat every home and every piece of furniture as if it were our own — showing up on time, handling with care, and honoring our quotes.&rdquo;
+                <span className="ml-1.5 not-italic font-semibold text-navy-deep dark:text-white">— The Compass Cartage Standard</span>
               </p>
             </div>
 
@@ -120,7 +124,7 @@ export default function AboutAuthority() {
                 href="/about"
                 className="inline-flex items-center gap-2 rounded-xs bg-navy-deep px-6 py-3 text-xs font-bold text-gold-soft shadow-sm transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
               >
-                <span>Read Institutional Overview</span>
+                <span>About Compass Cartage</span>
                 <ArrowRight size={14} />
               </Link>
               <Link

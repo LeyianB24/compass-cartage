@@ -51,7 +51,7 @@ export default function ServicesPage() {
       <div className="flex flex-col min-h-full">
         {/* Page Hero Header Section */}
         <PageHero
-          image={IMAGES.indoorsWithTools}
+          image={IMAGES.lorry3}
           eyebrow="Our Capabilities"
           title="Moving services built around you"
           lead="Whether it's a studio apartment or a full office floor, we scope every job the same way: carefully, transparently, and completely on your schedule."
