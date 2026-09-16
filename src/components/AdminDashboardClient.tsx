@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Image from "next/image";
 import {
   Inbox,
   Sparkles,
@@ -15,11 +16,71 @@ import {
   BarChart3,
   Filter,
   X,
+  Sliders,
+  Truck,
+  Image as ImageIcon,
+  ChevronDown,
+  ChevronUp,
+  Eye,
 } from "lucide-react";
 import AdminRequestRow from "./AdminRequestRow";
 import AdminCalendarView from "./AdminCalendarView";
 import AdminAnalyticsView from "./AdminAnalyticsView";
+import AdminPricingTiersTab from "./AdminPricingTiersTab";
 import ManualLeadModal from "./ManualLeadModal";
+
+const FLEET_UNITS = [
+  {
+    unitId: "UNIT-101",
+    name: "26ft Commercial Freightliner Lorry",
+    type: "Heavy Haul / Multi-Bedroom",
+    capacity: "1,800 cu ft • 4-5 Bed Homes",
+    status: "Active Dispatched",
+    statusColor: "text-emerald-700 bg-emerald-500/15 border-emerald-500/30 dark:text-emerald-400",
+    image: "/images/lorry1.jpeg",
+    specs: "Hydraulic Tailgate Lift • Air-Ride Suspension",
+  },
+  {
+    unitId: "UNIT-102",
+    name: "20ft City Cargo Moving Truck",
+    type: "Residential / Commercial",
+    capacity: "1,350 cu ft • 2-3 Bed Homes",
+    status: "Ready for Dispatch",
+    statusColor: "text-blue-700 bg-blue-500/15 border-blue-500/30 dark:text-blue-400",
+    image: "/images/lorry2.jpeg",
+    specs: "Walk-Up Low Ramp • E-Track Ratchet Rails",
+  },
+  {
+    unitId: "UNIT-103",
+    name: "High-Roof Ford Transit Cargo Van",
+    type: "Express / Studio / Condo",
+    capacity: "650 cu ft • Padded Furniture Bay",
+    status: "Ready for Dispatch",
+    statusColor: "text-blue-700 bg-blue-500/15 border-blue-500/30 dark:text-blue-400",
+    image: "/images/transit-van-side-loaded.jpeg",
+    specs: "High-Ceiling Clearance • Padded Moving Blankets",
+  },
+  {
+    unitId: "UNIT-104",
+    name: "16ft Urban Box Transport Lorry",
+    type: "Apartment / 1-2 Bed Homes",
+    capacity: "900 cu ft • Medium Haul",
+    status: "Ready for Dispatch",
+    statusColor: "text-blue-700 bg-blue-500/15 border-blue-500/30 dark:text-blue-400",
+    image: "/images/lorry3.jpeg",
+    specs: "Tight Urban Turning • High Roof Clearance",
+  },
+  {
+    unitId: "UNIT-105",
+    name: "Tri-Axle Enclosed Cargo Transporter",
+    type: "Long Distance & Heavy Cargo",
+    capacity: "2,200 cu ft Combined",
+    status: "In Service (Highway)",
+    statusColor: "text-gold bg-gold/15 border-gold/30",
+    image: "/images/hero 3.jpg",
+    specs: "Weather-Sealed • Commercial Highway Class",
+  },
+];
 
 type RequestType = {
   id: string;
@@ -30,6 +91,10 @@ type RequestType = {
   dropoffAddress: string;
   moveDate: string | null;
   moveSize: string | null;
+  distanceKm?: number | null;
+  distanceFee?: number | null;
+  pricingTier?: string | null;
+  estimatedPrice?: number | null;
   notes: string | null;
   photoUrls: string[];
   status: string;
@@ -45,11 +110,26 @@ type Props = {
 const FILTERS = ["ALL", "NEW", "CONTACTED", "QUOTED", "BOOKED", "COMPLETED", "DECLINED"] as const;
 
 export default function AdminDashboardClient({ requests, stats }: Props) {
-  const [activeTab, setActiveTab] = useState<"ledger" | "calendar" | "analytics">("ledger");
+  const [activeTab, setActiveTab] = useState<"ledger" | "calendar" | "analytics" | "pricing">("ledger");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"created_desc" | "created_asc" | "move_date">("created_desc");
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
+  const [showFleetDeck, setShowFleetDeck] = useState(true);
+  const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
+
+  // Extract all client uploaded inventory photos across all requests for quick visual access
+  const allCustomerPhotos = useMemo(() => {
+    const list: { url: string; clientName: string; date: string; requestId: string }[] = [];
+    requests.forEach((r) => {
+      if (r.photoUrls && r.photoUrls.length > 0) {
+        r.photoUrls.forEach((url) => {
+          list.push({ url, clientName: r.name, date: r.createdAt, requestId: r.id });
+        });
+      }
+    });
+    return list;
+  }, [requests]);
 
   // Keyboard shortcut '/' to focus search
   useEffect(() => {
@@ -104,6 +184,10 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
       "Email",
       "Origin (Pickup)",
       "Destination (Dropoff)",
+      "Distance (km)",
+      "Distance Fee ($)",
+      "Service Tier",
+      "Estimated Total ($)",
       "Preferred Move Date",
       "Move Scope / Size",
       "Status",
@@ -120,6 +204,10 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
       `"${r.email}"`,
       `"${r.pickupAddress.replace(/"/g, '""')}"`,
       `"${r.dropoffAddress.replace(/"/g, '""')}"`,
+      `"${r.distanceKm ? `~${r.distanceKm} km` : "Local"}"`,
+      `"${r.distanceFee ? `$${r.distanceFee.toFixed(2)}` : "$0.00"}"`,
+      `"${r.pricingTier || "Standard"}"`,
+      `"${r.estimatedPrice ? `$${Math.round(r.estimatedPrice)}` : ""}"`,
       `"${r.moveDate || ""}"`,
       `"${(r.moveSize || "").replace(/"/g, '""')}"`,
       `"${r.status}"`,
@@ -141,25 +229,35 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-10 space-y-8">
-      {/* Top Header & View Switcher */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-hairline pb-6 dark:border-white/10">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold">
-              Operations Terminal
-            </span>
-            <span className="rounded-xs bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-              ● Live DB Connected
-            </span>
+      {/* Top Header & Quick Actions */}
+      <div className="flex flex-col justify-between gap-4 border-b border-hairline pb-6 dark:border-white/10 md:flex-row md:items-end">
+        <div className="flex items-start gap-3.5">
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md border border-gold/40 bg-navy-deep p-1 shadow-sm">
+            <Image
+              src="/logos/logo Compass Cartage.png"
+              alt="Compass Cartage Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
-          <h1 className="font-display mt-1 text-2xl font-bold text-navy-deep dark:text-white sm:text-3xl">
-            Dispatch Command Center
-          </h1>
+          <div>
+            <div className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Operational Command Center</span>
+            </div>
+            <h1 className="font-display mt-0.5 text-2xl font-bold tracking-tight text-navy-deep dark:text-white sm:text-3xl">
+              Dispatch Ledger & Pipeline
+            </h1>
+            <p className="mt-0.5 text-xs text-slate dark:text-gray-400">
+              Real-time moving inquiries, calendar dispatches, pricing rate controls, and conversion metrics.
+            </p>
+          </div>
         </div>
 
-        {/* View Mode Switcher */}
-        <div className="flex items-center gap-2">
-          <div className="flex rounded-xs border border-hairline bg-paper-muted p-1 dark:border-white/10 dark:bg-[#0f172a]">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* View Mode Tabs */}
+          <div className="flex items-center rounded-xs border border-hairline bg-paper-muted p-1 dark:border-white/10 dark:bg-[#070c14]">
             <button
               onClick={() => setActiveTab("ledger")}
               className={`flex items-center gap-1.5 rounded-xs px-3 py-1.5 font-mono text-xs font-semibold transition-all ${
@@ -169,7 +267,7 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
               }`}
             >
               <TableIcon size={14} />
-              <span>Ledger Matrix</span>
+              <span>Inquiry Ledger</span>
             </button>
 
             <button
@@ -195,6 +293,18 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
               <BarChart3 size={14} />
               <span>Analytics</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab("pricing")}
+              className={`flex items-center gap-1.5 rounded-xs px-3 py-1.5 font-mono text-xs font-semibold transition-all ${
+                activeTab === "pricing"
+                  ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                  : "text-slate hover:text-navy-deep dark:text-gray-400 dark:hover:text-white"
+              }`}
+            >
+              <Sliders size={14} />
+              <span>Pricing & Tiers</span>
+            </button>
           </div>
 
           <button
@@ -215,6 +325,141 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
         <StatCard icon={CalendarCheck} label="Locked Fleet Bookings" value={stats.booked} />
         <StatCard icon={CheckCircle2} label="Completed Relocations" value={stats.completed} />
       </div>
+
+      {/* COMPASS CARTAGE ACTIVE FLEET OPERATIONS DECK */}
+      <div className="rounded-card border border-hairline bg-paper-muted p-5 shadow-xs dark:border-white/10 dark:bg-[#0c1626]">
+        <div className="flex items-center justify-between border-b border-hairline pb-3 dark:border-white/10">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-xs bg-gold/15 text-gold">
+              <Truck size={15} />
+            </div>
+            <div>
+              <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-navy-deep dark:text-white">
+                Compass Cartage Fleet Operations Roster
+              </h2>
+              <p className="text-[11px] text-slate dark:text-gray-400">
+                Active commercial vehicles, lorries, trailers & cargo capacity
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowFleetDeck((v) => !v)}
+            className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-gold hover:underline"
+          >
+            <span>{showFleetDeck ? "Hide Fleet Roster" : "Show Fleet Roster"}</span>
+            {showFleetDeck ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        </div>
+
+        {showFleetDeck && (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {FLEET_UNITS.map((unit) => (
+              <div
+                key={unit.unitId}
+                className="group relative flex flex-col overflow-hidden rounded-xs border border-hairline bg-paper transition-all hover:border-gold/60 dark:border-white/10 dark:bg-[#070c14]"
+              >
+                {/* Vehicle Thumbnail with Status Badge */}
+                <div className="relative h-32 w-full overflow-hidden bg-navy-deep">
+                  <Image
+                    src={unit.image}
+                    alt={unit.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute top-2 left-2">
+                    <span className="rounded-xs bg-navy-deep/90 px-2 py-0.5 font-mono text-[10px] font-bold text-gold backdrop-blur-xs border border-gold/30">
+                      {unit.unitId}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <span
+                      className={`inline-block rounded-xs border px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase ${unit.statusColor}`}
+                    >
+                      {unit.status}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Specs and Details */}
+                <div className="flex flex-1 flex-col justify-between p-3">
+                  <div>
+                    <h3 className="font-display text-xs font-bold text-navy-deep dark:text-white line-clamp-1">
+                      {unit.name}
+                    </h3>
+                    <p className="font-mono text-[10px] text-gold mt-0.5">{unit.type}</p>
+                    <p className="mt-1 font-mono text-[10px] text-slate dark:text-gray-400">
+                      {unit.capacity}
+                    </p>
+                  </div>
+                  <div className="mt-2 border-t border-hairline/60 pt-1.5 dark:border-white/5">
+                    <p className="font-mono text-[9px] text-slate-light dark:text-gray-400 truncate">
+                      {unit.specs}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* CLIENT INVENTORY MEDIA HUB (When quotes have photos) */}
+      {allCustomerPhotos.length > 0 && (
+        <div className="rounded-card border border-hairline bg-paper-muted p-5 shadow-xs dark:border-white/10 dark:bg-[#0c1626]">
+          <div className="flex items-center justify-between border-b border-hairline pb-3 dark:border-white/10">
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-xs bg-gold/15 text-gold">
+                <ImageIcon size={15} />
+              </div>
+              <div>
+                <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-navy-deep dark:text-white">
+                  Client Inventory Media Hub ({allCustomerPhotos.length} Photos)
+                </h2>
+                <p className="text-[11px] text-slate dark:text-gray-400">
+                  Customer-submitted room & item inventory photos for quote accuracy
+                </p>
+              </div>
+            </div>
+            <span className="font-mono text-[11px] text-gold font-semibold">
+              Click any photo to inspect full size
+            </span>
+          </div>
+
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+            {allCustomerPhotos.map((photo, pIdx) => (
+              <div
+                key={pIdx}
+                onClick={() => setLightboxPhoto(photo.url)}
+                className="group relative h-28 w-32 shrink-0 cursor-pointer overflow-hidden rounded-xs border border-hairline bg-navy-deep transition-all hover:border-gold hover:shadow-md dark:border-white/10"
+              >
+                <Image
+                  src={photo.url}
+                  alt={`Inventory photo from ${photo.clientName}`}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90" />
+                <div className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="rounded-full bg-black/60 p-1 text-gold">
+                    <Eye size={12} />
+                  </div>
+                </div>
+                <div className="absolute bottom-1.5 left-1.5 right-1.5">
+                  <p className="font-mono text-[10px] font-bold text-white truncate">
+                    {photo.clientName}
+                  </p>
+                  <p className="font-mono text-[9px] text-gold/90">
+                    {new Date(photo.date).toLocaleDateString("en-CA")}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* TAB 1: LEDGER MATRIX VIEW */}
       {activeTab === "ledger" && (
@@ -307,6 +552,48 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
 
       {/* TAB 3: PIPELINE ANALYTICS VIEW */}
       {activeTab === "analytics" && <AdminAnalyticsView requests={requests} />}
+
+      {/* TAB 4: PRICING CONFIG & SERVICE TIERS */}
+      {activeTab === "pricing" && <AdminPricingTiersTab />}
+
+      {/* Photo Preview Lightbox Modal */}
+      {lightboxPhoto && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <div
+            className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-md border border-gold/40 bg-navy-deep shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setLightboxPhoto(null)}
+              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white hover:bg-black hover:text-gold"
+            >
+              <X size={18} />
+            </button>
+            <div className="relative h-[75vh] w-[85vw] max-w-4xl">
+              <Image
+                src={lightboxPhoto}
+                alt="Client uploaded photo preview"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="flex items-center justify-between border-t border-white/10 bg-[#070c14] px-4 py-2.5">
+              <span className="font-mono text-xs text-gold">High-Resolution Client Inventory Attachment</span>
+              <a
+                href={lightboxPhoto}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-xs text-white hover:text-gold underline flex items-center gap-1"
+              >
+                Open in new tab
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Manual Intake Lead Modal */}
       <ManualLeadModal

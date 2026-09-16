@@ -88,6 +88,22 @@ const FLEET_VEHICLES: FleetVehicle[] = [
     ],
   },
   {
+    id: "transitVanSideLoaded",
+    category: "Transit Vans",
+    title: "High-Roof Van Cargo Bay & Sofa Staging",
+    tag: "Real Client Move • Edmonton",
+    specs: "Side Sliding Access • Padded Protection",
+    capacity: "Loaded Residential Sofa & Padded Bay",
+    img: IMAGES.transitVanSideLoaded,
+    description:
+      "Captured on-site during an Edmonton residential move: showing our high-roof cargo van loaded with client furniture protected by heavy blue moving pads and safety tie-down points.",
+    highlights: [
+      "High roof standing clearance for sofas and tall armchairs",
+      "Heavy padded moving blankets shielding upholstery from scuffs",
+      "Reinforced safety divider protecting the cab and driver",
+    ],
+  },
+  {
     id: "lorry2",
     category: "Freight Trucks",
     title: "Commercial Freight Loading Bay & Chassis",

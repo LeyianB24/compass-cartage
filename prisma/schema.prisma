@@ -32,6 +32,10 @@ model QuoteRequest {
   dropoffAddress String
   moveDate       String?
   moveSize       String?
+  distanceKm     Float?
+  distanceFee    Float?
+  pricingTier    String?
+  estimatedPrice Float?
   notes          String?
   photoUrls      String[]      @default([])
   status         RequestStatus @default(NEW)
@@ -55,3 +59,27 @@ model BookedSlot {
   @@index([date])
   @@index([moveType])
 }
+
+model DistancePricingConfig {
+  id               String   @id @default("default")
+  includedKm       Float    @default(30.0)
+  perKmRate        Float    @default(2.50)
+  intercityFlatFee Float    @default(120.0)
+  updatedAt        DateTime @updatedAt
+}
+
+model PricingTier {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  multiplier  Float    @default(1.0)
+  baseFee     Float    @default(0.0)
+  features    String[] @default([])
+  isDefault   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

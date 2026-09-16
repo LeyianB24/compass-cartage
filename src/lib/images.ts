@@ -57,20 +57,44 @@ export const IMAGES = {
     alt: "Compass Cartage weather-sealed tri-axle cargo transport trailer for intercity moves",
   },
 
-  // 4. High-Roof Residential Delivery Van (White)
+  // 4. High-Roof Residential Delivery Van (Real Edmonton Fleet)
+  transitVanResidentialCurb: {
+    src: "/images/transit-van-residential-curb.jpeg",
+    alt: "Compass Cartage high-roof white Transit moving van on a residential Edmonton street with flower garden",
+  },
+  transitVanDoorsOpen: {
+    src: "/images/transit-van-doors-open.jpeg",
+    alt: "Compass Cartage Ford Transit moving van with side slider and rear cargo doors open",
+  },
+  transitVanSideLoaded: {
+    src: "/images/transit-van-side-loaded.jpeg",
+    alt: "Compass Cartage moving van loaded with protected sofa and heavy-duty moving blankets",
+  },
+  transitVanWideAngle: {
+    src: "/images/transit-van-wide-angle.jpeg",
+    alt: "Wide-angle street view of Compass Cartage Ford Transit moving van on site",
+  },
+  transitVanCargoLoading: {
+    src: "/images/transit-van-cargo-loading.jpeg",
+    alt: "Compass Cartage moving van side loading bay with padded sofa and ratchet straps",
+  },
+  transitVanInteriorCargo: {
+    src: "/images/transit-van-interior-cargo.jpeg",
+    alt: "Interior cargo bay perspective showing ceiling clearance, safety partition and padded furniture",
+  },
   residentialDeliveryVan: {
-    src: "/images/hero 6.jpg",
-    alt: "Compass Cartage residential moving van loaded with furniture and boxes at customer driveway",
+    src: "/images/transit-van-residential-curb.jpeg",
+    alt: "Compass Cartage residential moving van loaded with furniture at customer curb",
   },
   residentialDeliveryVanAlt: {
-    src: "/images/hero 7.jpg",
+    src: "/images/transit-van-doors-open.jpeg",
     alt: "Compass Cartage residential relocation van open for secure unloading",
   },
 
   // 5. Interior Van Cargo & Furniture Protection
   cargoInteriorLoading: {
-    src: "/images/hero 1.jpg",
-    alt: "Compass Cartage interior van cargo bay with padded mattresses and organized boxes",
+    src: "/images/transit-van-interior-cargo.jpeg",
+    alt: "Compass Cartage interior van cargo bay with padded sofa, moving blankets and safety partition",
   },
 
   // Legacy mappings for backwards compatibility

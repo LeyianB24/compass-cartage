@@ -85,6 +85,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
     }
 
+    const distanceKmRaw = form.get("distanceKm")?.toString();
+    const distanceFeeRaw = form.get("distanceFee")?.toString();
+    const pricingTierRaw = form.get("pricingTier")?.toString();
+    const estimatedPriceRaw = form.get("estimatedPrice")?.toString();
+
+    const distanceKm = distanceKmRaw ? parseFloat(distanceKmRaw) : null;
+    const distanceFee = distanceFeeRaw ? parseFloat(distanceFeeRaw) : null;
+    const pricingTier = pricingTierRaw || "Standard Full-Service";
+    const estimatedPrice = estimatedPriceRaw ? parseFloat(estimatedPriceRaw) : null;
+
     const rawFields = {
       name: form.get("name")?.toString() || "",
       email: form.get("email")?.toString() || "",
@@ -128,8 +138,9 @@ export async function POST(req: NextRequest) {
       photoUrls.push(blob.url);
     }
 
-    // Save to database — source of truth, independent of email success
-    const savedRequest = await prisma.quoteRequest.create({
+    // Save to database — source of truth with distance and tier pricing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const savedRequest = await (prisma.quoteRequest.create as any)({
       data: {
         name: data.name,
         phone: data.phone,
@@ -138,6 +149,10 @@ export async function POST(req: NextRequest) {
         dropoffAddress: data.dropoffAddress,
         moveDate: data.moveDate,
         moveSize: data.moveSize,
+        distanceKm,
+        distanceFee,
+        pricingTier,
+        estimatedPrice,
         notes: data.notes,
         photoUrls,
       },
@@ -154,6 +169,7 @@ export async function POST(req: NextRequest) {
     const safeDropoff = escapeHtml(data.dropoffAddress);
     const safeDate = escapeHtml(data.moveDate);
     const safeSize = escapeHtml(data.moveSize);
+    const safeTier = escapeHtml(pricingTier);
     const safeNotes = escapeHtml(data.notes).replace(/\n/g, "<br/>");
 
     const submittedAt = new Date().toLocaleString("en-CA", { dateStyle: "long", timeStyle: "short" });
@@ -168,6 +184,10 @@ export async function POST(req: NextRequest) {
           dropoffAddress: data.dropoffAddress,
           moveDate: data.moveDate,
           moveSize: data.moveSize,
+          distanceKm: distanceKm || undefined,
+          distanceFee: distanceFee || undefined,
+          pricingTier,
+          estimatedPrice: estimatedPrice || undefined,
           notes: data.notes,
           submittedAt,
         },
@@ -180,6 +200,15 @@ export async function POST(req: NextRequest) {
           .map((url, i) => `<a href="${url}" target="_blank">Photo ${i + 1}</a>`)
           .join(" &middot; ")}</p>`
       : "";
+
+    const pricingSummaryHtml = `
+      <div style="background-color: #f4f6f8; border-left: 4px solid #c5a880; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
+        <p style="margin: 0 0 6px 0;"><strong>Selected Price Tier:</strong> ${safeTier}</p>
+        <p style="margin: 0 0 6px 0;"><strong>Route Distance:</strong> ${distanceKm ? `~${distanceKm} km` : "Local Metro"}</p>
+        <p style="margin: 0 0 6px 0;"><strong>Distance Travel Fee:</strong> ${distanceFee ? `$${distanceFee.toFixed(2)}` : "$0.00 (Local Metro Included)"}</p>
+        ${estimatedPrice ? `<p style="margin: 6px 0 0 0; font-size: 16px; color: #0a131f;"><strong>Total Estimate: $${Math.round(estimatedPrice)}</strong></p>` : ""}
+      </div>
+    `;
 
     const adminEmailHtml = `
       <!DOCTYPE html>
@@ -195,6 +224,7 @@ export async function POST(req: NextRequest) {
             <p><strong>Moving To:</strong> ${safeDropoff}</p>
             <p><strong>Preferred Date:</strong> ${safeDate}</p>
             <p><strong>Move Size:</strong> ${safeSize}</p>
+            ${pricingSummaryHtml}
             ${photoLinksHtml}
             <hr style="border: none; border-top: 1px solid #e1e4e6; margin: 20px 0;" />
             <p><strong>Notes / Special Instructions:</strong></p>
@@ -220,6 +250,10 @@ export async function POST(req: NextRequest) {
                 <li><strong>Pickup:</strong> ${safePickup}</li>
                 <li><strong>Drop-off:</strong> ${safeDropoff}</li>
                 <li><strong>Preferred Date:</strong> ${safeDate}</li>
+                <li><strong>Service Tier:</strong> ${safeTier}</li>
+                ${distanceKm ? `<li><strong>Estimated Distance:</strong> ~${distanceKm} km</li>` : ""}
+                ${distanceFee !== null && distanceFee > 0 ? `<li><strong>Travel Fee:</strong> $${distanceFee.toFixed(2)}</li>` : "<li><strong>Travel Fee:</strong> Included (Local Metro)</li>"}
+                ${estimatedPrice ? `<li><strong>Estimated Quote:</strong> $${Math.round(estimatedPrice)}</li>` : ""}
               </ul>
             </div>
             <p style="color:#4a5568;font-size:13px;">A PDF copy of your submitted details is attached for your records.</p>

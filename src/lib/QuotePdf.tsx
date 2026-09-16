@@ -144,6 +144,10 @@ export type QuotePdfData = {
   dropoffAddress: string;
   moveDate?: string;
   moveSize?: string;
+  distanceKm?: number;
+  distanceFee?: number;
+  pricingTier?: string;
+  estimatedPrice?: number;
   notes?: string;
   submittedAt: string;
 };
@@ -181,7 +185,7 @@ export default function QuotePdf({ data }: { data: QuotePdfData }) {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>MOVE DETAILS</Text>
+            <Text style={styles.sectionLabel}>MOVE & ROUTE DETAILS</Text>
             <View style={styles.row}>
               <Text style={styles.rowLabel}>Moving From</Text>
               <Text style={styles.rowValue}>{data.pickupAddress}</Text>
@@ -201,8 +205,40 @@ export default function QuotePdf({ data }: { data: QuotePdfData }) {
           </View>
         </View>
 
+        {(data.distanceKm !== undefined || data.pricingTier || data.estimatedPrice) && (
+          <View style={[styles.section, { marginBottom: 20 }]}>
+            <Text style={styles.sectionLabel}>PRICING TIER & DISTANCE CHARGES</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 8, color: SLATE, marginBottom: 3 }}>SERVICE TIER</Text>
+                <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: NAVY_DEEP }}>
+                  {data.pricingTier ? data.pricingTier.toUpperCase() : "STANDARD FULL-SERVICE"}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 8, color: SLATE, marginBottom: 3 }}>ROUTE DISTANCE</Text>
+                <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: NAVY_DEEP }}>
+                  {data.distanceKm ? `~${data.distanceKm} km` : "Local Metro"}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 8, color: SLATE, marginBottom: 3 }}>TRAVEL CHARGE</Text>
+                <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: GOLD }}>
+                  {data.distanceFee && data.distanceFee > 0 ? `$${data.distanceFee.toFixed(2)}` : "$0.00 (Included)"}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 8, color: SLATE, marginBottom: 3 }}>ESTIMATED BINDING TOTAL</Text>
+                <Text style={{ fontSize: 13, fontFamily: "Helvetica-Bold", color: NAVY }}>
+                  {data.estimatedPrice ? `$${Math.round(data.estimatedPrice)}` : "Pending Inspection"}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
+
         <View style={styles.notesBox}>
-          <Text style={styles.sectionLabel}>ADDITIONAL NOTES</Text>
+          <Text style={styles.sectionLabel}>ADDITIONAL NOTES & ACCESS</Text>
           <Text style={styles.notesText}>{data.notes || "None provided."}</Text>
         </View>
 

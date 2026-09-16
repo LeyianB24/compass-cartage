@@ -23,6 +23,8 @@ export default function FilterableGallery() {
     { ...IMAGES.transitVanGrey, category: "Trucks & Transport" },
     { ...IMAGES.enclosedTrailerBlue, category: "Trucks & Transport" },
     { ...IMAGES.residentialDeliveryVan, category: "Trucks & Transport" },
+    { ...IMAGES.transitVanSideLoaded, category: "Trucks & Transport" },
+    { ...IMAGES.transitVanCargoLoading, category: "Trucks & Transport" },
     { ...IMAGES.cargoInteriorLoading, category: "Trucks & Transport" },
     { ...IMAGES.enclosedTrailerFacility, category: "Trucks & Transport" },
     { ...IMAGES.transitVanGreyWheel, category: "Trucks & Transport" },

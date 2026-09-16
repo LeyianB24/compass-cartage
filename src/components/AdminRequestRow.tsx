@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import {
   Phone,
   Mail,
@@ -18,6 +19,8 @@ import {
   Maximize2,
   X,
   Truck,
+  Navigation,
+  Tag,
 } from "lucide-react";
 import { bookMove, updateRequestStatus, deleteQuoteRequest, cancelBooking, updateRequestNotes } from "@/lib/actions";
 import CommunicationModal from "./CommunicationModal";
@@ -32,6 +35,10 @@ type Props = {
     dropoffAddress: string;
     moveDate: string | null;
     moveSize: string | null;
+    distanceKm?: number | null;
+    distanceFee?: number | null;
+    pricingTier?: string | null;
+    estimatedPrice?: number | null;
     notes: string | null;
     photoUrls: string[];
     status: string;
@@ -39,6 +46,40 @@ type Props = {
     bookedSlot: { date: string; moveType: string } | null;
   };
 };
+
+function getRecommendedVehicle(moveSize: string | null) {
+  const size = (moveSize || "").toLowerCase();
+  if (size.includes("3") || size.includes("4") || size.includes("commercial") || size.includes("large") || size.includes("5")) {
+    return {
+      title: "Unit 101 - 26ft Freightliner Heavy Box Truck",
+      image: "/images/lorry1.jpeg",
+      desc: "Hydraulic Tailgate Lift • 1,800 cu ft Capacity",
+      capacityTag: "Multi-Bedroom / Heavy Haul",
+    };
+  }
+  if (size.includes("2") || size.includes("townhouse")) {
+    return {
+      title: "Unit 102 - 20ft City Cargo Moving Truck",
+      image: "/images/lorry2.jpeg",
+      desc: "Low-Deck Loading Ramp • 1,350 cu ft Capacity",
+      capacityTag: "2-3 Bedroom Residence",
+    };
+  }
+  if (size.includes("long") || size.includes("alberta") || size.includes("province")) {
+    return {
+      title: "Unit 104 - Tri-Axle Enclosed Cargo Transporter",
+      image: "/images/hero 3.jpg",
+      desc: "Weather-Sealed • 2,200 cu ft Combined",
+      capacityTag: "Intercity Highway Haul",
+    };
+  }
+  return {
+    title: "Unit 103 - High-Roof Ford Transit Cargo Van",
+    image: "/images/transit-van-side-loaded.jpeg",
+    desc: "Padded Furniture Bay • Walk-In High Clearance",
+    capacityTag: "Studio / 1-Bedroom / Condo",
+  };
+}
 
 function timeAgo(dateStr: string): string {
   const diffMs = Date.now() - new Date(dateStr).getTime();
@@ -135,16 +176,52 @@ export default function AdminRequestRow({ request }: Props) {
               >
                 {request.status}
               </span>
+              {request.photoUrls.length > 0 && (
+                <div
+                  className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-2 py-0.5"
+                  title={`${request.photoUrls.length} customer inventory photos uploaded`}
+                >
+                  <div className="flex -space-x-1.5 overflow-hidden">
+                    {request.photoUrls.slice(0, 2).map((url, pIdx) => (
+                      <div
+                        key={pIdx}
+                        className="relative h-4 w-4 rounded-full border border-gold overflow-hidden bg-navy-deep shrink-0"
+                      >
+                        <Image src={url} alt="Inventory item" fill className="object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="font-mono text-[9px] font-bold text-gold">
+                    {request.photoUrls.length} {request.photoUrls.length === 1 ? "photo" : "photos"}
+                  </span>
+                </div>
+              )}
               {request.bookedSlot && (
                 <span className="rounded-xs border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                   Booked: {new Date(request.bookedSlot.date).toLocaleDateString("en-CA")} ({request.bookedSlot.moveType})
                 </span>
               )}
             </div>
-            <p className="mt-1 font-mono text-xs text-slate dark:text-gray-300 truncate max-w-xl">
-              {request.pickupAddress} → {request.dropoffAddress} &middot;{" "}
-              <span className="text-gold font-semibold">{request.moveSize || "Size not specified"}</span>
-            </p>
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-slate dark:text-gray-300">
+              <span className="truncate max-w-md">
+                {request.pickupAddress} → {request.dropoffAddress}
+              </span>
+              <span className="text-gold font-semibold">&middot; {request.moveSize || "Size not specified"}</span>
+              {request.distanceKm != null && request.distanceKm > 0 && (
+                <span className="inline-flex items-center gap-1 text-slate-light dark:text-gray-400">
+                  <Navigation size={11} className="text-gold" />
+                  ~{request.distanceKm} km
+                  {request.distanceFee != null && request.distanceFee > 0 && ` (+$${request.distanceFee} travel)`}
+                </span>
+              )}
+              {request.pricingTier && (
+                <span className="inline-flex items-center gap-1 rounded-xs bg-gold/15 px-1.5 py-0.5 text-[10px] font-bold text-gold">
+                  <Tag size={10} />
+                  {request.pricingTier}
+                  {request.estimatedPrice != null && ` · $${request.estimatedPrice.toLocaleString()}`}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
@@ -246,6 +323,84 @@ export default function AdminRequestRow({ request }: Props) {
               </div>
             </div>
 
+            {/* Distance & Tier Pricing Card */}
+            <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
+              <div className="flex items-center justify-between mb-3 border-b border-hairline pb-2 dark:border-white/10">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-navy-deep dark:text-white flex items-center gap-1.5">
+                  <Navigation size={13} className="text-gold" />
+                  Route Distance & Tier Pricing Estimate
+                </span>
+                {request.pricingTier && (
+                  <span className="rounded-xs bg-gold/15 px-2 py-0.5 font-mono text-[10px] font-bold text-gold">
+                    Tier: {request.pricingTier}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 text-xs font-mono">
+                <div>
+                  <span className="text-[10px] text-slate-light dark:text-gray-400 block">Road Distance</span>
+                  <span className="font-bold text-navy-deep dark:text-white">
+                    {request.distanceKm != null ? `~${request.distanceKm} km` : "Not calculated"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-light dark:text-gray-400 block">Travel Mileage Fee</span>
+                  <span className="font-bold text-gold">
+                    {request.distanceFee != null ? `$${request.distanceFee.toLocaleString()} CAD` : "$0 CAD (Included)"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-light dark:text-gray-400 block">Package Tier</span>
+                  <span className="font-bold text-navy-deep dark:text-white">
+                    {request.pricingTier || "Standard Full-Service"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-light dark:text-gray-400 block">Total Est. Quote</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    {request.estimatedPrice != null ? `$${request.estimatedPrice.toLocaleString()} CAD` : "Quote Pending"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Recommended Dispatch Vehicle with Truck Image */}
+            {(() => {
+              const rec = getRecommendedVehicle(request.moveSize);
+              return (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
+                  <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xs border border-hairline bg-navy-deep shadow-xs">
+                    <Image
+                      src={rec.image}
+                      alt={rec.title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute top-1 left-1 rounded-xs bg-black/75 px-1.5 py-0.5 font-mono text-[8px] font-bold text-gold">
+                      MATCHED FLEET
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">
+                        Dispatch Vehicle Recommendation
+                      </span>
+                      <span className="rounded-xs bg-navy-deep/10 px-1.5 py-0.5 font-mono text-[9px] font-bold text-navy-deep dark:bg-white/10 dark:text-gray-200">
+                        {rec.capacityTag}
+                      </span>
+                    </div>
+                    <h4 className="font-display text-sm font-bold text-navy-deep dark:text-white mt-0.5">
+                      {rec.title}
+                    </h4>
+                    <p className="font-mono text-xs text-slate dark:text-gray-400 mt-0.5">
+                      {rec.desc} &middot; Matched from customer scope: <span className="text-gold font-semibold">{request.moveSize || "Standard"}</span>
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* Notes Section with In-place Editing */}
             <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
               <div className="flex items-center justify-between mb-2">
@@ -292,27 +447,35 @@ export default function AdminRequestRow({ request }: Props) {
               )}
             </div>
 
-            {/* Photo Attachments Lightbox */}
+            {/* Photo Attachments Lightbox Gallery */}
             {request.photoUrls.length > 0 && (
-              <div>
-                <p className="mb-2 flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-wider text-navy-deep dark:text-white">
-                  <ImageIcon size={14} className="text-gold" /> Uploaded Photos ({request.photoUrls.length})
-                </p>
-                <div className="flex flex-wrap gap-2.5">
+              <div className="rounded-xs border border-hairline bg-paper p-4 dark:border-white/10 dark:bg-[#070c14]">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-wider text-navy-deep dark:text-white">
+                    <ImageIcon size={14} className="text-gold" /> Uploaded Inventory Photos ({request.photoUrls.length})
+                  </p>
+                  <span className="font-mono text-[10px] text-slate dark:text-gray-400">
+                    Click any photo to zoom
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6">
                   {request.photoUrls.map((url, i) => (
                     <div
                       key={i}
                       onClick={() => setPreviewPhoto(url)}
-                      className="group relative h-20 w-20 cursor-pointer overflow-hidden rounded-xs border border-hairline shadow-2xs"
+                      className="group relative h-24 w-full cursor-pointer overflow-hidden rounded-xs border border-hairline bg-navy-deep shadow-2xs transition-all hover:border-gold"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
                         src={url}
                         alt={`Photo ${i + 1}`}
-                        className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                        fill
+                        className="object-cover transition-transform group-hover:scale-110"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Maximize2 size={16} className="text-white" />
+                      </div>
+                      <div className="absolute bottom-1 right-1 rounded-xs bg-black/70 px-1 font-mono text-[8px] text-gold">
+                        #{i + 1}
                       </div>
                     </div>
                   ))}
