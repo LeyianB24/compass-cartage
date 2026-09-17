@@ -307,4 +307,284 @@ export const SERVICE_DETAILS: Record<string, ServiceDetail> = {
       },
     ],
   },
+
+  packing: {
+    slug: "packing",
+    title: "Full-Service Packing & Unpacking",
+    subtitle: "Professional Packing, Fragile Wrapping & Moving Supplies",
+    metaTitle: "Moving Packing Services Edmonton | Compass Cartage",
+    metaDescription: "Professional packing and unpacking services in Edmonton. High-density dish packs, wardrobe boxes, shrink wrapping, and fragile care.",
+    imageKey: "couplePacking",
+    eyebrow: "Packing & Unpacking",
+    tagline: "Save hours of stress — let our certified packing team prepare your entire home.",
+    overview:
+      "Packing is often the most exhausting part of any move. Compass Cartage provides complete full-home packing, fragile-only packing (china, glassware, fine art), and partial packing for tricky areas like kitchens and garages. We arrive with double-walled cartons, heavy bubble wrap, and acid-free packing paper to protect your valuables.",
+    inclusions: [
+      "Heavy-duty double-walled moving boxes & specialty wardrobe cartons",
+      "Specialty dish-pack barrels with cellular dividers for fine china",
+      "Acid-free newsprint paper, high-grade bubble wrap & stretch film",
+      "Clear room-by-room box labeling and inventory cataloging",
+      "Optional unpacking and debris removal service upon arrival",
+    ],
+    pricingGuide: [
+      {
+        title: "Fragile & Kitchen Only",
+        rate: "Hourly + Supplies",
+        description: "Kitchen dishware, glassware, artwork, mirrors, and delicate decor.",
+        badge: "Most Popular",
+      },
+      {
+        title: "Partial Home Packing",
+        rate: "Custom Estimate",
+        description: "Kitchen, living room, and fragile items packed before moving day.",
+      },
+      {
+        title: "Turnkey Full-Home Packing",
+        rate: "Complete Package",
+        description: "Every room packed, labeled, and prepared the day before your move.",
+      },
+    ],
+    process: [
+      {
+        step: "01",
+        title: "Supply Staging",
+        desc: "We arrive with tailored box sizes, bubble wrap, and protective paper.",
+      },
+      {
+        step: "02",
+        title: "Fragile First",
+        desc: "Dishes, glassware, electronics, and artwork receive custom multi-layer wrapping.",
+      },
+      {
+        step: "03",
+        title: "Room Color-Coding",
+        desc: "Every box is labeled with its target room and contents for fast move-in.",
+      },
+      {
+        step: "04",
+        title: "Unpack & Debris Haul",
+        desc: "Optional service to unpack onto flat surfaces and haul away all boxes.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Do I have to supply my own boxes?",
+        answer: "No! We provide commercial-grade boxes, tape, and wrapping paper. You only pay for what is used.",
+      },
+      {
+        question: "Can you pack the day before the move?",
+        answer: "Yes, for larger 3-5 bedroom homes we typically schedule packing on the afternoon or day prior to ensure a seamless moving day.",
+      },
+    ],
+  },
+
+  "appliance-delivery": {
+    slug: "appliance-delivery",
+    title: "Couch, Appliance & Single-Item Delivery",
+    subtitle: "Safely Moving Heavy Furniture, Refrigerators, Washers & Specialty Items",
+    metaTitle: "Single Item & Appliance Delivery Edmonton | Compass Cartage",
+    metaDescription: "Reliable couch, appliance, and heavy item pickup and delivery across Edmonton. Refrigerators, washers, dryers, and sectional sofas moved with care.",
+    imageKey: "fridgeAppliance",
+    eyebrow: "Appliance & Single-Item",
+    tagline: "Fast, equipped pickup and delivery for single heavy items and marketplace purchases.",
+    overview:
+      "Need a new refrigerator, washer-dryer set, oversized sectional couch, or commercial showcase moved? You don't need to rent an entire moving truck or risk damaging your vehicle. Our 2-mover crew arrives with heavy-duty appliance dollies, neoprene floor runners, and ratcheting cargo straps to transport heavy or awkward items safely.",
+    inclusions: [
+      "Heavy-duty stair-climbing appliance dollies and four-wheel furniture dollies",
+      "Thick quilted furniture pads and door jamb protectors",
+      "Ratcheting straps for secure in-transit locking",
+      "Disconnection and reconnection assistance (water/electrical lines where applicable)",
+      "Curbside or inside-room delivery and placement",
+    ],
+    pricingGuide: [
+      {
+        title: "Single Large Furniture / Couch",
+        rate: "Affordable Flat Rate",
+        description: "Pickup and dropoff of sectional, sofa, armoire, or dining table.",
+        badge: "Marketplace Special",
+      },
+      {
+        title: "Major Kitchen Appliance",
+        rate: "Equipment Rate",
+        description: "Refrigerator, stove, dishwasher, or washer/dryer with stairs protection.",
+      },
+      {
+        title: "Commercial Showcase / Heavy Item",
+        rate: "Custom Equipment",
+        description: "Gun safes, display cases, marble tables, and heavy specialty items.",
+      },
+    ],
+    process: [
+      {
+        step: "01",
+        title: "Pickup Coordination",
+        desc: "We coordinate pickup from the seller, retailer, or residence.",
+      },
+      {
+        step: "02",
+        title: "Protective Wrap",
+        desc: "The item is blanketed and shrink-wrapped before passing through doors.",
+      },
+      {
+        step: "03",
+        title: "Strapped Transit",
+        desc: "Secured tightly to our truck's E-track cargo rails.",
+      },
+      {
+        step: "04",
+        title: "In-Room Setup",
+        desc: "Delivered up stairs or into the exact room of your choice.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Can you pick up items from Kijiji or Facebook Marketplace?",
+        answer: "Yes! We frequently handle Marketplace and store deliveries with prompt payment and pickup coordination.",
+      },
+      {
+        question: "Do you protect door frames and hardwood floors?",
+        answer: "Always. We use padded doorway blankets and neoprene floor runners to prevent scrapes and dents.",
+      },
+    ],
+  },
+
+  "junk-removal": {
+    slug: "junk-removal",
+    title: "Junk Removal & Pre-Move Decluttering",
+    subtitle: "Responsible Disposal, Donation Drops & Garage Cleanouts",
+    metaTitle: "Junk Removal & Decluttering Edmonton | Compass Cartage",
+    metaDescription: "Eco-friendly junk removal and pre-move cleanout services in Edmonton. Furniture disposal, donation drop-offs, and garage clearing with upfront rates.",
+    imageKey: "storageWarehouse",
+    eyebrow: "Junk Removal & Disposal",
+    tagline: "Lighten your move — let us clear out unwanted furniture, appliances, and clutter responsibly.",
+    overview:
+      "Why pay to move things you no longer need? Compass Cartage combines moving and junk removal into one convenient booking. Before moving day or after an estate cleanout, our crew loads unwanted furniture, electronics, and household clutter, donating usable goods to Edmonton charities and recycling the rest at municipal eco-stations.",
+    inclusions: [
+      "All heavy lifting, carrying down stairs, and truck loading",
+      "Donation drop-off to local Edmonton charitable organizations",
+      "Environmentally responsible eco-station sorting & recycling",
+      "Swept-clean finish in cleared areas",
+      "Transparent pricing based on truck volume with zero surprise dump surcharges",
+    ],
+    pricingGuide: [
+      {
+        title: "Quarter Truck Load",
+        rate: "Volume Flat Rate",
+        description: "1-3 bulky furniture pieces or 10-15 boxes of clutter.",
+        badge: "Quick Clearout",
+      },
+      {
+        title: "Half Truck Load",
+        rate: "Volume Flat Rate",
+        description: "Small garage, basement corner, or bedroom cleanout.",
+      },
+      {
+        title: "Full Truck Cleanout",
+        rate: "Complete Job Rate",
+        description: "Full estate, large garage, or major renovation debris clearing.",
+      },
+    ],
+    process: [
+      {
+        step: "01",
+        title: "Point & Estimate",
+        desc: "Point out what goes; we give an upfront volume rate on the spot.",
+      },
+      {
+        step: "02",
+        title: "Safe Removal",
+        desc: "Our movers carry everything out without damaging walls or floors.",
+      },
+      {
+        step: "03",
+        title: "Charity & Eco Sorting",
+        desc: "Items in good shape go to local shelters and community partners.",
+      },
+      {
+        step: "04",
+        title: "Broom Clean",
+        desc: "We sweep up the staging area before heading out.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Can I combine junk removal with my moving day?",
+        answer: "Yes! This is our most popular option. We can load your keeper items into our moving truck and dispose of unwanted items in a single dispatch.",
+      },
+      {
+        question: "Do you take hazardous materials or paint?",
+        answer: "We can advise on eco-station disposal, but cannot transport industrial hazardous chemicals or propane tanks.",
+      },
+    ],
+  },
+
+  "same-day": {
+    slug: "same-day",
+    title: "Same-Day & Emergency Moving Services",
+    subtitle: "Fast-Dispatch Local Moves When Time is Critical",
+    metaTitle: "Same Day & Emergency Movers Edmonton | Compass Cartage",
+    metaDescription: "Urgent moving assistance in Edmonton. Last-minute apartment moves, lease-end emergencies, and short-notice relocations with quick dispatch.",
+    imageKey: "moversNeededToday",
+    eyebrow: "Emergency & Same-Day",
+    tagline: "Need to move today? Our quick-response dispatch team is on call 7 days a week.",
+    overview:
+      "Unexpected lease changes, contractor delays, or movers who canceled at the last minute? Don't panic. Compass Cartage maintains reserve dispatch capacity for same-day and emergency moving situations across the Edmonton metro region. Call our dispatch hotline directly for immediate vehicle and crew assignment.",
+    inclusions: [
+      "Priority dispatch booking with rapid crew routing",
+      "Fully stocked commercial moving vehicle with all pads, dollies & tools",
+      "2 to 4 movers assigned depending on load size",
+      "Full cargo insurance coverage even on short-notice jobs",
+      "Upfront quote before we begin loading — no predatory emergency surcharges",
+    ],
+    pricingGuide: [
+      {
+        title: "Express Van / 1-2 Movers",
+        rate: "Rapid Hourly",
+        description: "Studio, single room, or small apartment emergency move.",
+        badge: "Fastest Dispatch",
+      },
+      {
+        title: "Standard Box Truck / 2-3 Movers",
+        rate: "Standard Emergency",
+        description: "Full 1-2 bedroom apartment or urgent condo vacancy.",
+      },
+      {
+        title: "Full House Urgent Dispatch",
+        rate: "Priority Crew Rate",
+        description: "3-4 movers + large freight truck for sudden home turnovers.",
+      },
+    ],
+    process: [
+      {
+        step: "01",
+        title: "Call Dispatch Directly",
+        desc: "Call (587) 501-7519 for live truck availability and instant quote.",
+      },
+      {
+        step: "02",
+        title: "Crew En Route",
+        desc: "Our team routes to your origin with a fully equipped truck.",
+      },
+      {
+        step: "03",
+        title: "Rapid Protective Load",
+        desc: "Fast, efficient padding and loading without compromising safety.",
+      },
+      {
+        step: "04",
+        title: "Delivered & Done",
+        desc: "Safely delivered to your new address before deadlines hit.",
+      },
+    ],
+    faqs: [
+      {
+        question: "How quickly can you arrive?",
+        answer: "Depending on traffic and crew staging, we can often arrive within 90 to 180 minutes of your call in Edmonton, St. Albert, and Sherwood Park.",
+      },
+      {
+        question: "Are your same-day rates much higher?",
+        answer: "We believe in fair, honest business. While priority dispatch carries standard scheduling parameters, we never charge predatory or hidden surcharges.",
+      },
+    ],
+  },
 };

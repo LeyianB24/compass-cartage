@@ -15,6 +15,7 @@ import {
   HelpCircle,
   Images,
   ArrowLeft,
+  Mail,
 } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -30,6 +31,7 @@ const NAV_LINKS = [
   { label: "FAQ", href: "/faq", icon: HelpCircle },
   { label: "Gallery", href: "/gallery", icon: Images },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact", icon: Mail },
 ];
 
 export default function Navbar() {

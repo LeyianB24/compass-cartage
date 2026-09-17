@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Mail, MessageSquare, Copy, Check, ExternalLink, Send } from "lucide-react";
+import { X, Mail, MessageSquare, Copy, Check, ExternalLink, Send, Loader2, AlertCircle } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 
 type Props = {
@@ -23,6 +23,9 @@ type Props = {
 export default function CommunicationModal({ isOpen, onClose, request }: Props) {
   const [templateType, setTemplateType] = useState<"quote" | "confirmation" | "prep">("quote");
   const [copied, setCopied] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [sendSuccess, setSendSuccess] = useState(false);
+  const [sendError, setSendError] = useState("");
 
   if (!isOpen || !request) return null;
 
@@ -50,6 +53,38 @@ export default function CommunicationModal({ isOpen, onClose, request }: Props) 
     navigator.clipboard.writeText(body);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSendDirect = async () => {
+    if (!request) return;
+    setIsSending(true);
+    setSendError("");
+    setSendSuccess(false);
+
+    try {
+      const res = await fetch("/api/admin/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: request.email,
+          subject,
+          body,
+          quoteRequestId: request.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Failed to send email");
+      }
+
+      setSendSuccess(true);
+      setTimeout(() => setSendSuccess(false), 6000);
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : "Failed to send email");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const mailtoUrl = `mailto:${encodeURIComponent(request.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -148,6 +183,21 @@ export default function CommunicationModal({ isOpen, onClose, request }: Props) 
             />
           </div>
 
+          {/* Feedback alerts */}
+          {sendSuccess && (
+            <div className="flex items-center gap-2 rounded-xs border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400">
+              <Check size={16} />
+              <span>Email delivered directly to {request.email} via Resend!</span>
+            </div>
+          )}
+
+          {sendError && (
+            <div className="flex items-center gap-2 rounded-xs border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400">
+              <AlertCircle size={16} />
+              <span>{sendError}</span>
+            </div>
+          )}
+
           {/* Actions */}
           <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-hairline dark:border-white/10">
             <button
@@ -159,7 +209,7 @@ export default function CommunicationModal({ isOpen, onClose, request }: Props) 
               <span>{copied ? "Copied to Clipboard!" : "Copy Text"}</span>
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {request.phone && (
                 <a
                   href={smsUrl}
@@ -174,12 +224,31 @@ export default function CommunicationModal({ isOpen, onClose, request }: Props) 
                 href={mailtoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xs bg-navy-deep px-5 py-2 text-xs font-bold text-gold-soft shadow-md transition-all hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                className="inline-flex items-center gap-1.5 rounded-xs border border-hairline bg-paper px-3 py-2 text-xs font-semibold text-slate hover:text-navy-deep dark:border-white/15 dark:bg-[#070c14] dark:text-gray-300 dark:hover:text-white"
+                title="Open client's default email program"
               >
-                <Send size={14} />
-                <span>Open in Email App</span>
+                <span>Email Client</span>
                 <ExternalLink size={12} className="opacity-70" />
               </a>
+
+              <button
+                type="button"
+                onClick={handleSendDirect}
+                disabled={isSending}
+                className="btn-shimmer inline-flex items-center gap-1.5 rounded-xs bg-navy-deep px-5 py-2 text-xs font-bold text-gold-soft shadow-md transition-all hover:bg-gold hover:text-navy-deep disabled:opacity-60 dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+              >
+                {isSending ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={14} />
+                    <span>Send via Resend</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

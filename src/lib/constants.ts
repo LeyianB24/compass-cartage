@@ -163,6 +163,12 @@ export const SERVICES: Service[] = [
     imageKey: "truckSunnyDay",
   },
   {
+    title: "Commercial & Office Moves",
+    description:
+      "Office furniture, workstations, IT equipment, and retail relocations with minimal business downtime.",
+    imageKey: "officeMove",
+  },
+  {
     title: "Storage Moves",
     description:
       "Moving items into or out of storage, handled with the same care as a full household move.",

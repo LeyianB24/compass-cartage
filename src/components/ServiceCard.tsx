@@ -23,14 +23,14 @@ const TITLE_TO_SLUG: Record<string, string> = {
   "Commercial & Office Moves": "commercial",
   "Commercial Logistics": "commercial",
   "Corporate & Office Logistics": "commercial",
-  "Couch & Appliance Delivery": "residential",
-  "Single-Item Moves": "residential",
-  "Moving-Related Packing": "residential",
-  "Packing & Unpacking": "residential",
+  "Couch & Appliance Delivery": "appliance-delivery",
+  "Single-Item Moves": "appliance-delivery",
+  "Moving-Related Packing": "packing",
+  "Packing & Unpacking": "packing",
   "Loading & Unloading": "residential",
-  "Junk Removal": "residential",
-  "Last-Minute & Same-Day Moves": "residential",
-  "Short-Notice Moves": "residential",
+  "Junk Removal": "junk-removal",
+  "Last-Minute & Same-Day Moves": "same-day",
+  "Short-Notice Moves": "same-day",
 };
 
 export default function ServiceCard({

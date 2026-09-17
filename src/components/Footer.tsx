@@ -16,6 +16,7 @@ const QUICK_LINKS = [
   { label: "Coverage Map", href: "/service-area" },
   { label: "Moving FAQ", href: "/faq" },
   { label: "Work Gallery", href: "/gallery" },
+  { label: "Contact Us", href: "/contact" },
   { label: "Get a Quote", href: "/quote" },
 ];
 
@@ -165,11 +166,34 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Sub-Footer / Copyright */}
+        {/* Sub-Footer / Copyright & Legal */}
         <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 text-xs text-white/60 md:flex-row">
-          <p>
-            © {currentYear} {BUSINESS?.name || "Compass Cartage"}. All rights reserved.
-          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 md:justify-start">
+            <p>
+              © {currentYear} {BUSINESS?.name || "Compass Cartage"}. All rights reserved.
+            </p>
+            <span className="hidden text-white/30 md:inline">|</span>
+            <Link
+              href="/privacy-policy"
+              className="transition-colors hover:text-white dark:hover:text-gold-soft"
+            >
+              Privacy Policy
+            </Link>
+            <span className="text-white/30">·</span>
+            <Link
+              href="/terms"
+              className="transition-colors hover:text-white dark:hover:text-gold-soft"
+            >
+              Terms of Service
+            </Link>
+            <span className="text-white/30">·</span>
+            <Link
+              href="/admin"
+              className="font-mono text-[11px] text-gold/70 transition-colors hover:text-gold"
+            >
+              Staff Portal
+            </Link>
+          </div>
           <p className="flex items-center gap-1">
             <span>Site built by</span>
             <a

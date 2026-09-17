@@ -1,7 +1,7 @@
 // src/components/InventoryPlanner.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Package,
@@ -14,22 +14,62 @@ import {
   ArrowRight,
   Sparkles,
   Info,
+  Printer,
+  RotateCcw,
 } from "lucide-react";
 import { INVENTORY_CATEGORIES } from "@/lib/constants";
 
+const STORAGE_KEY = "compass_cartage_inventory_manifest_v1";
+
+const DEFAULT_ITEMS: Record<string, number> = {
+  sofa_3seat: 1,
+  tv_55: 1,
+  coffee_table: 1,
+  bed_queen: 1,
+  dresser_6drawer: 1,
+  dining_table: 1,
+  dining_chair: 4,
+  box_medium: 10,
+  box_large: 5,
+};
+
 export default function InventoryPlanner() {
   const [activeCategory, setActiveCategory] = useState<string>("Living Room");
-  const [itemCounts, setItemCounts] = useState<Record<string, number>>({
-    sofa_3seat: 1,
-    tv_55: 1,
-    coffee_table: 1,
-    bed_queen: 1,
-    dresser_6drawer: 1,
-    dining_table: 1,
-    dining_chair: 4,
-    box_medium: 10,
-    box_large: 5,
-  });
+  const [itemCounts, setItemCounts] = useState<Record<string, number>>(DEFAULT_ITEMS);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === "object") {
+          queueMicrotask(() => setItemCounts(parsed));
+        }
+      }
+    } catch {
+      // Ignore parse error
+    }
+  }, []);
+
+  // Save to localStorage on change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(itemCounts));
+    } catch {
+      // Ignore write error
+    }
+  }, [itemCounts]);
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleResetDefaults = () => {
+    if (window.confirm("Restore recommended standard household items?")) {
+      setItemCounts(DEFAULT_ITEMS);
+    }
+  };
 
   const handleAdd = (id: string) => {
     setItemCounts((prev) => ({
@@ -118,15 +158,41 @@ export default function InventoryPlanner() {
             </div>
           </div>
 
-          {totalItemCount > 0 && (
-            <button
-              onClick={handleClear}
-              className="inline-flex items-center gap-1.5 rounded-xs border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 transition-colors"
-            >
-              <Trash2 size={13} />
-              <span>Clear Inventory</span>
-            </button>
-          )}
+          <div className="flex flex-wrap items-center gap-2">
+            {totalItemCount > 0 && (
+              <>
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="inline-flex items-center gap-1.5 rounded-xs border border-gold/40 bg-gold/15 px-3 py-1.5 text-xs font-semibold text-gold-soft hover:bg-gold hover:text-navy-deep transition-all"
+                  title="Print or save as PDF"
+                >
+                  <Printer size={13} />
+                  <span>Print Manifest</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="inline-flex items-center gap-1.5 rounded-xs border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 transition-colors"
+                >
+                  <Trash2 size={13} />
+                  <span>Clear All</span>
+                </button>
+              </>
+            )}
+
+            {totalItemCount === 0 && (
+              <button
+                type="button"
+                onClick={handleResetDefaults}
+                className="inline-flex items-center gap-1.5 rounded-xs border border-gold/40 bg-gold/15 px-3 py-1.5 text-xs font-semibold text-gold-soft hover:bg-gold hover:text-navy-deep transition-all"
+              >
+                <RotateCcw size={13} />
+                <span>Load Sample Items</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
