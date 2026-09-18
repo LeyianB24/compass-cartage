@@ -4,6 +4,7 @@ import { MapPin, Navigation } from "lucide-react";
 import CallToAction from "@/components/CallToAction";
 import PageHero from "@/components/PageHero";
 import CoverageChecker from "@/components/CoverageChecker";
+import InteractiveMoveMap from "@/components/InteractiveMoveMap";
 import { DETAILED_COVERAGE_ZONES, BUSINESS } from "@/lib/constants";
 import { IMAGES } from "@/lib/images";
 
@@ -50,6 +51,24 @@ export default function ServiceAreaPage() {
         <section aria-label="Coverage Search" className="bg-paper py-12 border-b border-hairline">
           <div className="section-padding mx-auto max-w-content">
             <CoverageChecker />
+          </div>
+        </section>
+
+        {/* Live Interactive Alberta Route & Distance Planner */}
+        <section aria-label="Route Distance Planner" className="bg-paper py-16 border-b border-hairline dark:bg-[#070c14] dark:border-white/10">
+          <div className="section-padding mx-auto max-w-content">
+            <div className="mb-8 text-center max-w-2xl mx-auto">
+              <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold">
+                Live Route & Travel Tier Calculation
+              </span>
+              <h2 className="font-display mt-1 text-2xl font-bold text-navy-deep dark:text-white sm:text-3xl">
+                Plan Moving Directions Between Any Alberta Communities
+              </h2>
+              <p className="mt-2 text-xs text-slate dark:text-gray-400">
+                Calculate direct driving distance, route travel fees, and seamlessly transfer your route into a free binding quote.
+              </p>
+            </div>
+            <InteractiveMoveMap />
           </div>
         </section>
 

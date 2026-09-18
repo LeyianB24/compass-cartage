@@ -1,6 +1,7 @@
 // src/app/page.tsx
 import { Metadata } from "next";
 import Hero from "@/components/Hero";
+import QuickEstimateSection from "@/components/QuickEstimateSection";
 import AboutAuthority from "@/components/AboutAuthority";
 import FeaturedServicesMatrix from "@/components/FeaturedServicesMatrix";
 import FleetShowcase from "@/components/FleetShowcase";
@@ -58,10 +59,13 @@ export default function HomePage() {
       />
 
       <main className="relative w-full overflow-hidden">
-        {/* 1. Hero Section with Interactive Quote Widget */}
+        {/* 1. Hero Section Clean Presentation */}
         <Hero />
 
-        {/* 2. About Us & Local Authority Section (Light Mode Feature) */}
+        {/* 2. Quick Move Estimate & Crew Sizing Section (Dedicated Full-Width Edge-to-Edge) */}
+        <QuickEstimateSection />
+
+        {/* 3. About Us & Local Authority Section (Light Mode Feature) */}
         <AboutAuthority />
 
         {/* 3. Featured Services Matrix (Residential, Commercial, Storage) */}

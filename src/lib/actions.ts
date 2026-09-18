@@ -4,6 +4,8 @@
 import { prisma } from "./prisma";
 import { revalidatePath } from "next/cache";
 import { verifyAdminAuth } from "./auth";
+import { generateNextQuoteNumber } from "./quoteNumber";
+import { logActivity } from "./activityLogger";
 
 export type BookMoveResult = { success: true } | { success: false; error: string };
 export type ActionSimpleResult = { success: true } | { success: false; error: string };
@@ -71,9 +73,20 @@ export async function bookMove(
     });
   }
 
-  await prisma.quoteRequest.update({
+  const updatedQuote = await prisma.quoteRequest.update({
     where: { id: quoteRequestId },
     data: { status: "BOOKED" },
+    select: { id: true, quoteNumber: true, name: true },
+  });
+
+  await logActivity({
+    action: "BOOKING_CREATED",
+    category: "BOOKING",
+    quoteNumber: updatedQuote.quoteNumber,
+    quoteRequestId: updatedQuote.id,
+    actor: "Admin",
+    title: `Move Booked (${moveType})`,
+    details: `Confirmed booking for ${updatedQuote.name} on ${dateStr}. Assigned type: ${moveType}. Quote #${updatedQuote.quoteNumber || updatedQuote.id}.`,
   });
 
   revalidatePath("/admin");
@@ -96,9 +109,21 @@ export async function cancelBooking(quoteRequestId: string): Promise<ActionSimpl
     });
   }
 
-  await prisma.quoteRequest.update({
+  const updatedQuote = await prisma.quoteRequest.update({
     where: { id: quoteRequestId },
     data: { status: "QUOTED" },
+    select: { id: true, quoteNumber: true, name: true },
+  });
+
+  await logActivity({
+    action: "BOOKING_CANCELLED",
+    category: "BOOKING",
+    quoteNumber: updatedQuote.quoteNumber,
+    quoteRequestId: updatedQuote.id,
+    actor: "Admin",
+    title: "Booking Slot Cancelled",
+    details: `Reservation cancelled for Quote #${updatedQuote.quoteNumber || updatedQuote.id} (${updatedQuote.name}). Status returned to QUOTED.`,
+    status: "WARNING",
   });
 
   revalidatePath("/admin");
@@ -122,10 +147,28 @@ export async function updateRequestStatus(
     throw new Error("Invalid status");
   }
 
+  const current = await prisma.quoteRequest.findUnique({
+    where: { id: quoteRequestId },
+    select: { id: true, quoteNumber: true, name: true, status: true },
+  });
+
   await prisma.quoteRequest.update({
     where: { id: quoteRequestId },
     data: { status },
   });
+
+  if (current) {
+    await logActivity({
+      action: "STATUS_UPDATED",
+      category: "STATUS",
+      quoteNumber: current.quoteNumber,
+      quoteRequestId: current.id,
+      actor: "Admin",
+      title: `Status Changed to ${status}`,
+      details: `Quote #${current.quoteNumber || current.id} (${current.name}) transitioned from ${current.status} to ${status}.`,
+    });
+  }
+
   revalidatePath("/admin");
 }
 
@@ -138,9 +181,20 @@ export async function updateRequestNotes(
     return { success: false, error: "Unauthorized: Admin session required" };
   }
 
-  await prisma.quoteRequest.update({
+  const updated = await prisma.quoteRequest.update({
     where: { id: quoteRequestId },
     data: { notes },
+    select: { id: true, quoteNumber: true, name: true },
+  });
+
+  await logActivity({
+    action: "NOTE_UPDATED",
+    category: "DISPATCH",
+    quoteNumber: updated.quoteNumber,
+    quoteRequestId: updated.id,
+    actor: "Admin",
+    title: `Notes Updated #${updated.quoteNumber || updated.id}`,
+    details: `Dispatch operational notes modified for ${updated.name}.`,
   });
 
   revalidatePath("/admin");
@@ -153,6 +207,11 @@ export async function deleteQuoteRequest(quoteRequestId: string): Promise<Action
     return { success: false, error: "Unauthorized: Admin session required" };
   }
 
+  const target = await prisma.quoteRequest.findUnique({
+    where: { id: quoteRequestId },
+    select: { id: true, quoteNumber: true, name: true },
+  });
+
   // Delete booked slot first if any
   await prisma.bookedSlot.deleteMany({
     where: { quoteRequestId },
@@ -161,6 +220,18 @@ export async function deleteQuoteRequest(quoteRequestId: string): Promise<Action
   await prisma.quoteRequest.delete({
     where: { id: quoteRequestId },
   });
+
+  if (target) {
+    await logActivity({
+      action: "QUOTE_DELETED",
+      category: "SYSTEM",
+      quoteNumber: target.quoteNumber,
+      actor: "Admin",
+      title: `Quote Record Removed`,
+      details: `Permanently deleted Quote #${target.quoteNumber || target.id} (${target.name}) and associated booking records.`,
+      status: "WARNING",
+    });
+  }
 
   revalidatePath("/admin");
   return { success: true };
@@ -186,8 +257,11 @@ export async function createManualQuoteRequest(data: {
     return { success: false, error: "Missing required client fields" };
   }
 
-  await prisma.quoteRequest.create({
+  const quoteNumber = await generateNextQuoteNumber();
+
+  const created = await prisma.quoteRequest.create({
     data: {
+      quoteNumber,
       name: data.name.trim(),
       phone: data.phone.trim(),
       email: data.email?.trim() || "intake@compasscartage.internal",
@@ -198,6 +272,16 @@ export async function createManualQuoteRequest(data: {
       notes: data.notes?.trim() || "Logged via Dispatch Intake Terminal",
       status: data.status || "NEW",
     },
+  });
+
+  await logActivity({
+    action: "MANUAL_LEAD",
+    category: "QUOTE",
+    quoteNumber,
+    quoteRequestId: created.id,
+    actor: "Admin",
+    title: `Manual Lead #${quoteNumber} Created`,
+    details: `Admin intake created for ${created.name} (${created.phone}). Origin: ${created.pickupAddress}, Dropoff: ${created.dropoffAddress}. Initial status: ${created.status}.`,
   });
 
   revalidatePath("/admin");

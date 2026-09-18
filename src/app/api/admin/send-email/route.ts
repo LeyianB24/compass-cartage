@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { verifyAdminAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activityLogger";
 
 const getResendClient = () => {
   const apiKey = process.env.RESEND_API_KEY;
@@ -78,24 +79,41 @@ ${body}
       );
     }
 
-    // If quoteRequestId is provided, automatically advance status if currently NEW
+    // If quoteRequestId is provided, automatically advance status if currently NEW and fetch quote details
+    let quoteNumber: string | null = null;
     if (quoteRequestId) {
       try {
         const current = await prisma.quoteRequest.findUnique({
           where: { id: quoteRequestId },
-          select: { status: true },
+          select: { status: true, quoteNumber: true },
         });
 
-        if (current && current.status === "NEW") {
-          await prisma.quoteRequest.update({
-            where: { id: quoteRequestId },
-            data: { status: "CONTACTED" },
-          });
+        if (current) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          quoteNumber = (current as any).quoteNumber || null;
+          if (current.status === "NEW") {
+            await prisma.quoteRequest.update({
+              where: { id: quoteRequestId },
+              data: { status: "CONTACTED" },
+            });
+          }
         }
       } catch (dbErr) {
         console.warn("Could not update quote request status after email:", dbErr);
       }
     }
+
+    // Log admin email dispatch
+    await logActivity({
+      action: "ADMIN_EMAIL_SENT",
+      category: "EMAIL",
+      quoteNumber,
+      quoteRequestId: quoteRequestId || null,
+      actor: "Admin",
+      title: `Admin Direct Email Sent: "${subject.trim()}"`,
+      details: `Direct dispatch email sent to ${to.trim()}. Subject: ${subject.trim()}. Resend ID: ${resendData?.id || "sent"}.`,
+      metadata: { to: to.trim(), subject: subject.trim(), messageId: resendData?.id },
+    });
 
     return NextResponse.json({
       success: true,

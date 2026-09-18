@@ -8,6 +8,8 @@ import { put } from "@vercel/blob";
 import { renderToBuffer } from "@react-pdf/renderer";
 import QuotePdf from "@/lib/QuotePdf";
 import { prisma } from "@/lib/prisma";
+import { generateNextQuoteNumber } from "@/lib/quoteNumber";
+import { logActivity } from "@/lib/activityLogger";
 
 const getResendClient = () => {
   const apiKey = process.env.RESEND_API_KEY;
@@ -138,10 +140,14 @@ export async function POST(req: NextRequest) {
       photoUrls.push(blob.url);
     }
 
-    // Save to database — source of truth with distance and tier pricing
+    // Generate sequential quote number (e.g. CC-2026-1001)
+    const quoteNumber = await generateNextQuoteNumber();
+
+    // Save to database — source of truth with distance, tier pricing, and quoteNumber
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const savedRequest = await (prisma.quoteRequest.create as any)({
       data: {
+        quoteNumber,
         name: data.name,
         phone: data.phone,
         email: data.email,
@@ -155,6 +161,24 @@ export async function POST(req: NextRequest) {
         estimatedPrice,
         notes: data.notes,
         photoUrls,
+      },
+    });
+
+    // Record submission audit log
+    await logActivity({
+      action: "QUOTE_SUBMITTED",
+      category: "QUOTE",
+      quoteNumber,
+      quoteRequestId: savedRequest?.id,
+      actor: "Client",
+      title: `New Quote Request #${quoteNumber} Logged`,
+      details: `${data.name} (${data.phone}) submitted relocation intake from ${data.pickupAddress} to ${data.dropoffAddress}. Scope: ${data.moveSize || "N/A"}, Tier: ${pricingTier || "Standard"}, Est: $${Math.round(estimatedPrice || 0)}.`,
+      metadata: {
+        quoteNumber,
+        pickupAddress: data.pickupAddress,
+        dropoffAddress: data.dropoffAddress,
+        distanceKm,
+        estimatedPrice,
       },
     });
 
@@ -177,6 +201,8 @@ export async function POST(req: NextRequest) {
     const pdfBuffer = await renderToBuffer(
       QuotePdf({
         data: {
+          quoteId: savedRequest?.id,
+          quoteNumber,
           name: data.name,
           phone: data.phone,
           email: data.email,
@@ -213,23 +239,39 @@ export async function POST(req: NextRequest) {
     const adminEmailHtml = `
       <!DOCTYPE html>
       <html>
-        <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #092634; margin: 0; padding: 20px;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e1e4e6;">
-            <h2 style="color: #092634; border-bottom: 2px solid #ff6e42; padding-bottom: 10px; margin-top: 0;">New Quote Request</h2>
-            <p><strong>Client Name:</strong> ${safeName}</p>
-            <p><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #004e72;">${safeEmail}</a></p>
-            <p><strong>Phone:</strong> <a href="tel:${safePhone}" style="color: #004e72;">${safePhone}</a></p>
-            <hr style="border: none; border-top: 1px solid #e1e4e6; margin: 20px 0;" />
-            <p><strong>Moving From:</strong> ${safePickup}</p>
-            <p><strong>Moving To:</strong> ${safeDropoff}</p>
-            <p><strong>Preferred Date:</strong> ${safeDate}</p>
-            <p><strong>Move Size:</strong> ${safeSize}</p>
-            ${pricingSummaryHtml}
-            ${photoLinksHtml}
-            <hr style="border: none; border-top: 1px solid #e1e4e6; margin: 20px 0;" />
-            <p><strong>Notes / Special Instructions:</strong></p>
-            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 6px; border-left: 4px solid #ff6e42;">${safeNotes}</div>
-            <p style="color:#8792a2;font-size:12px;margin-top:20px;">A branded PDF summary is attached.</p>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #070c14; color: #334155; margin: 0; padding: 24px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <div style="background-color: #0a131f; padding: 20px 24px; border-bottom: 3px solid #c5a880;">
+              <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+                <tr>
+                  <td style="vertical-align: middle; width: 60px; padding-right: 14px;">
+                    <img src="https://compass-cartage.vercel.app/logos/logo%20Compass%20Cartage.png" alt="Compass Cartage" width="56" height="31" style="display: block; border-radius: 4px; object-fit: contain;" />
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <h1 style="color: #c5a880; margin: 0; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase;">Compass Cartage</h1>
+                    <p style="color: #ffffff; margin: 3px 0 0 0; font-size: 13px;">Dispatch Notification &bull; New Quote Lead</p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div style="padding: 30px;">
+              <h2 style="color: #0a131f; margin-top: 0; font-size: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Customer Profile</h2>
+              <p style="margin: 6px 0;"><strong>Client Name:</strong> ${safeName}</p>
+              <p style="margin: 6px 0;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #c5a880; font-weight: bold;">${safeEmail}</a></p>
+              <p style="margin: 6px 0;"><strong>Direct Phone:</strong> <a href="tel:${safePhone}" style="color: #0a131f; font-weight: bold;">${safePhone}</a></p>
+              <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+              <h2 style="color: #0a131f; font-size: 16px; margin-bottom: 10px;">Route & Move Scope</h2>
+              <p style="margin: 6px 0;"><strong>Origin / Pickup:</strong> ${safePickup}</p>
+              <p style="margin: 6px 0;"><strong>Destination / Drop-off:</strong> ${safeDropoff}</p>
+              <p style="margin: 6px 0;"><strong>Preferred Date:</strong> ${safeDate}</p>
+              <p style="margin: 6px 0;"><strong>Home / Move Size:</strong> ${safeSize}</p>
+              ${pricingSummaryHtml}
+              ${photoLinksHtml}
+              <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+              <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: bold; color: #0a131f;">Special Instructions / Inventory Notes:</p>
+              <div style="background-color: #f8f9fa; padding: 14px; border-radius: 6px; border-left: 4px solid #c5a880; font-size: 13px; line-height: 1.5;">${safeNotes}</div>
+              <p style="color: #64748b; font-size: 12px; margin-top: 24px; border-top: 1px solid #e2e8f0; pt: 16px;">Itemized PDF summary is attached for immediate review.</p>
+            </div>
           </div>
         </body>
       </html>
@@ -238,56 +280,110 @@ export async function POST(req: NextRequest) {
     const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
-        <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #092634; margin: 0; padding: 20px;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e1e4e6;">
-            <h2 style="color: #092634; border-bottom: 2px solid #ff6e42; padding-bottom: 10px; margin-top: 0;">We Received Your Moving Quote Request!</h2>
-            <p>Hi ${safeName},</p>
-            <p>Thank you for reaching out to <strong>Compass Cartage</strong>. We&rsquo;ve received your quote request and our team is currently reviewing your details.</p>
-            <p>We will get back to you within 24 hours with a detailed estimate.</p>
-            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;">
-              <p style="margin: 0 0 8px 0;"><strong>Summary of your details:</strong></p>
-              <ul style="margin: 0; padding-left: 20px;">
-                <li><strong>Pickup:</strong> ${safePickup}</li>
-                <li><strong>Drop-off:</strong> ${safeDropoff}</li>
-                <li><strong>Preferred Date:</strong> ${safeDate}</li>
-                <li><strong>Service Tier:</strong> ${safeTier}</li>
-                ${distanceKm ? `<li><strong>Estimated Distance:</strong> ~${distanceKm} km</li>` : ""}
-                ${distanceFee !== null && distanceFee > 0 ? `<li><strong>Travel Fee:</strong> $${distanceFee.toFixed(2)}</li>` : "<li><strong>Travel Fee:</strong> Included (Local Metro)</li>"}
-                ${estimatedPrice ? `<li><strong>Estimated Quote:</strong> $${Math.round(estimatedPrice)}</li>` : ""}
-              </ul>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #334155; margin: 0; padding: 24px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+            <div style="background-color: #0a131f; padding: 20px 24px; border-bottom: 3px solid #c5a880;">
+              <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+                <tr>
+                  <td style="vertical-align: middle; width: 60px; padding-right: 14px;">
+                    <img src="https://compass-cartage.vercel.app/logos/logo%20Compass%20Cartage.png" alt="Compass Cartage" width="56" height="31" style="display: block; border-radius: 4px; object-fit: contain;" />
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <h1 style="color: #c5a880; margin: 0; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase;">Compass Cartage</h1>
+                    <p style="color: #ffffff; margin: 3px 0 0 0; font-size: 13px;">Precision Relocation &bull; Edmonton & Alberta</p>
+                  </td>
+                </tr>
+              </table>
             </div>
-            <p style="color:#4a5568;font-size:13px;">A PDF copy of your submitted details is attached for your records.</p>
-            <p>If you need to make urgent changes, simply reply to this email or call our team directly.</p>
-            <p style="margin-top: 30px; color: #4a5568; font-size: 0.9em;">Best regards,<br/><strong>Compass Cartage Team</strong></p>
+            <div style="padding: 30px;">
+              <h2 style="color: #0a131f; margin-top: 0; font-size: 18px;">We&rsquo;ve Received Your Moving Quote Request!</h2>
+              <p style="font-size: 14px; line-height: 1.6;">Hi ${safeName},</p>
+              <p style="font-size: 14px; line-height: 1.6;">Thank you for choosing <strong>Compass Cartage</strong>. We have logged your relocation details and our team is currently preparing your dedicated crew and fleet assignment.</p>
+              <p style="font-size: 14px; line-height: 1.6;">We will review your access conditions and follow up within <strong>24 hours</strong> with guaranteed rate availability.</p>
+              
+              <div style="background-color: #f8f9fa; border: 1px solid #e2e8f0; border-left: 4px solid #c5a880; padding: 18px; border-radius: 6px; margin: 20px 0;">
+                <p style="margin: 0 0 10px 0; font-weight: bold; color: #0a131f; font-size: 14px;">Summary of Submitted Move Details:</p>
+                <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.7; color: #334155;">
+                  <li><strong>Pickup:</strong> ${safePickup}</li>
+                  <li><strong>Drop-off:</strong> ${safeDropoff}</li>
+                  <li><strong>Preferred Date:</strong> ${safeDate}</li>
+                  <li><strong>Scope / Size:</strong> ${safeSize}</li>
+                  <li><strong>Service Tier:</strong> ${safeTier}</li>
+                  ${distanceKm ? `<li><strong>Route Distance:</strong> ~${distanceKm} km</li>` : ""}
+                  ${distanceFee !== null && distanceFee > 0 ? `<li><strong>Distance Travel Fee:</strong> $${distanceFee.toFixed(2)}</li>` : "<li><strong>Distance Travel Fee:</strong> Included (Local Metro)</li>"}
+                  ${estimatedPrice ? `<li><strong>Upfront Estimate:</strong> $${Math.round(estimatedPrice)} CAD</li>` : ""}
+                </ul>
+              </div>
+
+              <p style="color: #475569; font-size: 13px; line-height: 1.5;">
+                A PDF copy of your submitted quote request is attached to this email for your records.
+              </p>
+              <p style="color: #475569; font-size: 13px; line-height: 1.5;">
+                Have questions or need to make adjustments to your inventory? Reply directly to this email or call our Edmonton dispatch team at <strong>(780) 900-3490</strong>.
+              </p>
+              <div style="margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                <p style="margin: 0; color: #0a131f; font-size: 14px; font-weight: bold;">Compass Cartage Team</p>
+                <p style="margin: 4px 0 0 0; color: #64748b; font-size: 12px;">Licensed &bull; Cargo Insured &bull; One Trusted Crew</p>
+              </div>
+            </div>
           </div>
         </body>
       </html>
     `;
 
     try {
-      await Promise.all([
+      const [adminResult, customerResult] = await Promise.allSettled([
         resend.emails.send({
           from: senderEmail,
           to: recipientEmail,
           replyTo: data.email,
-          subject: `New Quote Request — ${data.name} (${data.moveSize})`,
+          subject: `[Dispatch Lead] Quote #${quoteNumber} — ${data.name} (${data.moveSize || "Move"})`,
           html: adminEmailHtml,
           attachments: [pdfAttachment],
         }),
         resend.emails.send({
           from: senderEmail,
           to: data.email,
-          subject: "We've received your quote request | Compass Cartage",
+          subject: `Your Compass Cartage Quote #${quoteNumber} & Relocation Estimate`,
           html: customerEmailHtml,
           attachments: [pdfAttachment],
         }),
       ]);
+
+      const emailSuccess = adminResult.status === "fulfilled" || customerResult.status === "fulfilled";
+      await logActivity({
+        action: "EMAIL_DISPATCHED",
+        category: "EMAIL",
+        quoteNumber,
+        quoteRequestId: savedRequest?.id,
+        actor: "System",
+        title: `Quote #${quoteNumber} Notifications Dispatched`,
+        details: `Admin send: ${adminResult.status === "fulfilled" ? "Delivered" : "Failed"}. Customer send: ${customerResult.status === "fulfilled" ? "Delivered" : "Pending/Failed"}.`,
+        status: emailSuccess ? "SUCCESS" : "WARNING",
+      });
+
+      if (adminResult.status === "fulfilled") {
+        console.log("Admin notification email sent successfully:", adminResult.value?.data?.id);
+      } else {
+        console.error("Admin notification email delivery failed:", adminResult.reason);
+      }
+
+      if (customerResult.status === "fulfilled") {
+        console.log("Customer confirmation email sent successfully:", customerResult.value?.data?.id);
+      } else {
+        console.error("Customer confirmation email delivery failed:", customerResult.reason);
+      }
     } catch (emailErr) {
-      console.error("Email sending failed (request still saved):", emailErr);
+      console.error("Email dispatch exception (request still saved):", emailErr);
     }
 
     return NextResponse.json(
-      { success: true, message: "Quote request submitted successfully.", id: savedRequest.id },
+      {
+        success: true,
+        message: "Quote request submitted successfully.",
+        id: savedRequest?.id,
+        quoteNumber,
+      },
       { status: 200 }
     );
   } catch (err) {

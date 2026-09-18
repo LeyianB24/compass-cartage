@@ -1,7 +1,7 @@
 // src/components/InteractiveMoveMap.tsx
 "use client";
 
-import { useState, useId, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,44 +17,26 @@ import {
   CheckCircle2,
   ExternalLink,
   Sparkles,
+  Loader2,
+  X,
 } from "lucide-react";
-
-export interface RouteCoordinates {
-  name: string;
-  region: "Metro Edmonton" | "Regional Alberta" | "Intercity Alberta";
-  lat: number;
-  lng: number;
-  isLocal: boolean;
-}
-
-// Key Alberta & Edmonton hub coordinates for visual route mapping
-export const ALBERTA_LOCATIONS: Record<string, RouteCoordinates> = {
-  "Downtown Edmonton": { name: "Downtown Edmonton", region: "Metro Edmonton", lat: 53.5461, lng: -113.4938, isLocal: true },
-  "Old Strathcona, Edmonton": { name: "Old Strathcona, Edmonton", region: "Metro Edmonton", lat: 53.5186, lng: -113.4975, isLocal: true },
-  "Windermere, Edmonton": { name: "Windermere, Edmonton", region: "Metro Edmonton", lat: 53.4358, lng: -113.5936, isLocal: true },
-  "West Edmonton": { name: "West Edmonton", region: "Metro Edmonton", lat: 53.5225, lng: -113.6242, isLocal: true },
-  "Mill Woods, Edmonton": { name: "Mill Woods, Edmonton", region: "Metro Edmonton", lat: 53.4635, lng: -113.4373, isLocal: true },
-  "St. Albert": { name: "St. Albert", region: "Metro Edmonton", lat: 53.6305, lng: -113.6256, isLocal: true },
-  "Sherwood Park": { name: "Sherwood Park", region: "Metro Edmonton", lat: 53.5414, lng: -113.3106, isLocal: true },
-  "Spruce Grove": { name: "Spruce Grove", region: "Metro Edmonton", lat: 53.5451, lng: -113.9017, isLocal: true },
-  "Leduc": { name: "Leduc", region: "Metro Edmonton", lat: 53.2594, lng: -113.5494, isLocal: true },
-  "Beaumont": { name: "Beaumont", region: "Metro Edmonton", lat: 53.3567, lng: -113.4147, isLocal: true },
-  "Fort Saskatchewan": { name: "Fort Saskatchewan", region: "Metro Edmonton", lat: 53.7128, lng: -113.2133, isLocal: true },
-  "Stony Plain": { name: "Stony Plain", region: "Metro Edmonton", lat: 53.5303, lng: -113.9897, isLocal: true },
-  "Red Deer": { name: "Red Deer", region: "Regional Alberta", lat: 52.2681, lng: -113.8112, isLocal: false },
-  "Calgary": { name: "Calgary", region: "Intercity Alberta", lat: 51.0447, lng: -114.0719, isLocal: false },
-  "Airdrie": { name: "Airdrie", region: "Regional Alberta", lat: 51.2917, lng: -114.0144, isLocal: false },
-  "Canmore / Banff": { name: "Canmore / Banff", region: "Intercity Alberta", lat: 51.089, lng: -115.359, isLocal: false },
-  "Lethbridge": { name: "Lethbridge", region: "Intercity Alberta", lat: 49.6956, lng: -112.8451, isLocal: false },
-  "Medicine Hat": { name: "Medicine Hat", region: "Intercity Alberta", lat: 50.0417, lng: -110.6775, isLocal: false },
-  "Grande Prairie": { name: "Grande Prairie", region: "Intercity Alberta", lat: 55.1699, lng: -118.7986, isLocal: false },
-  "Fort McMurray": { name: "Fort McMurray", region: "Intercity Alberta", lat: 56.7264, lng: -111.3803, isLocal: false },
-};
+import {
+  ALBERTA_LOCALITIES,
+  searchAlbertaAddresses,
+  type SearchResult,
+} from "@/lib/mapUtils";
 
 // Haversine formula for driving distance approximation with highway detour factor
 function calculateRouteMetrics(originStr: string, destStr: string) {
-  const loc1 = ALBERTA_LOCATIONS[originStr];
-  const loc2 = ALBERTA_LOCATIONS[destStr];
+  const findLoc = (name: string) => {
+    const clean = name.toLowerCase().trim();
+    return ALBERTA_LOCALITIES.find(
+      (l) => l.name.toLowerCase() === clean || clean.includes(l.name.toLowerCase())
+    );
+  };
+
+  const loc1 = findLoc(originStr);
+  const loc2 = findLoc(destStr);
 
   if (loc1 && loc2) {
     const R = 6371; // Earth radius km
@@ -69,7 +51,7 @@ function calculateRouteMetrics(originStr: string, destStr: string) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const straightKm = R * c;
 
-    // Road winding factor (1.25x for direct highway, 1.35x for urban city streets)
+    // Road winding factor (1.35x for city urban streets, 1.22x for provincial highways)
     const windingFactor = straightKm < 30 ? 1.35 : 1.22;
     const roadKm = Math.max(5, Math.round(straightKm * windingFactor));
 
@@ -113,26 +95,28 @@ function calculateRouteMetrics(originStr: string, destStr: string) {
 
 function AnimatedKm({ target }: { target: number }) {
   const [displayVal, setDisplayVal] = useState(target);
+  const currentRef = useRef(target);
 
   useEffect(() => {
-    const start = displayVal;
+    const start = currentRef.current;
     const end = target;
     if (start === end) return;
     let startTime: number | null = null;
-    const duration = 500;
+    const duration = 400;
     let reqId: number;
     function step(timestamp: number) {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
-      setDisplayVal(Math.round(start + (end - start) * ease));
+      const val = Math.round(start + (end - start) * ease);
+      currentRef.current = val;
+      setDisplayVal(val);
       if (progress < 1) {
         reqId = requestAnimationFrame(step);
       }
     }
     reqId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(reqId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target]);
 
   return <span>~{displayVal} km</span>;
@@ -152,13 +136,66 @@ export default function InteractiveMoveMap({
   showQuoteCTA = true,
 }: InteractiveMoveMapProps) {
   const router = useRouter();
-  const datalistId = useId();
   const [origin, setOrigin] = useState(initialOrigin);
   const [destination, setDestination] = useState(initialDestination);
   const [mapMode, setMapMode] = useState<"googleLive" | "compassRadar">("googleLive");
   const [isSwapping, setIsSwapping] = useState(false);
 
+  // Search Autocomplete State for Origin
+  const [originSuggestions, setOriginSuggestions] = useState<SearchResult[]>([]);
+  const [isOriginLoading, setIsOriginLoading] = useState(false);
+  const [showOriginDropdown, setShowOriginDropdown] = useState(false);
+  const originRef = useRef<HTMLDivElement>(null);
+
+  // Search Autocomplete State for Destination
+  const [destSuggestions, setDestSuggestions] = useState<SearchResult[]>([]);
+  const [isDestLoading, setIsDestLoading] = useState(false);
+  const [showDestDropdown, setShowDestDropdown] = useState(false);
+  const destRef = useRef<HTMLDivElement>(null);
+
   const metrics = calculateRouteMetrics(origin, destination);
+
+  // Debounced search for Origin
+  useEffect(() => {
+    if (!origin || origin.trim().length < 2) {
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsOriginLoading(true);
+      const results = await searchAlbertaAddresses(origin);
+      setOriginSuggestions(results);
+      setIsOriginLoading(false);
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [origin]);
+
+  // Debounced search for Destination
+  useEffect(() => {
+    if (!destination || destination.trim().length < 2) {
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsDestLoading(true);
+      const results = await searchAlbertaAddresses(destination);
+      setDestSuggestions(results);
+      setIsDestLoading(false);
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [destination]);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (originRef.current && !originRef.current.contains(e.target as Node)) {
+        setShowOriginDropdown(false);
+      }
+      if (destRef.current && !destRef.current.contains(e.target as Node)) {
+        setShowDestDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSwap = () => {
     setIsSwapping(true);
@@ -181,7 +218,7 @@ export default function InteractiveMoveMap({
     router.push(`/quote?${params.toString()}`);
   };
 
-  // Google Maps embed directions URL (zero API key required, 100% reliable)
+  // Google Maps embed directions URL
   const googleMapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(
     `${origin}, Alberta to ${destination}, Alberta`
   )}&output=embed`;
@@ -202,14 +239,14 @@ export default function InteractiveMoveMap({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-display text-base font-bold text-navy-deep dark:text-white sm:text-lg">
-                Interactive Moving Route & Distance Planner
+                Interactive Alberta Route & Distance Planner
               </h3>
               <span className="inline-flex items-center gap-1 rounded-xs bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
-                <Sparkles size={10} /> Live Maps
+                <Sparkles size={10} /> Live Autocomplete Search
               </span>
             </div>
             <p className="text-xs text-slate dark:text-gray-400">
-              Select where you are and where you are moving to calculate exact distance and travel tier.
+              Type any Alberta address, city, or postal area to view exact driving distance, route tiers, and pre-fill your quote.
             </p>
           </div>
         </div>
@@ -259,13 +296,13 @@ export default function InteractiveMoveMap({
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[1.1fr_1fr]">
-        {/* Left Column: Origin & Destination Inputs + Route Metrics */}
+        {/* Left Column: Origin & Destination Inputs + Autocomplete + Route Metrics */}
         <div className="flex flex-col justify-between p-6 sm:p-7">
           <div className="space-y-6">
             {/* Input Row with Swap Button */}
             <div className="relative space-y-4">
-              {/* Pickup / Origin */}
-              <div>
+              {/* Pickup / Origin with Autocomplete Dropdown */}
+              <div ref={originRef} className="relative">
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold-soft dark:text-gold">
                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gold/20 text-[10px] text-navy-deep dark:text-gold">
@@ -275,17 +312,65 @@ export default function InteractiveMoveMap({
                   </label>
                   <span className="text-[10px] text-slate-light dark:text-gray-400">Origin Point</span>
                 </div>
+
                 <div className="relative mt-1.5">
                   <input
                     type="text"
-                    list={datalistId}
                     value={origin}
-                    onChange={(e) => setOrigin(e.target.value)}
-                    placeholder="e.g. Downtown Edmonton, St. Albert, Leduc..."
-                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-3 pl-10 text-xs font-medium text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold"
+                    onFocus={() => setShowOriginDropdown(true)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setOrigin(val);
+                      if (!val || val.trim().length < 2) setOriginSuggestions([]);
+                      setShowOriginDropdown(true);
+                    }}
+                    placeholder="Search any Alberta street, city, or community..."
+                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-3 pl-10 pr-9 text-xs font-medium text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold"
                   />
                   <MapPin size={16} className="absolute left-3.5 top-3.5 text-gold" />
+                  {isOriginLoading ? (
+                    <Loader2 size={15} className="absolute right-3.5 top-3.5 text-gold animate-spin" />
+                  ) : origin ? (
+                    <button
+                      type="button"
+                      onClick={() => setOrigin("")}
+                      className="absolute right-3.5 top-3.5 text-slate hover:text-navy-deep dark:text-gray-400"
+                    >
+                      <X size={14} />
+                    </button>
+                  ) : null}
                 </div>
+
+                {/* Origin Autocomplete Dropdown */}
+                {showOriginDropdown && originSuggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-56 overflow-y-auto rounded-xs border border-gold/40 bg-paper-muted shadow-xl dark:border-gold/30 dark:bg-[#070c14]">
+                    {originSuggestions.map((item, idx) => (
+                      <div
+                        key={idx}
+                        onMouseDown={() => {
+                          setOrigin(item.title);
+                          setShowOriginDropdown(false);
+                        }}
+                        className="flex cursor-pointer items-center justify-between border-b border-hairline/60 px-4 py-2.5 text-xs transition-colors hover:bg-gold/15 dark:border-white/5"
+                      >
+                        <div className="flex items-center gap-2.5 truncate">
+                          <MapPin size={14} className="text-gold shrink-0" />
+                          <div className="truncate">
+                            <p className="font-bold text-navy-deep dark:text-white truncate">
+                              {item.title}
+                            </p>
+                            <p className="text-[10px] text-slate-light dark:text-gray-400 truncate">
+                              {item.subtitle}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="shrink-0 font-mono text-[9px] text-gold font-semibold ml-2">
+                          {item.isLocal ? "Metro" : "Regional"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Swap Button Divider */}
@@ -305,8 +390,8 @@ export default function InteractiveMoveMap({
                 </button>
               </div>
 
-              {/* Destination / Dropoff */}
-              <div>
+              {/* Destination / Dropoff with Autocomplete Dropdown */}
+              <div ref={destRef} className="relative">
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-[10px] text-emerald-700 dark:text-emerald-400">
@@ -316,28 +401,69 @@ export default function InteractiveMoveMap({
                   </label>
                   <span className="text-[10px] text-slate-light dark:text-gray-400">Destination Point</span>
                 </div>
+
                 <div className="relative mt-1.5">
                   <input
                     type="text"
-                    list={datalistId}
                     value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    placeholder="e.g. Windermere, Calgary, Red Deer, Sherwood Park..."
-                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-3 pl-10 text-xs font-medium text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-emerald-500"
+                    onFocus={() => setShowDestDropdown(true)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setDestination(val);
+                      if (!val || val.trim().length < 2) setDestSuggestions([]);
+                      setShowDestDropdown(true);
+                    }}
+                    placeholder="Search any Alberta destination or community..."
+                    className="w-full rounded-xs border border-hairline bg-paper px-4 py-3 pl-10 pr-9 text-xs font-medium text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-[#070c14] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-emerald-500"
                   />
                   <Navigation size={16} className="absolute left-3.5 top-3.5 text-emerald-500" />
+                  {isDestLoading ? (
+                    <Loader2 size={15} className="absolute right-3.5 top-3.5 text-emerald-500 animate-spin" />
+                  ) : destination ? (
+                    <button
+                      type="button"
+                      onClick={() => setDestination("")}
+                      className="absolute right-3.5 top-3.5 text-slate hover:text-navy-deep dark:text-gray-400"
+                    >
+                      <X size={14} />
+                    </button>
+                  ) : null}
                 </div>
-              </div>
 
-              {/* Autocomplete Datalist */}
-              <datalist id={datalistId}>
-                {Object.keys(ALBERTA_LOCATIONS).map((loc) => (
-                  <option key={loc} value={loc} />
-                ))}
-              </datalist>
+                {/* Destination Autocomplete Dropdown */}
+                {showDestDropdown && destSuggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-56 overflow-y-auto rounded-xs border border-emerald-500/40 bg-paper-muted shadow-xl dark:border-emerald-500/30 dark:bg-[#070c14]">
+                    {destSuggestions.map((item, idx) => (
+                      <div
+                        key={idx}
+                        onMouseDown={() => {
+                          setDestination(item.title);
+                          setShowDestDropdown(false);
+                        }}
+                        className="flex cursor-pointer items-center justify-between border-b border-hairline/60 px-4 py-2.5 text-xs transition-colors hover:bg-emerald-500/15 dark:border-white/5"
+                      >
+                        <div className="flex items-center gap-2.5 truncate">
+                          <Navigation size={14} className="text-emerald-500 shrink-0" />
+                          <div className="truncate">
+                            <p className="font-bold text-navy-deep dark:text-white truncate">
+                              {item.title}
+                            </p>
+                            <p className="text-[10px] text-slate-light dark:text-gray-400 truncate">
+                              {item.subtitle}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="shrink-0 font-mono text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold ml-2">
+                          {item.isLocal ? "Metro" : "Regional"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Quick-Select Hub Chips */}
+            {/* Quick-Select Popular Hub Chips */}
             <div>
               <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-light dark:text-gray-400">
                 Popular Alberta & Edmonton Destinations:
@@ -425,7 +551,7 @@ export default function InteractiveMoveMap({
             </div>
           </div>
 
-          {/* Action Row */}
+          {/* Action Row — Pre-fills Quote Form */}
           {showQuoteCTA && (
             <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-hairline pt-5 dark:border-white/10">
               <button
@@ -483,7 +609,7 @@ export default function InteractiveMoveMap({
                     </span>
                   </div>
                   <span className="font-mono text-[10px] text-white/70">
-                    Live Google Directions
+                    Live Directions
                   </span>
                 </div>
               </motion.div>

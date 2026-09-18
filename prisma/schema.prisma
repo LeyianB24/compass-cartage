@@ -25,6 +25,7 @@ enum MoveType {
 
 model QuoteRequest {
   id             String        @id @default(cuid())
+  quoteNumber    String?
   name           String
   phone          String
   email          String
@@ -43,8 +44,30 @@ model QuoteRequest {
   updatedAt      DateTime      @updatedAt
 
   bookedSlot     BookedSlot?
+  activityLogs   ActivityLog[]
 
   @@index([status])
+  @@index([createdAt])
+  @@index([quoteNumber])
+}
+
+model ActivityLog {
+  id             String        @id @default(cuid())
+  action         String        // "QUOTE_SUBMITTED", "EMAIL_DISPATCHED", "STATUS_UPDATED", "BOOKING_CREATED", "BOOKING_CANCELLED", "MANUAL_LEAD", "ADMIN_EMAIL_SENT"
+  category       String        @default("QUOTE") // "QUOTE" | "EMAIL" | "STATUS" | "BOOKING" | "DISPATCH" | "SYSTEM"
+  quoteNumber    String?
+  quoteRequestId String?
+  quoteRequest   QuoteRequest? @relation(fields: [quoteRequestId], references: [id], onDelete: SetNull)
+  actor          String        @default("System") // "Client" | "Admin" | "System"
+  title          String
+  details        String?
+  metadata       Json?
+  status         String        @default("SUCCESS") // "SUCCESS" | "WARNING" | "FAILED" | "INFO"
+  createdAt      DateTime      @default(now())
+
+  @@index([action])
+  @@index([category])
+  @@index([quoteNumber])
   @@index([createdAt])
 }
 

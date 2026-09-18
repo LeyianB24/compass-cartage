@@ -21,6 +21,7 @@ import {
   Truck,
   Navigation,
   Tag,
+  Copy,
 } from "lucide-react";
 import { bookMove, updateRequestStatus, deleteQuoteRequest, cancelBooking, updateRequestNotes } from "@/lib/actions";
 import CommunicationModal from "./CommunicationModal";
@@ -28,6 +29,7 @@ import CommunicationModal from "./CommunicationModal";
 type Props = {
   request: {
     id: string;
+    quoteNumber?: string | null;
     name: string;
     phone: string;
     email: string;
@@ -112,6 +114,13 @@ export default function AdminRequestRow({ request }: Props) {
   const [moveType, setMoveType] = useState<"LOCAL" | "LONG_DISTANCE_ALBERTA" | "OUT_OF_PROVINCE">("LOCAL");
   const [bookError, setBookError] = useState("");
 
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [copiedNum, setCopiedNum] = useState(false);
+
+  const recVehicle = getRecommendedVehicle(request.moveSize);
+  const quoteDisplayNumber = request.quoteNumber || `CC-${request.id.slice(-4).toUpperCase()}`;
+
   const [commOpen, setCommOpen] = useState(false);
   const [previewPhoto, setPreviewPhoto] = useState<string | null>(null);
 
@@ -160,14 +169,34 @@ export default function AdminRequestRow({ request }: Props) {
 
   return (
     <>
-      <div className="rounded-card border border-hairline bg-paper-muted shadow-xs transition-all hover:border-gold/50 dark:border-white/10 dark:bg-[#0f172a] dark:hover:border-gold/50">
+      <div className="group rounded-card border border-hairline bg-paper-muted shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-gold hover:shadow-md dark:border-white/10 dark:bg-[#0c1626] dark:hover:border-gold/70">
         {/* Row Header Bar */}
         <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
           <div
             onClick={() => setExpanded((v) => !v)}
             className="flex-1 cursor-pointer"
           >
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              {/* Official Quote Number Badge */}
+              <div className="flex items-center gap-1">
+                <span className="rounded-xs border border-gold/40 bg-gold/15 px-2 py-0.5 font-mono text-xs font-bold text-gold">
+                  #{quoteDisplayNumber}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(quoteDisplayNumber);
+                    setCopiedNum(true);
+                    setTimeout(() => setCopiedNum(false), 2000);
+                  }}
+                  className="p-0.5 text-slate hover:text-gold dark:text-gray-400"
+                  title="Copy Quote Number"
+                >
+                  {copiedNum ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                </button>
+              </div>
+
               <span className="font-display text-base font-bold text-navy-deep dark:text-white">
                 {request.name}
               </span>
@@ -602,25 +631,43 @@ export default function AdminRequestRow({ request }: Props) {
         request={request}
       />
 
-      {/* Photo Lightbox Modal */}
+      {/* Enhanced Photo Lightbox Modal */}
       {previewPhoto && (
         <div
           onClick={() => setPreviewPhoto(null)}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
         >
-          <div className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-card">
+          <div
+            className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-md border border-gold/40 bg-navy-deep shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => setPreviewPhoto(null)}
-              className="absolute right-3 top-3 z-10 rounded-full bg-black/70 p-2 text-white hover:bg-black"
+              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white hover:bg-black hover:text-gold"
             >
               <X size={18} />
             </button>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={previewPhoto}
-              alt="Preview"
-              className="max-h-[85vh] w-auto rounded-card object-contain shadow-2xl"
-            />
+            <div className="relative h-[75vh] w-[85vw] max-w-4xl bg-black/40 flex items-center justify-center p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewPhoto}
+                alt="Client uploaded photo preview"
+                className="max-h-full max-w-full object-contain rounded-xs"
+              />
+            </div>
+            <div className="flex items-center justify-between border-t border-white/10 bg-[#070c14] px-4 py-3">
+              <span className="font-mono text-xs text-gold font-semibold">
+                Client Inventory Media Attachment &middot; {request.name}
+              </span>
+              <a
+                href={previewPhoto}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-xs text-white hover:text-gold underline flex items-center gap-1"
+              >
+                Open original in new tab ↗
+              </a>
+            </div>
           </div>
         </div>
       )}

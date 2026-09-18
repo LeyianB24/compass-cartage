@@ -76,8 +76,6 @@
 
   html {
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -114,15 +112,22 @@
     font-family: var(--font-display);
     color: var(--color-navy-deep);
     letter-spacing: -0.015em;
-    text-wrap: balance;
+  }
+
+  @supports (text-wrap: balance) {
+    h1, h2, h3, h4, h5, h6 {
+      text-wrap: balance;
+    }
   }
 
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
     color: #ffffff;
   }
 
-  p {
-    text-wrap: pretty;
+  @supports (text-wrap: pretty) {
+    p {
+      text-wrap: pretty;
+    }
   }
 }
 

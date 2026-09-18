@@ -22,11 +22,13 @@ import {
   ChevronDown,
   ChevronUp,
   Eye,
+  Shield,
 } from "lucide-react";
 import AdminRequestRow from "./AdminRequestRow";
 import AdminCalendarView from "./AdminCalendarView";
 import AdminAnalyticsView from "./AdminAnalyticsView";
 import AdminPricingTiersTab from "./AdminPricingTiersTab";
+import AdminActivityLogsTab, { type SerializedActivityLog } from "./AdminActivityLogsTab";
 import ManualLeadModal from "./ManualLeadModal";
 
 const FLEET_UNITS = [
@@ -84,6 +86,7 @@ const FLEET_UNITS = [
 
 type RequestType = {
   id: string;
+  quoteNumber?: string | null;
   name: string;
   phone: string;
   email: string;
@@ -105,12 +108,13 @@ type RequestType = {
 type Props = {
   requests: RequestType[];
   stats: { total: number; new: number; booked: number; completed: number };
+  initialLogs?: SerializedActivityLog[];
 };
 
 const FILTERS = ["ALL", "NEW", "CONTACTED", "QUOTED", "BOOKED", "COMPLETED", "DECLINED"] as const;
 
-export default function AdminDashboardClient({ requests, stats }: Props) {
-  const [activeTab, setActiveTab] = useState<"ledger" | "calendar" | "analytics" | "pricing">("ledger");
+export default function AdminDashboardClient({ requests, stats, initialLogs = [] }: Props) {
+  const [activeTab, setActiveTab] = useState<"ledger" | "calendar" | "analytics" | "pricing" | "logs">("ledger");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"created_desc" | "created_asc" | "move_date">("created_desc");
@@ -151,6 +155,7 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
         const q = searchQuery.toLowerCase().trim();
         const matchesSearch =
           q === "" ||
+          (r.quoteNumber && r.quoteNumber.toLowerCase().includes(q)) ||
           r.name.toLowerCase().includes(q) ||
           r.email.toLowerCase().includes(q) ||
           r.phone.toLowerCase().includes(q) ||
@@ -230,30 +235,42 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-10 space-y-8">
       {/* Top Header & Quick Actions */}
-      <div className="flex flex-col justify-between gap-4 border-b border-hairline pb-6 dark:border-white/10 md:flex-row md:items-end">
-        <div className="flex items-start gap-3.5">
-          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md border border-gold/40 bg-navy-deep p-1 shadow-sm">
-            <Image
-              src="/logos/logo Compass Cartage.png"
-              alt="Compass Cartage Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div>
-            <div className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Operational Command Center</span>
-            </div>
-            <h1 className="font-display mt-0.5 text-2xl font-bold tracking-tight text-navy-deep dark:text-white sm:text-3xl">
-              Dispatch Ledger & Pipeline
-            </h1>
-            <p className="mt-0.5 text-xs text-slate dark:text-gray-400">
-              Real-time moving inquiries, calendar dispatches, pricing rate controls, and conversion metrics.
-            </p>
-          </div>
+      <div className="relative overflow-hidden rounded-card border border-hairline bg-paper-muted p-6 shadow-sm dark:border-white/10 dark:bg-[#0c1626]">
+        {/* Subtle moving fleet truck photo watermark overlay */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-1/3 opacity-10 dark:opacity-20 overflow-hidden">
+          <Image
+            src="/images/lorry1.jpeg"
+            alt=""
+            fill
+            className="object-cover object-left"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-paper-muted via-paper-muted/80 to-transparent dark:from-[#0c1626] dark:via-[#0c1626]/80" />
         </div>
+
+        <div className="relative z-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div className="flex items-start gap-3.5">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md border border-gold/40 bg-navy-deep p-1 shadow-sm">
+              <Image
+                src="/logos/logo Compass Cartage.png"
+                alt="Compass Cartage Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-gold">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Operational Command Center</span>
+              </div>
+              <h1 className="font-display mt-0.5 text-2xl font-bold tracking-tight text-navy-deep dark:text-white sm:text-3xl">
+                Dispatch Ledger & Pipeline
+              </h1>
+              <p className="mt-0.5 text-xs text-slate dark:text-gray-400">
+                Real-time moving inquiries, calendar dispatches, pricing rate controls, and conversion metrics.
+              </p>
+            </div>
+          </div>
 
         <div className="flex flex-wrap items-center gap-3">
           {/* View Mode Tabs */}
@@ -305,6 +322,21 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
               <Sliders size={14} />
               <span>Pricing & Tiers</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab("logs")}
+              className={`flex items-center gap-1.5 rounded-xs px-3 py-1.5 font-mono text-xs font-semibold transition-all ${
+                activeTab === "logs"
+                  ? "bg-navy-deep text-gold-soft font-bold shadow-xs dark:bg-gold dark:text-navy-deep"
+                  : "text-slate hover:text-navy-deep dark:text-gray-400 dark:hover:text-white"
+              }`}
+            >
+              <Shield size={14} />
+              <span>Activity Logs</span>
+              <span className="rounded-xs bg-gold/15 px-1.5 py-0.2 text-[10px] text-gold font-bold">
+                {initialLogs.length}
+              </span>
+            </button>
           </div>
 
           <button
@@ -317,6 +349,7 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
           </button>
         </div>
       </div>
+    </div>
 
       {/* Top Stat Cards */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -556,6 +589,17 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
       {/* TAB 4: PRICING CONFIG & SERVICE TIERS */}
       {activeTab === "pricing" && <AdminPricingTiersTab />}
 
+      {/* TAB 5: EXECUTIVE ACTIVITY & AUDIT LOGS */}
+      {activeTab === "logs" && (
+        <AdminActivityLogsTab
+          logs={initialLogs}
+          onSelectQuote={(quoteRef) => {
+            setSearchQuery(quoteRef);
+            setActiveTab("ledger");
+          }}
+        />
+      )}
+
       {/* Photo Preview Lightbox Modal */}
       {lightboxPhoto && (
         <div
@@ -604,6 +648,30 @@ export default function AdminDashboardClient({ requests, stats }: Props) {
   );
 }
 
+function CountUpNumber({ target }: { target: number }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (target === 0) return;
+    let startTime: number | null = null;
+    const duration = 750;
+    let reqId: number;
+    function step(timestamp: number) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      setCurrent(Math.round(target * ease));
+      if (progress < 1) {
+        reqId = requestAnimationFrame(step);
+      }
+    }
+    reqId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(reqId);
+  }, [target]);
+
+  return <span>{target === 0 ? 0 : current}</span>;
+}
+
 function StatCard({
   icon: Icon,
   label,
@@ -616,17 +684,19 @@ function StatCard({
   accent?: boolean;
 }) {
   return (
-    <div className="rounded-card border border-hairline bg-paper-muted p-4 shadow-xs dark:border-white/10 dark:bg-[#0f172a]">
+    <div className="group relative overflow-hidden rounded-card border border-hairline bg-paper-muted p-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/50 hover:shadow-md dark:border-white/10 dark:bg-[#0c1626] dark:hover:border-gold/50">
       <div className="flex items-center justify-between">
-        <p className="font-mono text-2xl font-bold text-navy-deep dark:text-white">{value}</p>
+        <p className="font-mono text-2xl font-bold text-navy-deep dark:text-white">
+          <CountUpNumber target={value} />
+        </p>
         <div
-          className={`flex h-8 w-8 items-center justify-center rounded-xs ${
+          className={`flex h-9 w-9 items-center justify-center rounded-xs transition-transform duration-300 group-hover:scale-110 ${
             accent
-              ? "bg-gold/15 text-gold"
-              : "bg-navy-deep/5 text-navy-deep dark:bg-white/10 dark:text-gray-200"
+              ? "bg-gold/20 text-gold"
+              : "bg-navy-deep/5 text-navy-deep dark:bg-white/10 dark:text-gold"
           }`}
         >
-          <Icon size={16} />
+          <Icon size={18} />
         </div>
       </div>
       <p className="mt-1 font-mono text-[11px] text-slate dark:text-gray-400">{label}</p>
