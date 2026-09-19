@@ -76,7 +76,7 @@ export default function Hero() {
           <motion.div
             key={activeDeckItem.id}
             initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 0.32, scale: 1 }}
+            animate={{ opacity: 0.75, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.7, ease: "easeInOut" }}
             className="absolute inset-0"
@@ -87,23 +87,23 @@ export default function Hero() {
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center filter saturate-[0.8]"
+              className="object-cover object-center filter saturate-[1.0] contrast-[1.08]"
             />
           </motion.div>
         </AnimatePresence>
 
-        {/* Multi-layered architectural gradient wash for pristine legibility and contrast */}
+        {/* Multi-layered architectural gradient wash for pristine legibility and cinematic depth */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-[#070c14] via-[#070c14]/92 to-[#070c14]/65"
+          className="absolute inset-0 bg-gradient-to-r from-[#070c14] via-[#070c14]/75 to-[#070c14]/25"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-t from-[#070c14] via-transparent to-[#070c14]/80"
+          className="absolute inset-0 bg-gradient-to-t from-[#070c14] via-transparent to-[#070c14]/40"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_30%,transparent,rgba(7,12,20,0.85))]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_65%_35%,transparent,rgba(7,12,20,0.45))]"
         />
       </div>
 
