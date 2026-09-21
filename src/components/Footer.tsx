@@ -7,17 +7,23 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 import BrandMark from "@/components/BrandMark";
 
-const QUICK_LINKS = [
+const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Cost Calculator", href: "/calculator" },
+  { label: "Fleet & Equipment", href: "/#fleet" },
+  { label: "Pricing & Calculator", href: "/calculator" },
+  { label: "Moving FAQ", href: "/faq" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
+  { label: "Get a Free Quote", href: "/quote" },
+];
+
+const MOVING_TOOLS = [
   { label: "Inventory Planner", href: "/inventory" },
   { label: "Moving Checklist", href: "/checklist" },
   { label: "Coverage Map", href: "/service-area" },
-  { label: "Moving FAQ", href: "/faq" },
   { label: "Work Gallery", href: "/gallery" },
-  { label: "Contact Us", href: "/contact" },
-  { label: "Get a Quote", href: "/quote" },
+  { label: "Instant Cost Calculator", href: "/calculator" },
 ];
 
 export default function Footer() {
@@ -85,13 +91,13 @@ export default function Footer() {
 
             <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-gold-soft dark:text-gold">
               <span className="rounded-xs border border-gold/30 bg-gold/10 px-2 py-0.5">
-                100% Insured
+                100% Insured Cargo
               </span>
               <span className="rounded-xs border border-gold/30 bg-gold/10 px-2 py-0.5">
                 Upfront Pricing
               </span>
               <span className="rounded-xs border border-gold/30 bg-gold/10 px-2 py-0.5">
-                Licensed & Insured
+                Dedicated Single Crew
               </span>
             </div>
           </div>
@@ -100,7 +106,7 @@ export default function Footer() {
           <div>
             <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Navigation</p>
             <ul className="space-y-2.5 text-xs lg:text-sm text-white/80">
-              {QUICK_LINKS.slice(0, 5).map((link) => (
+              {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -115,9 +121,9 @@ export default function Footer() {
 
           {/* Tools & Planning Column */}
           <div>
-            <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Tools & Hubs</p>
+            <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Moving Tools</p>
             <ul className="space-y-2.5 text-xs lg:text-sm text-white/80">
-              {QUICK_LINKS.slice(5).map((link) => (
+              {MOVING_TOOLS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -185,13 +191,6 @@ export default function Footer() {
               className="transition-colors hover:text-white dark:hover:text-gold-soft"
             >
               Terms of Service
-            </Link>
-            <span className="text-white/30">·</span>
-            <Link
-              href="/admin"
-              className="font-mono text-[11px] text-gold/70 transition-colors hover:text-gold"
-            >
-              Staff Portal
             </Link>
           </div>
           <p className="flex items-center gap-1">

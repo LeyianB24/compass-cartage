@@ -36,7 +36,7 @@ export const IMAGES = {
   // 2. High-Roof Custom Transit Van (Charcoal Grey)
   transitVanGrey: {
     src: "/images/hero 2.jpg",
-    alt: "Compass Cartage high-roof Ford Transit moving van for apartment and express moves",
+    alt: "Compass Cartage high-roof Ford Transit commercial moving van on location in Edmonton",
   },
   transitVanGreyWheel: {
     src: "/images/hero 4.jpg",
@@ -137,8 +137,8 @@ export const IMAGES = {
 
   // Movers loading a truck on a sunny day — used for the CTA band
   truckSunnyDay: {
-    src: "/images/hero 2.jpg",
-    alt: "Professional movers in uniform with moving truck on moving day",
+    src: "/images/professional-movers-carrying-boxes-truck-bright-sunny-day-two-uniformed-carry-large-under-clear-blue-sky-image-410839417.webp",
+    alt: "Professional movers in uniform carrying moving boxes to a moving truck on a sunny day",
   },
 
   // Movers indoors with a tool case — used for inner page heroes and

@@ -38,24 +38,27 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://compasscartage.ca";
+const ogImageUrl = `${siteUrl}/images/lorry1.jpeg`;
+
 // Comprehensive Base Metadata
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.compasscartage.com"), // Replace with your production domain
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Compass Cartage | Moving Services You Can Trust",
+    default: "Edmonton Movers — One Dedicated Crew, Upfront Pricing | Compass Cartage",
     template: "%s | Compass Cartage",
   },
   description:
-    "Fast, reliable, and affordable moving services. Local moves, long-distance relocations, packing, and storage — get your free quote today.",
+    "Edmonton's trusted moving company for residential, commercial, and long-distance relocations across Alberta. One dedicated crew from start to finish with upfront pricing and zero surprise fees.",
   keywords: [
-    "moving company",
-    "movers",
-    "local moves",
-    "long distance moving",
-    "packing services",
+    "Edmonton movers",
+    "moving company Edmonton",
+    "Alberta long distance moving",
+    "residential relocation Edmonton",
+    "commercial office movers",
     "Compass Cartage",
-    "residential relocation",
-    "commercial movers",
+    "furniture delivery Edmonton",
+    "one dedicated crew",
   ],
   authors: [{ name: "Compass Cartage" }],
   creator: "Compass Cartage",
@@ -66,28 +69,28 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Compass Cartage | Moving Services You Can Trust",
+    title: "Edmonton Movers — One Dedicated Crew, Upfront Pricing | Compass Cartage",
     description:
-      "Fast, reliable, and affordable moving services. Get your free quote today.",
-    url: "https://www.compasscartage.com",
+      "Reliable residential, commercial, and provincial moving services across Edmonton and Alberta. Upfront pricing, single dedicated crew, and 100% insured transit.",
+    url: siteUrl,
     siteName: "Compass Cartage",
-    locale: "en_US",
+    locale: "en_CA",
     type: "website",
     images: [
       {
-        url: IMAGES.heroMovers.src, // 1200x630+ recommended; using the hero movers photo
+        url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: IMAGES.heroMovers.alt,
+        alt: "Compass Cartage 26ft commercial moving truck in Edmonton, Alberta",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Compass Cartage | Moving Services You Can Trust",
+    title: "Edmonton Movers — One Dedicated Crew, Upfront Pricing | Compass Cartage",
     description:
-      "Fast, reliable, and affordable moving services. Get your free quote today.",
-    images: [IMAGES.heroMovers.src],
+      "Reliable residential, commercial, and provincial moving services across Edmonton and Alberta. Upfront pricing, single dedicated crew, and 100% insured transit.",
+    images: [ogImageUrl],
   },
   robots: {
     index: true,
@@ -110,6 +113,63 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": ["MovingCompany", "LocalBusiness"],
+  "@id": `${siteUrl}/#movingcompany`,
+  name: "Compass Cartage",
+  url: siteUrl,
+  logo: `${siteUrl}/icon.png`,
+  image: ogImageUrl,
+  description:
+    "Edmonton moving company providing residential, commercial, and provincial long-distance relocations with one dedicated crew and upfront transparent pricing.",
+  telephone: "+1-587-501-7519",
+  email: "info@compasscartage.ca",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Edmonton",
+    addressRegion: "AB",
+    addressCountry: "CA",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 53.5461,
+    longitude: -113.4938,
+  },
+  areaServed: [
+    { "@type": "City", name: "Edmonton" },
+    { "@type": "City", name: "St. Albert" },
+    { "@type": "City", name: "Sherwood Park" },
+    { "@type": "City", name: "Spruce Grove" },
+    { "@type": "City", name: "Leduc" },
+    { "@type": "City", name: "Beaumont" },
+    { "@type": "City", name: "Red Deer" },
+    { "@type": "City", name: "Calgary" },
+  ],
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      opens: "07:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Sunday"],
+      opens: "08:00",
+      closes: "18:00",
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -120,6 +180,12 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${plusJakarta.variable} ${spaceMono.variable} scroll-smooth`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
+        />
+      </head>
       <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased overflow-x-clip selection:bg-gold-soft selection:text-navy-deep">
         <ThemeProvider>
           {/* Accessibility Skip Link */}
