@@ -13,13 +13,19 @@ const STATS = [
 ];
 
 function Counter({ value, suffix }: { value: number; suffix: string }) {
-  const [displayValue, setDisplayValue] = useState(0);
+  // Server-side renders real values (100, 1, 0) for SEO and non-JS clients
+  const [displayValue, setDisplayValue] = useState(value);
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
+  const inView = useInView(ref, { once: true, amount: 0.3 });
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
-    if (!inView || value === 0) return;
+    // Only animate after client-side hydration when scrolled into view
+    if (!inView || value === 0 || hasAnimated.current) return;
+    hasAnimated.current = true;
 
+    // Reset to 0 and animate smoothly up to target value
+    setDisplayValue(0);
     const controls = animate(0, value, {
       duration: 1.4,
       ease: [0.16, 1, 0.3, 1],

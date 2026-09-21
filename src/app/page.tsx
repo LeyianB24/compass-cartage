@@ -9,17 +9,18 @@ import InteractiveMoveMap from "@/components/InteractiveMoveMap";
 import ProcessTimeline from "@/components/ProcessTimeline";
 import StatsCounter from "@/components/StatsCounter";
 import Testimonials from "@/components/Testimonials";
+import HomeFaqPreview from "@/components/HomeFaqPreview";
 import GalleryStrip from "@/components/GalleryStrip";
 import CallToAction from "@/components/CallToAction";
 import { Navigation } from "lucide-react";
 import { SERVICES } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Edmonton's Premier Movers | One Trusted Crew for Every Move",
+  title: "Edmonton Movers — One Dedicated Crew, Upfront Pricing | Compass Cartage",
   description:
     "Professional residential, commercial, and storage moving solutions across Edmonton & Alberta with upfront quotes and zero hidden fees.",
   openGraph: {
-    title: "Edmonton's Premier Movers | One Trusted Crew for Every Move",
+    title: "Edmonton Movers — One Dedicated Crew, Upfront Pricing | Compass Cartage",
     description:
       "Professional, reliable residential and commercial moving services across Edmonton and Alberta.",
     type: "website",
@@ -68,13 +69,13 @@ export default function HomePage() {
         {/* 3. About Us & Local Authority Section (Light Mode Feature) */}
         <AboutAuthority />
 
-        {/* 3. Featured Services Matrix (Residential, Commercial, Storage) */}
+        {/* 4. Featured Services Matrix (Residential, Commercial, Storage) */}
         <FeaturedServicesMatrix />
 
-        {/* 4. Moving Fleet & Equipment Showcase (All Fleets & Lorries) */}
+        {/* 5. Moving Fleet & Equipment Showcase (All Fleets & Lorries) */}
         <FleetShowcase />
 
-        {/* 5. Interactive Route & Google Maps Distance Planner */}
+        {/* 6. Interactive Route & Google Maps Distance Planner */}
         <section className="relative border-b border-hairline bg-paper py-20 dark:border-white/10 dark:bg-[#070c14] md:py-28">
           <div className="section-padding mx-auto max-w-content">
             <div className="mb-10 text-center">
@@ -94,19 +95,22 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 6. Interactive Step-by-Step Process Timeline */}
+        {/* 7. Interactive Step-by-Step Process Timeline */}
         <ProcessTimeline />
 
-        {/* 5. Company Statistics Counter */}
+        {/* 8. Company Statistics Counter */}
         <StatsCounter />
 
-        {/* 6. Customer Reviews & Testimonials */}
+        {/* 9. Customer Reviews & Testimonials */}
         <Testimonials />
 
-        {/* 7. Gallery — A Look at Moving Day */}
+        {/* 10. 5-Question FAQ Preview */}
+        <HomeFaqPreview />
+
+        {/* 11. Gallery — A Look at Moving Day */}
         <GalleryStrip />
 
-        {/* 8. Call To Action Band */}
+        {/* 12. Call To Action Band */}
         <CallToAction />
       </main>
     </>

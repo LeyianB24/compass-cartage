@@ -23,16 +23,16 @@ export default function AboutAuthority() {
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-xs border border-hairline shadow-xl dark:border-white/10">
               <Image
-                src={IMAGES.lorry3.src}
-                alt={IMAGES.lorry3.alt}
+                src={IMAGES.smilingMover.src}
+                alt={IMAGES.smilingMover.alt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/60 via-transparent to-transparent dark:from-[#070c14]/70" />
               <div className="absolute bottom-4 left-4 z-10 rounded-xs border border-white/20 bg-navy-deep/85 px-3 py-1.5 backdrop-blur shadow-md">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">Compass Cartage Fleet</p>
-                <p className="text-[11px] font-medium text-white/95">Edmonton Dispatch Facility</p>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-gold">One Dedicated Crew</p>
+                <p className="text-[11px] font-medium text-white/95">Full-Time Professional Movers</p>
               </div>
             </div>
 
