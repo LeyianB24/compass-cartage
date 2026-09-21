@@ -130,8 +130,8 @@ interface InteractiveMoveMapProps {
 }
 
 export default function InteractiveMoveMap({
-  initialOrigin = "Downtown Edmonton",
-  initialDestination = "Windermere, Edmonton",
+  initialOrigin = "",
+  initialDestination = "",
   onSelectRoute,
   showQuoteCTA = true,
 }: InteractiveMoveMapProps) {

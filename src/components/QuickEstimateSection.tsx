@@ -20,8 +20,6 @@ import { MOVE_SIZES } from "@/lib/constants";
 export default function QuickEstimateSection() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
     moveSize: "1-bedroom",
     pickupArea: "",
     dropoffArea: "",
@@ -32,10 +30,8 @@ export default function QuickEstimateSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const params = new URLSearchParams({
-      name: formData.name,
-      phone: formData.phone,
       moveSize: formData.moveSize,
-      pickupAddress: formData.pickupArea || "Edmonton Metro",
+      pickupAddress: formData.pickupArea || "Downtown Edmonton",
       dropoffAddress: formData.dropoffArea || "Edmonton Metro",
     });
     router.push(`/quote?${params.toString()}`);
@@ -53,7 +49,7 @@ export default function QuickEstimateSection() {
             </span>
             <span className="text-white/30">•</span>
             <span className="inline-flex items-center gap-1 font-mono text-[10px] text-emerald-600 dark:text-emerald-400">
-              <Sparkles size={10} /> 60-Second Calculation
+              <Sparkles size={10} /> Upfront Rate Calculation
             </span>
           </div>
 
@@ -61,84 +57,53 @@ export default function QuickEstimateSection() {
             Estimate Your Move in Under a Minute
           </h2>
           <p className="mt-2 max-w-2xl text-xs sm:text-sm text-slate dark:text-gray-300">
-            Tell us where you are moving and the scope of your home. We&apos;ll match the optimal crew size,
+            Tell us where you are moving and your residence size. We&apos;ll match the optimal crew size,
             truck class, and transparent upfront pricing with zero surprise fees.
           </p>
         </div>
 
         {/* Dedicated Full-Width Form Card */}
         <div className="relative overflow-hidden rounded-card border border-hairline bg-paper p-6 shadow-xl dark:border-white/10 dark:bg-[#070c14] sm:p-8 lg:p-10">
-          {/* Subtle gold decorative gradient corner */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gold/10 blur-3xl dark:bg-gold/15"
           />
 
           <form onSubmit={handleSubmit} className="relative space-y-6">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {/* Client Name */}
-              <div>
-                <label className="block font-mono text-[11px] font-bold uppercase tracking-wider text-navy-deep dark:text-gray-200">
-                  Client / Contact Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. John Doe"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="mt-1.5 w-full rounded-xs border border-hairline bg-paper-muted px-4 py-3 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold"
-                />
-              </div>
-
-              {/* Direct Phone */}
-              <div>
-                <label className="block font-mono text-[11px] font-bold uppercase tracking-wider text-navy-deep dark:text-gray-200">
-                  Direct Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="(780) 555-0199"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="mt-1.5 w-full rounded-xs border border-hairline bg-paper-muted px-4 py-3 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold"
-                />
-              </div>
-
+            <div className="grid gap-4 sm:grid-cols-2">
               {/* Pickup Area */}
               <div>
                 <label className="block font-mono text-[11px] font-bold uppercase tracking-wider text-navy-deep dark:text-gray-200">
-                  Where you are (Pickup) *
+                  Where you are (Pickup Area or Address)
                 </label>
                 <div className="relative mt-1.5">
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Downtown Edmonton, Windermere..."
+                    placeholder="e.g. Oliver, Edmonton or 104 St NW"
                     value={formData.pickupArea}
                     onChange={(e) => setFormData({ ...formData, pickupArea: e.target.value })}
-                    className="w-full rounded-xs border border-hairline bg-paper-muted pl-4 pr-9 py-3 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold"
+                    className="w-full rounded-xs border border-hairline bg-paper-muted px-4 py-3 pl-10 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-gold focus:ring-2 focus:ring-gold/20 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gold"
                   />
-                  <MapPin size={15} className="absolute right-3 top-3.5 text-gold" />
+                  <MapPin size={16} className="absolute left-3.5 top-3.5 text-gold" />
                 </div>
               </div>
 
               {/* Destination Area */}
               <div>
                 <label className="block font-mono text-[11px] font-bold uppercase tracking-wider text-navy-deep dark:text-gray-200">
-                  Where you go (Destination) *
+                  Where you go (Destination Area or City)
                 </label>
                 <div className="relative mt-1.5">
                   <input
                     type="text"
                     required
-                    placeholder="e.g. St. Albert, Sherwood Park, Calgary..."
+                    placeholder="e.g. Windermere, St. Albert, or Calgary"
                     value={formData.dropoffArea}
                     onChange={(e) => setFormData({ ...formData, dropoffArea: e.target.value })}
-                    className="w-full rounded-xs border border-hairline bg-paper-muted pl-4 pr-9 py-3 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-emerald-500"
+                    className="w-full rounded-xs border border-hairline bg-paper-muted px-4 py-3 pl-10 text-xs text-navy-deep outline-none transition-all placeholder:text-slate-light focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-[#0f172a] dark:text-white dark:placeholder:text-gray-500 dark:focus:border-emerald-500"
                   />
-                  <Navigation size={15} className="absolute right-3 top-3.5 text-emerald-500" />
+                  <Navigation size={16} className="absolute left-3.5 top-3.5 text-emerald-500" />
                 </div>
               </div>
             </div>
