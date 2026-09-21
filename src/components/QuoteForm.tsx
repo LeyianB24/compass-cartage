@@ -749,7 +749,7 @@ function QuoteFormContent() {
                       Travel Tier
                     </span>
                     <span className="font-bold text-navy-deep dark:text-white">
-                      {quoteEstimate.distance.tier} (~{distanceKm} km)
+                      {quoteEstimate.distance.intercityFee > 0 ? "Highway / Intercity" : "Local Metro"} (~{distanceKm} km)
                     </span>
                   </div>
                 </div>
