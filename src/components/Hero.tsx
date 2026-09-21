@@ -112,28 +112,28 @@ const QUICK_ESTIMATE_SIZES = [
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
+  const [isPlaying, setIsPlaying] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
   const [isUserInteracting, setIsUserInteracting] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   // Swipe detection ref
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const heroRef = useRef<HTMLElement>(null);
 
-  // Detect prefers-reduced-motion
+  // Keep prefersReducedMotion in sync when the user changes their OS setting
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-    if (mediaQuery.matches) {
-      setIsPlaying(false);
-    }
-
     const handler = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
       if (e.matches) setIsPlaying(false);
     };
-
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);

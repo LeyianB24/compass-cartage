@@ -114,11 +114,8 @@ export default function AdminRequestRow({ request }: Props) {
   const [moveType, setMoveType] = useState<"LOCAL" | "LONG_DISTANCE_ALBERTA" | "OUT_OF_PROVINCE">("LOCAL");
   const [bookError, setBookError] = useState("");
 
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [copiedNum, setCopiedNum] = useState(false);
 
-  const recVehicle = getRecommendedVehicle(request.moveSize);
   const quoteDisplayNumber = request.quoteNumber || `CC-${request.id.slice(-4).toUpperCase()}`;
 
   const [commOpen, setCommOpen] = useState(false);

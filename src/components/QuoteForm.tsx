@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Loader2,
   AlertCircle,
-  RefreshCw,
   ImagePlus,
   X,
   ArrowRight,
@@ -19,15 +18,12 @@ import {
   MapPin,
   ShieldCheck,
   Navigation,
-  DollarSign,
   Check,
   Copy,
   Lock,
-  Truck,
   HelpCircle,
   CheckCircle2,
   Clock,
-  ChevronDown,
 } from "lucide-react";
 import { MOVE_SIZES, SPECIALTY_ADDONS, BUSINESS } from "@/lib/constants";
 import {

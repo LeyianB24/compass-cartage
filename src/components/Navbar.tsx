@@ -1,7 +1,7 @@
 // src/components/Navbar.tsx
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, startTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
@@ -16,7 +16,6 @@ import {
   ArrowLeft,
   ChevronDown,
   Wrench,
-  Calculator,
 } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -93,8 +92,10 @@ export default function Navbar() {
 
   // Close mobile drawer on route change
   useEffect(() => {
-    setOpen(false);
-    setToolsOpen(false);
+    startTransition(() => {
+      setOpen(false);
+      setToolsOpen(false);
+    });
   }, [pathname]);
 
   const isToolActive = TOOL_LINKS.some((t) => pathname === t.href);

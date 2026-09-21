@@ -1,7 +1,5 @@
 // src/components/Testimonials.tsx
-import Image from "next/image";
-import { Star, ShieldCheck, FileText, CheckCircle2, ExternalLink } from "lucide-react";
-import { IMAGES } from "@/lib/images";
+import { Star, ShieldCheck, FileText, CheckCircle2 } from "lucide-react";
 import { BUSINESS } from "@/lib/constants";
 
 interface CustomerReview {

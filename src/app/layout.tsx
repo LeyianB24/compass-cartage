@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileNav from "@/components/StickyMobileNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { IMAGES } from "@/lib/images";
 
 // Optimize fonts for structural stability and high-end editorial clarity
 const fraunces = Fraunces({
