@@ -199,7 +199,8 @@ export default function RootLayout({
           <Navbar />
 
           {/* Dynamic Page Content */}
-          <div id="main-content" className="flex flex-1 flex-col">
+          {/* pt-20 offsets the fixed navbar (80px) on inner pages; the Hero fills 100svh so it sits naturally behind the transparent bar */}
+          <div id="main-content" className="flex flex-1 flex-col pt-20">
             {children}
           </div>
 

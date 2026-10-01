@@ -59,8 +59,8 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="relative w-full overflow-hidden">
-        {/* 1. Hero Section Clean Presentation */}
+      <main className="relative w-full overflow-hidden -mt-20">
+        {/* 1. Hero Section — Full-bleed behind transparent fixed navbar */}
         <Hero />
 
         {/* 2. Quick Move Estimate & Crew Sizing Section (Dedicated Full-Width Edge-to-Edge) */}

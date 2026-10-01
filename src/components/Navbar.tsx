@@ -101,7 +101,13 @@ export default function Navbar() {
   const isToolActive = TOOL_LINKS.some((t) => pathname === t.href);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-hairline bg-paper/95 backdrop-blur-md dark:border-white/10 dark:bg-[#070c14]/95">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ${
+        scrolled
+          ? "border-hairline bg-paper/95 backdrop-blur-md dark:border-white/10 dark:bg-[#070c14]/95"
+          : "border-transparent bg-transparent backdrop-blur-none"
+      }`}
+    >
       <motion.div
         animate={{
           height: scrolled ? 68 : 80,
@@ -122,7 +128,9 @@ export default function Navbar() {
           >
             <BrandMark className="h-10 w-10 shrink-0" />
             <div>
-              <span className="font-display text-lg font-semibold leading-none text-navy-deep dark:text-white">
+              <span className={`font-display text-lg font-semibold leading-none transition-colors duration-300 ${
+                scrolled ? "text-navy-deep dark:text-white" : "text-white"
+              }`}>
                 {BUSINESS?.name || "Compass Cartage"}
               </span>
               {isAdminRoute ? (
@@ -130,7 +138,9 @@ export default function Navbar() {
                   Admin Dispatch
                 </span>
               ) : (
-                <span className="hidden sm:block font-mono text-[10px] text-slate-light dark:text-gray-400">
+                <span className={`hidden sm:block font-mono text-[10px] transition-colors duration-300 ${
+                  scrolled ? "text-slate-light dark:text-gray-400" : "text-white/60"
+                }`}>
                   Edmonton, AB
                 </span>
               )}
@@ -170,8 +180,12 @@ export default function Navbar() {
                     href={link.href}
                     className={`relative text-xs lg:text-sm transition-colors duration-200 rounded-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
                       isActive && link.href !== "/#fleet"
-                        ? "font-bold text-navy-deep dark:text-gold"
-                        : "font-medium text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-gold"
+                        ? scrolled
+                          ? "font-bold text-navy-deep dark:text-gold"
+                          : "font-bold text-gold"
+                        : scrolled
+                          ? "font-medium text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-gold"
+                          : "font-medium text-white/85 hover:text-gold"
                     }`}
                   >
                     {link.label}
@@ -195,8 +209,8 @@ export default function Navbar() {
                   aria-haspopup="true"
                   className={`inline-flex items-center gap-1.5 text-xs lg:text-sm font-medium transition-colors rounded-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
                     isToolActive
-                      ? "font-bold text-navy-deep dark:text-gold"
-                      : "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-gold"
+                      ? scrolled ? "font-bold text-navy-deep dark:text-gold" : "font-bold text-gold"
+                      : scrolled ? "text-slate hover:text-navy-deep dark:text-gray-300 dark:hover:text-gold" : "text-white/85 hover:text-gold"
                   }`}
                 >
                   <span>Moving Tools</span>
@@ -263,7 +277,9 @@ export default function Navbar() {
               {BUSINESS?.phone && (
                 <a
                   href={BUSINESS.phoneHref || `tel:${BUSINESS.phone}`}
-                  className="flex items-center gap-1.5 text-xs lg:text-sm font-semibold text-navy-deep hover:text-gold dark:text-gray-200 dark:hover:text-gold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs"
+                  className={`flex items-center gap-1.5 text-xs lg:text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-xs ${
+                    scrolled ? "text-navy-deep hover:text-gold dark:text-gray-200 dark:hover:text-gold" : "text-white/85 hover:text-gold"
+                  }`}
                 >
                   <Phone size={14} strokeWidth={2.2} className="text-gold" aria-hidden="true" />
                   <span>{BUSINESS.phone}</span>
@@ -274,7 +290,11 @@ export default function Navbar() {
 
               <Link
                 href="/quote"
-                className="btn-shimmer rounded-xs bg-navy-deep px-4 py-2 text-xs lg:text-sm font-bold text-gold-soft shadow-xs transition-all hover:bg-gold hover:text-navy-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                className={`btn-shimmer rounded-xs px-4 py-2 text-xs lg:text-sm font-bold shadow-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
+                  scrolled
+                    ? "bg-navy-deep text-gold-soft hover:bg-gold hover:text-navy-deep dark:bg-gold dark:text-navy-deep dark:hover:bg-gold-soft"
+                    : "bg-gold text-navy-deep hover:bg-gold-soft"
+                }`}
               >
                 Get a Free Quote
               </Link>
@@ -285,7 +305,11 @@ export default function Navbar() {
               <ThemeToggle />
               <button
                 type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-md text-navy-deep hover:bg-paper-muted dark:text-white dark:hover:bg-[#1e1e1e] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className={`flex h-11 w-11 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
+                  scrolled
+                    ? "text-navy-deep hover:bg-paper-muted dark:text-white dark:hover:bg-[#1e1e1e]"
+                    : "text-white hover:bg-white/10"
+                }`}
                 aria-label={open ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={open}
                 aria-controls="mobile-menu"
