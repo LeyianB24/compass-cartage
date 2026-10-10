@@ -185,7 +185,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
-      <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased overflow-x-clip selection:bg-gold-soft selection:text-navy-deep">
+      <body className="flex min-h-screen flex-col bg-paper font-body text-navy-deep antialiased overflow-x-clip selection:bg-gold-soft selection:text-navy-deep dark:bg-[#070c14] dark:text-white">
         <ThemeProvider>
           {/* Accessibility Skip Link */}
           <a

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function CalculatorPage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.indoorsWithTools}
         eyebrow="Cost & Logistics Estimator"
@@ -26,7 +26,7 @@ export default function CalculatorPage() {
         lead="Use our interactive calculation tool to model crew sizes, truck capacities, and itemized moving costs tailored to your home."
       />
 
-      <section className="bg-paper py-12 md:py-20">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
         <div className="section-padding mx-auto max-w-content">
           <CostCalculator />
         </div>
@@ -36,6 +36,6 @@ export default function CalculatorPage() {
         heading="Ready to confirm your move date?"
         subtext="Lock in your calculation with Howard's crew for guaranteed rate stability."
       />
-    </>
+    </main>
   );
 }

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function InventoryPage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.packingScene}
         eyebrow="Inventory Builder"
@@ -26,7 +26,7 @@ export default function InventoryPage() {
         lead="Add your furniture, appliances, and box estimates to view total cubic feet and generate an itemized inventory list for your moving quote."
       />
 
-      <section className="bg-paper py-12 md:py-20">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
         <div className="section-padding mx-auto max-w-content">
           <InventoryPlanner />
         </div>
@@ -36,6 +36,6 @@ export default function InventoryPage() {
         heading="Ready to get your binding estimate?"
         subtext="Attach your custom inventory list directly to your quote request."
       />
-    </>
+    </main>
   );
 }

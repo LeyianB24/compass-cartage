@@ -42,7 +42,7 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="relative w-full overflow-hidden">
+      <main className="relative w-full overflow-hidden -mt-20">
         {/* Page Hero */}
         <PageHero
           image={IMAGES.smilingMover}
@@ -51,7 +51,7 @@ export default function ContactPage() {
           lead="Whether you need to confirm move-day logistics, request a commercial proposal, or reach our crew directly, connect with us below."
         >
           {/* Quick contact aside inside hero */}
-          <div className="space-y-3.5 border-t border-paper/15 pt-6 text-sm">
+          <div className="space-y-3.5 rounded-card border border-white/15 bg-white/5 p-6 backdrop-blur-md">
             <a
               href={BUSINESS.phoneHref}
               className="flex items-center gap-3 font-semibold text-paper transition-colors hover:text-gold-soft"

@@ -72,7 +72,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="relative w-full overflow-hidden">
+      <main className="relative w-full overflow-hidden -mt-20">
         {/* Hero Section */}
         <PageHero
           image={heroImage}

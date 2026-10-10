@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function FaqPage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.indoorsWithTools}
         eyebrow="Knowledge Base"
@@ -26,7 +26,7 @@ export default function FaqPage() {
         lead="Got questions about insurance, packing, stair surcharges, or deposit policies? Search our clear answers below."
       />
 
-      <section className="bg-paper py-12 md:py-20">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
         <div className="section-padding mx-auto max-w-content">
           <FaqAccordion />
         </div>
@@ -36,6 +36,6 @@ export default function FaqPage() {
         heading="Still have a question?"
         subtext="Howard and the Compass Cartage team are always happy to help. Call or request a quote today."
       />
-    </>
+    </main>
   );
 }

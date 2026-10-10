@@ -48,7 +48,7 @@ export default function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
       />
 
-      <div className="flex flex-col min-h-full">
+      <main className="relative w-full overflow-hidden -mt-20">
         {/* Page Hero Header Section */}
         <PageHero
           image={IMAGES.lorry3}
@@ -60,7 +60,7 @@ export default function ServicesPage() {
         {/* Main Services Grid */}
         <section
           aria-label="All Moving Services"
-          className="bg-paper flex-1 py-16 md:py-20"
+          className="relative border-b border-hairline bg-paper flex-1 py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24"
         >
           <div className="section-padding mx-auto max-w-content">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -82,7 +82,7 @@ export default function ServicesPage() {
           heading="Not sure which service fits?"
           subtext="Tell us about your move and we'll build a custom package tailored to your exact timeline and budget."
         />
-      </div>
+      </main>
     </>
   );
 }

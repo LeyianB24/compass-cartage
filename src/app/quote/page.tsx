@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function QuotePage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.moversWorking}
         eyebrow="Get a Free Quote"
@@ -22,25 +22,26 @@ export default function QuotePage() {
         lead="Fill out the form below and we'll follow up with a free, no-obligation quote — usually within one business day."
       >
         {/* Right-aligned contact aside inside the hero */}
-        <div className="space-y-3 border-t border-paper/15 pt-6">
+        <div className="space-y-3.5 rounded-card border border-white/15 bg-white/5 p-6 backdrop-blur-md">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold">Direct Dispatch</p>
           <a
             href={BUSINESS.phoneHref}
-            className="flex items-center gap-3 text-sm font-medium text-paper hover:text-gold-soft"
+            className="flex items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-gold-soft"
           >
-            <Phone size={16} className="text-gold-soft" />
+            <Phone size={16} className="text-gold" />
             {BUSINESS.phone}
           </a>
           <a
             href={`mailto:${BUSINESS.email}`}
-            className="flex items-center gap-3 text-sm font-medium text-paper hover:text-gold-soft"
+            className="flex items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-gold-soft"
           >
-            <Mail size={16} className="text-gold-soft" />
+            <Mail size={16} className="text-gold" />
             {BUSINESS.email}
           </a>
         </div>
       </PageHero>
 
-      <section className="bg-paper dark:bg-[#070c14] border-b border-hairline dark:border-white/10">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
         <div className="section-padding mx-auto max-w-content py-16 md:py-20">
           <div className="grid gap-10 md:grid-cols-[0.7fr_1.3fr] lg:grid-cols-[0.6fr_1.4fr] md:gap-12">
             {/* Aside: a framed photo + reassurance copy beside the form,
@@ -69,6 +70,6 @@ export default function QuotePage() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function ChecklistPage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.couplePacking}
         eyebrow="Relocation Planner"
@@ -26,7 +26,7 @@ export default function ChecklistPage() {
         lead="Use our interactive 8-week timeline to check off tasks, manage utilities, pack efficiently, and track move-day readiness."
       />
 
-      <section className="bg-paper py-12 md:py-20">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
         <div className="section-padding mx-auto max-w-content">
           <MovingChecklist />
         </div>
@@ -36,6 +36,6 @@ export default function ChecklistPage() {
         heading="Have questions about your timeline?"
         subtext="Our experienced dispatch team is available to assist with parking permits, elevator bookings, and custom packing scheduling."
       />
-    </>
+    </main>
   );
 }

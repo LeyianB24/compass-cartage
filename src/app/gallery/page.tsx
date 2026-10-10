@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function GalleryPage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.heroMovers}
         eyebrow="Visual Showcase"
@@ -26,7 +26,7 @@ export default function GalleryPage() {
         lead="Filter through our photography portfolio showcasing residential moves, commercial office relocations, custom packing setups, and specialty heavy item transports."
       />
 
-      <section className="bg-paper py-12 md:py-20">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
         <div className="section-padding mx-auto max-w-content">
           <FilterableGallery />
         </div>
@@ -36,6 +36,6 @@ export default function GalleryPage() {
         heading="Ready to experience stress-free moving day?"
         subtext="Request a free, no-obligation quote today and let Howard's team handle the rest."
       />
-    </>
+    </main>
   );
 }

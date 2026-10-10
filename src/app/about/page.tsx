@@ -13,18 +13,18 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
+    <main className="relative w-full overflow-hidden -mt-20">
       <PageHero
         image={IMAGES.smilingMover}
         eyebrow="About Us"
         title="Moving, done right"
         lead="A locally owned crew built on showing up, handling every item with care, and quoting a price that holds."
       />
-      <section className="bg-paper dark:bg-[#070c14] border-b border-hairline dark:border-white/10">
-        <div className="section-padding mx-auto max-w-content py-16">
+      <section className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
+        <div className="section-padding mx-auto max-w-content">
           <div className="grid gap-12 md:grid-cols-2 md:items-start">
             <div>
-              <h2 className="font-display text-2xl font-semibold text-navy-deep dark:text-white">
+              <h2 className="font-display text-2xl font-semibold text-navy-deep dark:text-white sm:text-3xl">
                 Built on reliability, one move at a time
               </h2>
               <p className="mt-4 leading-relaxed text-slate dark:text-gray-300">
@@ -43,7 +43,7 @@ export default function AboutPage() {
 
             {/* Framed photo + the "why choose us" card stacked */}
             <div className="grid gap-6">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-sm ring-1 ring-hairline dark:ring-white/10">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-sm ring-1 border border-hairline shadow-lg dark:border-white/10">
                 <Image
                   src={IMAGES.lorry1.src}
                   alt={IMAGES.lorry1.alt}
@@ -55,7 +55,7 @@ export default function AboutPage() {
                   Compass Cartage Moving Truck • Edmonton, AB
                 </div>
               </div>
-              <div className="border border-hairline bg-paper-muted p-8 dark:border-white/10 dark:bg-[#0f172a]">
+              <div className="rounded-card border border-hairline bg-paper-muted p-8 shadow-sm dark:border-white/10 dark:bg-[#0f172a]">
                 <p className="eyebrow mb-4 text-gold-soft dark:text-gold">Why Customers Choose Us</p>
                 <ul className="space-y-4 text-sm text-slate dark:text-gray-300">
                   <li className="flex gap-3">
@@ -82,6 +82,6 @@ export default function AboutPage() {
       </section>
 
       <CallToAction />
-    </>
+    </main>
   );
 }

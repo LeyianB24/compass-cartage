@@ -38,7 +38,7 @@ export default function ServiceAreaPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceAreaJsonLd) }}
       />
 
-      <div className="flex flex-col min-h-full">
+      <main className="relative w-full overflow-hidden -mt-20">
         {/* Page Hero Header */}
         <PageHero
           image={IMAGES.lorry1}
@@ -48,14 +48,14 @@ export default function ServiceAreaPage() {
         />
 
         {/* Coverage Checker Widget Section */}
-        <section aria-label="Coverage Search" className="bg-paper py-12 border-b border-hairline">
+        <section aria-label="Coverage Search" className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
           <div className="section-padding mx-auto max-w-content">
             <CoverageChecker />
           </div>
         </section>
 
         {/* Live Interactive Alberta Route & Distance Planner */}
-        <section aria-label="Route Distance Planner" className="bg-paper py-16 border-b border-hairline dark:bg-[#070c14] dark:border-white/10">
+        <section aria-label="Route Distance Planner" className="relative border-b border-hairline bg-paper py-16 dark:border-white/10 dark:bg-[#070c14] md:py-24">
           <div className="section-padding mx-auto max-w-content">
             <div className="mb-8 text-center max-w-2xl mx-auto">
               <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-gold">
@@ -129,7 +129,7 @@ export default function ServiceAreaPage() {
           heading="Outside these areas?"
           subtext="We regularly take on long-distance jobs and specialty moves beyond our core coverage — just ask."
         />
-      </div>
+      </main>
     </>
   );
 }
